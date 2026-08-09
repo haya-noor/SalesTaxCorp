@@ -1,9 +1,12 @@
 # SalesTaxCorp Portal
 
-Version 1 is a secure client portal foundation built with Next.js, Supabase Auth/PostgreSQL, and Netlify.
+Sales Tax Corp is a public marketing website and secure client portal built with Next.js, Supabase Auth/PostgreSQL, and Netlify.
 
 ## Included
 
+- Public homepage with services, process, resources, and consultation calls to action
+- Interactive public pricing estimator and FAQ
+- Public contact/consultation information page
 - Client self-signup with `pending` approval status
 - One login page with admin/client routing
 - Admin management for clients, stores, and pending accounts
@@ -11,6 +14,8 @@ Version 1 is a secure client portal foundation built with Next.js, Supabase Auth
 - Protected admin and client routes
 - PostgreSQL Row Level Security
 - Empty Reports area ready for Version 1B
+
+The values shown by the pricing estimator are temporary planning figures. Update them in `src/features/pricing/config.ts` when approved pricing changes; no component edits or database migration are required.
 
 ## Local setup
 
@@ -57,6 +62,8 @@ npx eslint src scripts --no-warn-ignored
 npm run build
 npm run test:smoke
 ```
+
+Public route checks should confirm that `/`, `/pricing`, `/contact`, `/login`, and `/signup` return successfully while anonymous requests to `/admin` and `/dashboard` redirect to `/login`.
 
 ## Netlify
 

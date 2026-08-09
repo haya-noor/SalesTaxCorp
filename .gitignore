@@ -43,3 +43,5 @@ next-env.d.ts
 
 # local scaffold/cache artifacts
 /salestaxcorp-app/
+/.artifacts/
+/.next-dev.*.log

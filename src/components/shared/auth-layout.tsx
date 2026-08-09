@@ -4,6 +4,8 @@ It provides a common header with the SalesTaxCorp logo, title, and description,
 and a main content area where the login/signup form can be rendered.
 */
 
+import Link from "next/link";
+
 export function AuthLayout({
   title,
   description,
@@ -18,9 +20,12 @@ export function AuthLayout({
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
 
-          <p className="mb-3 text-sm font-bold uppercase tracking-[0.22em] text-teal-700">
-            SalesTaxCorp
-          </p>
+          <Link
+            href="/"
+            className="mb-3 inline-block text-sm font-bold uppercase tracking-[0.22em] text-teal-700 hover:text-teal-900"
+          >
+            Sales Tax Corp
+          </Link>
 
           <h1 className="text-3xl font-bold tracking-tight text-slate-950">{title}</h1>
           <p className="mt-2 text-sm leading-6 text-slate-600">{description}</p>
@@ -30,6 +35,12 @@ export function AuthLayout({
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/5 sm:p-8">
           {children}
         </div>
+
+        <p className="mt-6 text-center text-sm text-slate-500">
+          <Link href="/" className="font-medium hover:text-slate-900">
+            Return to the public website
+          </Link>
+        </p>
 
       </div>
     </main>

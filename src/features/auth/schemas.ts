@@ -17,3 +17,18 @@ export const signupSchema = z
     message: "Passwords do not match.",
     path: ["confirmPassword"],
   });
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Enter your current password.").max(72),
+    newPassword: z.string().min(8, "Use at least 8 characters.").max(72),
+    confirmPassword: z.string(),
+  })
+  .refine((values) => values.newPassword === values.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"],
+  })
+  .refine((values) => values.currentPassword !== values.newPassword, {
+    message: "Choose a password different from your current password.",
+    path: ["newPassword"],
+  });

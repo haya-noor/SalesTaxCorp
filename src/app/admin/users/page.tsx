@@ -19,6 +19,7 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { FlashMessage } from "@/components/shared/flash-message";
 import {
   approveUserAction,
+  promotePendingUserToAdminAction,
   rejectPendingUserAction,
   setUserStatusAction,
 } from "@/features/admin/actions";
@@ -37,7 +38,6 @@ export default async function UsersPage({
     supabase
       .from("profiles")
       .select("*")
-      .eq("role", "client")
       .order("created_at", { ascending: false }),
 
     supabase
@@ -60,10 +60,17 @@ export default async function UsersPage({
   );
 
   const pending =
-    profiles?.filter((profile) => profile.status === "pending") ?? [];
+    profiles?.filter(
+      (profile) => profile.role === "client" && profile.status === "pending",
+    ) ?? [];
 
   const managed =
-    profiles?.filter((profile) => profile.status !== "pending") ?? [];
+    profiles?.filter(
+      (profile) => profile.role === "client" && profile.status !== "pending",
+    ) ?? [];
+
+  const administrators =
+    profiles?.filter((profile) => profile.role === "admin") ?? [];
 
   const messages = await searchParams;
 
@@ -128,7 +135,7 @@ export default async function UsersPage({
                         ))}
                     </SelectField>
                   </div>
-                  <Button type="submit">Approve</Button>
+                  <Button type="submit">Approve as client</Button>
                 </form>
 
                 <form action={rejectPendingUserAction}>
@@ -142,11 +149,68 @@ export default async function UsersPage({
                   </Button>
                 </form>
               </div>
+
+              <form
+                action={promotePendingUserToAdminAction}
+                className="mt-4 rounded-lg border border-slate-300 bg-white p-3"
+              >
+                <input type="hidden" name="profileId" value={profile.id} />
+                <p className="text-sm font-semibold text-slate-900">
+                  Administrator access
+                </p>
+                <p className="mt-1 text-xs text-slate-600">
+                  Grants management access to every client, store, and account.
+                  Only use this after separately verifying the person.
+                </p>
+                <label className="mt-3 flex items-start gap-2 text-sm text-slate-700">
+                  <input
+                    className="mt-1 size-4 accent-teal-700"
+                    type="checkbox"
+                    name="confirmAdmin"
+                    value="yes"
+                    required
+                  />
+                  I confirm this person should be an administrator.
+                </label>
+                <Button type="submit" variant="secondary" className="mt-3">
+                  Approve as administrator
+                </Button>
+              </form>
             </div>
           ))}
 
           {!pending.length ? (
             <p className="text-sm text-slate-500">No pending accounts.</p>
+          ) : null}
+        </div>
+      </Card>
+
+      <Card>
+        <h2 className="text-lg font-bold">Administrators</h2>
+        <p className="mt-1 text-sm text-slate-500">
+          Administrators can manage all portal clients, stores, and accounts.
+        </p>
+
+        <div className="mt-5 divide-y divide-slate-100">
+          {administrators.map((profile) => (
+            <div
+              key={profile.id}
+              className="flex flex-wrap items-center justify-between gap-4 py-4"
+            >
+              <div>
+                <p className="font-semibold">{profile.full_name}</p>
+                <p className="text-sm text-slate-500">
+                  {emailById.get(profile.id) ?? "Email unavailable"}
+                </p>
+              </div>
+              <StatusBadge status={profile.status} />
+            </div>
+          ))}
+
+          {!administrators.length ? (
+            <p className="py-6 text-sm text-slate-500">
+              No administrators found.
+            </p>
           ) : null}
         </div>
       </Card>

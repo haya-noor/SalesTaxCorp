@@ -43,6 +43,7 @@ import {
   approveUserSchema,
   clientSchema,
   idSchema,
+  promoteAdminSchema,
   storeSchema,
 } from "./schemas";
 
@@ -307,6 +308,61 @@ export async function approveUserAction(formData: FormData) {
   revalidatePath("/admin/users");
 
   go("/admin/users", "success", "Account approved.");
+}
+
+/*
+ADMIN PROMOTION
+Promotes a verified, still-pending signup to an active administrator. Public
+signup can only create pending client profiles, so this explicit action is the
+only in-app path to a new administrator and remains protected by requireAdmin().
+*/
+export async function promotePendingUserToAdminAction(formData: FormData) {
+  const parsed = promoteAdminSchema.safeParse({
+    profileId: formData.get("profileId"),
+    confirmAdmin: formData.get("confirmAdmin"),
+  });
+
+  if (!parsed.success) {
+    go(
+      "/admin/users",
+      "error",
+      "Confirm that you intend to grant administrator access.",
+    );
+  }
+
+  const { supabase, user } = await requireAdmin();
+
+  if (parsed.data.profileId === user.id) {
+    go("/admin/users", "error", "You cannot promote your own account.");
+  }
+
+  const { data, error } = await supabase
+    .from("profiles")
+    .update({
+      role: "admin",
+      status: "active",
+      client_id: null,
+      requested_company_name: null,
+    })
+    .eq("id", parsed.data.profileId)
+    .eq("role", "client")
+    .eq("status", "pending")
+    .is("client_id", null)
+    .select("id")
+    .maybeSingle();
+
+  if (error || !data) {
+    go(
+      "/admin/users",
+      "error",
+      "Only an unassigned pending account can be promoted.",
+    );
+  }
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/users");
+
+  go("/admin/users", "success", "Administrator access granted.");
 }
 
 

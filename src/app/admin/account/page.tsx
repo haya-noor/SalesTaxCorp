@@ -1,10 +1,11 @@
 import { ChangePasswordForm } from "@/components/auth/change-password-form";
 import { Card } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { requireClientUser } from "@/lib/auth/guards";
+import { requireAdmin } from "@/lib/auth/guards";
 
-export default async function AccountPage() {
-  const { user, profile, client } = await requireClientUser();
+export default async function AdminAccountPage() {
+  const { user, profile } = await requireAdmin();
+
   return (
     <div className="grid max-w-2xl gap-6">
       <Card>
@@ -14,16 +15,22 @@ export default async function AccountPage() {
         </div>
         <dl className="mt-6 grid gap-5 sm:grid-cols-2">
           <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">Name</dt>
+            <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Name
+            </dt>
             <dd className="mt-1 font-medium">{profile.full_name}</dd>
           </div>
           <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">Email</dt>
+            <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Email
+            </dt>
             <dd className="mt-1 font-medium">{user.email}</dd>
           </div>
           <div>
-            <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">Company</dt>
-            <dd className="mt-1 font-medium">{client.company_name}</dd>
+            <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+              Role
+            </dt>
+            <dd className="mt-1 font-medium">Administrator</dd>
           </div>
         </dl>
       </Card>

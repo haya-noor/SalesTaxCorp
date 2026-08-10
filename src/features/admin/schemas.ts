@@ -21,3 +21,8 @@ export const approveUserSchema = z.object({
   profileId: idSchema,
   clientId: idSchema,
 });
+
+export const promoteAdminSchema = z.object({
+  profileId: idSchema,
+  confirmAdmin: z.literal("yes"),
+});

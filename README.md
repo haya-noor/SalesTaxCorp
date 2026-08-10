@@ -10,6 +10,8 @@ Sales Tax Corp is a public marketing website and secure client portal built with
 - Client self-signup with `pending` approval status
 - One login page with admin/client routing
 - Admin management for clients, stores, and pending accounts
+- Admin-only promotion of a verified pending signup to administrator
+- Self-service password changes for active administrators and client users
 - Client access to every active store belonging to the approved company
 - Protected admin and client routes
 - PostgreSQL Row Level Security
@@ -33,7 +35,10 @@ The values shown by the pricing estimator are temporary planning figures. Update
    supabase/migrations/202608080001_initial_portal.sql
    ```
 
-4. In **Authentication → Providers → Email**, disable email confirmation for this development-only no-email flow.
+4. In **Authentication → Providers → Email**:
+
+   - Disable email confirmation for this development-only no-email flow.
+   - Enable **Require current password when changing password**.
 
 5. Bootstrap the first administrator from PowerShell:
 
@@ -53,6 +58,16 @@ The values shown by the pricing estimator are temporary planning figures. Update
 ## Test accounts
 
 Create two client users through `/signup`, approve each against a different client company, and test them in separate browser profiles. The email addresses only need to be unique during Version 1 development because email confirmation is disabled.
+
+To add another administrator without knowing their password, have that person
+sign up normally. A current administrator verifies the pending account and uses
+**Approve as administrator** on `/admin/users`. Public signup never accepts a
+requested role and cannot create an administrator by itself.
+
+Active users change their own password from **Account**. The server verifies
+the current password, Supabase Auth stores the new password securely, and all
+existing sessions are signed out after a successful change. Passwords are never
+stored in the application tables.
 
 ## Verification
 

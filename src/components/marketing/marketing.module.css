@@ -63,7 +63,7 @@
   gap: 10px;
   color: var(--emerald);
   font-family: var(--font-mono), monospace;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -162,7 +162,7 @@
   margin-top: 4px;
   color: var(--ink-faint);
   font-family: var(--font-mono), monospace;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 500;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -202,7 +202,7 @@
 .desktopNavigation a,
 .loginLink {
   color: var(--ink-soft);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
   transition: color 150ms ease;
 }
@@ -280,7 +280,7 @@
   padding: 13px 18px;
   border-bottom: 1px solid var(--line-soft);
   color: var(--ink-soft);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 500;
 }
 
@@ -350,7 +350,7 @@
   margin-top: 20px;
   color: var(--ink-faint);
   font-family: var(--font-mono), monospace;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .heroNote::before {
@@ -380,7 +380,7 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.09);
   color: #8ca0a6;
   font-family: var(--font-mono), monospace;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.11em;
   text-transform: uppercase;
 }
@@ -435,7 +435,7 @@
   margin-top: 8px;
   color: #8ca0a6;
   font-family: var(--font-mono), monospace;
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
@@ -460,13 +460,13 @@
 .consoleState {
   color: #fff;
   font-family: var(--font-mono), monospace;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
 }
 
 .consoleStateName {
   color: #9fb2b8;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .statusChip {
@@ -478,7 +478,7 @@
   background: rgba(25, 180, 135, 0.14);
   color: #5fd8b4;
   font-family: var(--font-mono), monospace;
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .statusChip::before {
@@ -506,7 +506,6 @@
 }
 
 .platformStrip {
-  border-block: 1px solid var(--line);
   background: var(--surface-2);
 }
 
@@ -522,7 +521,7 @@
 .platformInner > span:first-child {
   color: var(--ink-faint);
   font-family: var(--font-mono), monospace;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -533,7 +532,7 @@
   justify-content: center;
   gap: 14px 28px;
   color: var(--ink-soft);
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 600;
 }
 
@@ -570,7 +569,7 @@
   margin-bottom: 14px;
   color: var(--amber);
   font-family: var(--font-mono), monospace;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -596,7 +595,7 @@
 .resourceCard p {
   margin-top: 8px;
   color: var(--ink-faint);
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.55;
 }
 
@@ -636,7 +635,7 @@
 .processNumber {
   color: var(--emerald-bright);
   font-family: var(--font-mono), monospace;
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.1em;
 }
 
@@ -648,7 +647,7 @@
 
 .processStep p {
   color: #9fb4ba;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .processCta {
@@ -679,7 +678,7 @@
   margin-bottom: 5px;
   color: var(--emerald);
   font-family: var(--font-mono), monospace;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -695,7 +694,7 @@
   padding: 9px 0 9px 21px;
   border-top: 1px solid var(--line-soft);
   color: var(--ink-soft);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .serviceCard li::before {
@@ -717,7 +716,7 @@
   margin-bottom: 25px;
   color: var(--emerald);
   font-family: var(--font-mono), monospace;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -726,7 +725,7 @@
   display: inline-flex;
   margin-top: 20px;
   color: var(--emerald-deep);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .closing {
@@ -787,7 +786,7 @@
   max-width: 36ch;
   margin-top: 19px;
   color: #8da1a8;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .footerColumn {
@@ -800,14 +799,14 @@
   margin-bottom: 9px;
   color: #fff;
   font-family: var(--font-mono), monospace;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .footerColumn a {
   color: #9eb0b6;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .footerColumn a:hover {
@@ -822,7 +821,7 @@
   padding-top: 22px;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   color: #738991;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 .pageHeader {

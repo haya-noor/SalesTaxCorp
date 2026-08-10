@@ -119,7 +119,6 @@ export default function HomePage() {
                 See what we manage
               </Link>
             </div>
-            <p className={styles.heroNote}>Human oversight at every important decision</p>
           </div>
 
           <div className={styles.console} aria-label="Illustrative compliance overview">
@@ -170,18 +169,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className={styles.platformStrip} aria-label="Sales channels">
-        <div className={`${styles.wrap} ${styles.platformInner}`}>
-          <span>Built for multi-channel sellers</span>
-          <div className={styles.platformList}>
-            <span>Shopify</span>
-            <span>Amazon</span>
-            <span>Walmart</span>
-            <span>Etsy</span>
-            <span>BigCommerce</span>
-          </div>
-        </div>
-      </section>
+     
 
       <section className={styles.section}>
         <div className={styles.wrap}>

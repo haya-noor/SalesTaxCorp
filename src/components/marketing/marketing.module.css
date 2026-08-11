@@ -570,7 +570,7 @@
   margin-bottom: 14px;
   color: var(--amber);
   font-family: var(--font-mono), monospace;
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -587,7 +587,7 @@
 .serviceCard h3,
 .resourceCard h3 {
   font-family: var(--font-body), sans-serif;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   font-weight: 600;
   letter-spacing: 0;
 }
@@ -596,7 +596,7 @@
 .resourceCard p {
   margin-top: 8px;
   color: var(--ink-faint);
-  font-size: 17px;
+  font-size: 19px;
   line-height: 1.65;
 }
 
@@ -636,19 +636,19 @@
 .processNumber {
   color: var(--emerald-bright);
   font-family: var(--font-mono), monospace;
-  font-size: 14px;
+  font-size: 15px;
   letter-spacing: 0.1em;
 }
 
 .processStep h3 {
   margin: 15px 0 10px;
   color: #fff;
-  font-size: 1.45rem;
+  font-size: 1.55rem;
 }
 
 .processStep p {
   color: #9fb4ba;
-  font-size: 17px;
+  font-size: 19px;
   line-height: 1.65;
 }
 
@@ -664,7 +664,7 @@
 
 .processCta p {
   color: #a7bbc1;
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .serviceGrid,
@@ -681,7 +681,7 @@
   margin-bottom: 5px;
   color: var(--emerald);
   font-family: var(--font-mono), monospace;
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -697,7 +697,7 @@
   padding: 9px 0 9px 21px;
   border-top: 1px solid var(--line-soft);
   color: var(--ink-soft);
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .serviceCard li::before {
@@ -719,7 +719,7 @@
   margin-bottom: 25px;
   color: var(--emerald);
   font-family: var(--font-mono), monospace;
-  font-size: 13px;
+  font-size: 14px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -728,7 +728,7 @@
   display: inline-flex;
   margin-top: 20px;
   color: var(--emerald-deep);
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .closing {
@@ -789,7 +789,7 @@
   max-width: 36ch;
   margin-top: 19px;
   color: #8da1a8;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .footerColumn {
@@ -809,7 +809,7 @@
 
 .footerColumn a {
   color: #9eb0b6;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .footerColumn a:hover {

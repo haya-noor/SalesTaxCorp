@@ -20,11 +20,11 @@ export default async function ClientsPage({
   const messages = await searchParams;
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[22rem_1fr]">
+    <div className="grid gap-7 lg:grid-cols-[24rem_1fr]">
 
       <Card className="h-fit">
-        <h2 className="text-lg font-bold">Create client</h2>
-        <p className="mt-1 text-sm text-slate-500">Add the company before approving its users.</p>
+        <h2 className="text-xl font-bold">Create client</h2>
+        <p className="mt-2 text-base text-slate-500">Add the company before approving its users.</p>
         <form action={createClientAction} className="mt-5 grid gap-4">
           <Field label="Company name" name="companyName" required />
           <Button type="submit">Create client</Button>
@@ -36,8 +36,8 @@ export default async function ClientsPage({
 
         <Card>
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-lg font-bold">Client companies</h2>
-            <span className="text-sm text-slate-500">{clients?.length ?? 0} total</span>
+            <h2 className="text-xl font-bold">Client companies</h2>
+            <span className="text-base font-medium text-slate-500">{clients?.length ?? 0} total</span>
           </div>
 
           <div className="divide-y divide-slate-100">
@@ -45,14 +45,14 @@ export default async function ClientsPage({
               <Link
                 href={`/admin/clients/${client.id}`}
                 key={client.id}
-                className="flex items-center justify-between gap-4 py-4 hover:text-teal-800"
+                className="flex items-center justify-between gap-4 py-5 text-base hover:text-teal-800"
               >
                 <span className="font-semibold">{client.company_name}</span>
                 <StatusBadge status={client.status} />
               </Link>
             ))}
             {!clients?.length ? (
-              <p className="py-8 text-center text-sm text-slate-500">No clients created yet.</p>
+              <p className="py-8 text-center text-base text-slate-500">No clients created yet.</p>
             ) : null}
           </div>
         </Card>

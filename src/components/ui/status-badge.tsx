@@ -7,7 +7,7 @@ export function StatusBadge({ status }: { status: string }) {
         : "bg-slate-100 text-slate-700 ring-slate-500/20";
 
   return (
-    <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold capitalize ring-1 ring-inset ${colors}`}>
+    <span className={`inline-flex rounded-full px-3 py-1.5 text-sm font-semibold capitalize ring-1 ring-inset ${colors}`}>
       {status}
     </span>
   );

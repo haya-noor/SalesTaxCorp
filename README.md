@@ -64,6 +64,16 @@ sign up normally. A current administrator verifies the pending account and uses
 **Approve as administrator** on `/admin/users`. Public signup never accepts a
 requested role and cannot create an administrator by itself.
 
+Both roles use the same `/login` page, labeled **Portal Login** on the public
+website. Supabase Auth verifies the credentials, and the application profile
+then routes an active administrator to `/admin` or an approved client user to
+`/dashboard`. The public `/signup` page is client-only; there is no public
+administrator signup page.
+
+Administrators created with `npm run bootstrap:admin` should receive a strong
+temporary password and change it immediately from **My account** after their
+first login.
+
 Active users change their own password from **Account**. The server verifies
 the current password, Supabase Auth stores the new password securely, and all
 existing sessions are signed out after a successful change. Passwords are never

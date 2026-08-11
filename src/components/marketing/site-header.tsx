@@ -36,7 +36,7 @@ export function SiteHeader() {
         <div className={styles.headerActions}>
           <Link href="/login" className={styles.loginLink}>
             <LockIcon />
-            <span>Client Login</span>
+            <span>Portal Login</span>
           </Link>
           <Link href="/contact" className={`${styles.button} ${styles.buttonPrimary}`}>
             Book a consultation
@@ -53,7 +53,7 @@ export function SiteHeader() {
                   {item.label}
                 </Link>
               ))}
-              <Link href="/login">Client Login</Link>
+              <Link href="/login">Portal Login</Link>
               <Link href="/contact">Book a consultation →</Link>
             </nav>
           </details>

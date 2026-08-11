@@ -79,12 +79,12 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       <SubmitButton label={mode === "login" ? "Sign in" : "Create account"} />
 
       <p className="text-center text-sm text-slate-600">
-        {mode === "login" ? "Need an account?" : "Already registered?"}{" "}
+        {mode === "login" ? "Need client access?" : "Already registered?"}{" "}
         <Link
           href={mode === "login" ? "/signup" : "/login"}
           className="font-semibold text-teal-700 hover:text-teal-800"
         >
-          {mode === "login" ? "Sign up" : "Sign in"}
+          {mode === "login" ? "Create a client account" : "Sign in"}
         </Link>
       </p>
     </form>

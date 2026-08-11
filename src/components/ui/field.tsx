@@ -15,14 +15,14 @@ export function Field({
   error?: string;
 }) {
   return (
-    <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+    <label className="grid gap-2 text-base font-semibold text-slate-700">
       {label}
       <input
-        className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-slate-950 shadow-sm transition placeholder:text-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
+        className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-950 shadow-sm transition placeholder:text-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
         aria-invalid={Boolean(error)}
         {...props}
       />
-      {error ? <span className="text-xs text-red-700">{error}</span> : null}
+      {error ? <span className="text-sm text-red-700">{error}</span> : null}
     </label>
   );
 }
@@ -36,10 +36,10 @@ export function SelectField({
   children: React.ReactNode;
 }) {
   return (
-    <label className="grid gap-1.5 text-sm font-medium text-slate-700">
+    <label className="grid gap-2 text-base font-semibold text-slate-700">
       {label}
       <select
-        className="h-11 rounded-lg border border-slate-300 bg-white px-3 text-slate-950 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
+        className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-950 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
         {...props}
       >
         {children}

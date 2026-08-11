@@ -34,8 +34,8 @@ export default async function ReportsPage({
         <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-teal-50 text-xl text-teal-700">
           ≡
         </div>
-        <h2 className="mt-4 text-xl font-bold">No reports are currently available</h2>
-        <p className="mx-auto mt-2 max-w-lg text-sm leading-6 text-slate-600">
+        <h2 className="mt-5 text-xl font-bold">No reports are currently available</h2>
+        <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-slate-600">
           {selected
             ? `Reports for ${selected.store.display_name} will appear here when report storage is added in Version 1B.`
             : "There are no active stores available for this account."}

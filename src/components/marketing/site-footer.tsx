@@ -35,8 +35,8 @@ export function SiteFooter() {
 
           <div className={styles.footerColumn}>
             <h2>Access</h2>
-            <Link href="/login">Client Login</Link>
-            <Link href="/signup">Create an account</Link>
+            <Link href="/login">Portal Login</Link>
+            <Link href="/signup">Create a client account</Link>
             <Link href="/contact">Book a consultation</Link>
           </div>
         </div>

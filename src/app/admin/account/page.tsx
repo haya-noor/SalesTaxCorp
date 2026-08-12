@@ -1,4 +1,5 @@
 import { ChangePasswordForm } from "@/components/auth/change-password-form";
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { Card } from "@/components/ui/card";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { requireAdmin } from "@/lib/auth/guards";
@@ -7,7 +8,17 @@ export default async function AdminAccountPage() {
   const { user, profile } = await requireAdmin();
 
   return (
-    <div className="grid max-w-2xl gap-6">
+    <div>
+      <AdminPageHeader
+        title="My account"
+        description="Review your administrator profile and keep your password secure."
+        breadcrumbs={[
+          { label: "Overview", href: "/admin" },
+          { label: "My account" },
+        ]}
+      />
+
+      <div className="grid max-w-2xl gap-6">
       <Card>
         <div className="flex items-center justify-between gap-3">
           <h2 className="text-lg font-bold">Account details</h2>
@@ -43,6 +54,7 @@ export default async function AdminAccountPage() {
         </p>
         <ChangePasswordForm />
       </Card>
+      </div>
     </div>
   );
 }

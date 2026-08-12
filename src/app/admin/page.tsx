@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { Card } from "@/components/ui/card";
 import { requireAdmin } from "@/lib/auth/guards";
 
@@ -28,8 +29,15 @@ export default async function AdminPage() {
   ];
 
   return (
-    <div className="grid gap-6">
-      <div className="grid gap-5 sm:grid-cols-3">
+    <div>
+      <AdminPageHeader
+        title="Overview"
+        description="A quick view of your client portal and the work that needs attention."
+        breadcrumbs={[{ label: "Overview" }]}
+      />
+
+      <div className="grid gap-6">
+        <div className="grid gap-5 sm:grid-cols-3">
         {stats.map((stat) => (
           <Card key={stat.label} className="relative overflow-hidden">
             <span className="absolute inset-x-0 top-0 h-1 bg-teal-600" />
@@ -39,9 +47,9 @@ export default async function AdminPage() {
             </p>
           </Card>
         ))}
-      </div>
+        </div>
 
-      <Card className="border-teal-100 bg-gradient-to-br from-white to-teal-50/70">
+        <Card className="border-teal-100 bg-gradient-to-br from-white to-teal-50/70">
         <p className="text-sm font-bold uppercase tracking-[0.14em] text-teal-700">
           Portal management
         </p>
@@ -57,7 +65,8 @@ export default async function AdminPage() {
             Review accounts
           </Link>
         </div>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }

@@ -13,6 +13,7 @@
 // Access is restricted to admins through requireAdmin().
 
 import { Button } from "@/components/ui/button";
+import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { Card } from "@/components/ui/card";
 import { SelectField } from "@/components/ui/field";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -75,7 +76,17 @@ export default async function UsersPage({
   const messages = await searchParams;
 
   return (
-    <div className="grid gap-6">
+    <div>
+      <AdminPageHeader
+        title="Accounts"
+        description="Approve client registrations and review everyone who can access the portal."
+        breadcrumbs={[
+          { label: "Overview", href: "/admin" },
+          { label: "Accounts" },
+        ]}
+      />
+
+      <div className="grid gap-6">
       <FlashMessage {...messages} />
 
       <Card>
@@ -275,6 +286,7 @@ export default async function UsersPage({
           ) : null}
         </div>
       </Card>
+      </div>
     </div>
   );
 }

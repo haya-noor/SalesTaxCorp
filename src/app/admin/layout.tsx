@@ -5,7 +5,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   await requireAdmin();
   return (
     <AppLayout
-      title="Administration"
+      title=""
       subtitle="Admin portal"
       navigation={[
         { href: "/admin", label: "Overview" },

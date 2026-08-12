@@ -59,10 +59,11 @@ The values shown by the pricing estimator are temporary planning figures. Update
 
 Create two client users through `/signup`, approve each against a different client company, and test them in separate browser profiles. The email addresses only need to be unique during Version 1 development because email confirmation is disabled.
 
-To add another administrator without knowing their password, have that person
-sign up normally. A current administrator verifies the pending account and uses
-**Approve as administrator** on `/admin/users`. Public signup never accepts a
-requested role and cannot create an administrator by itself.
+The portal has two fixed administrators: Manzoor and Izaz. Administrators
+cannot create or promote additional administrators through the website. Public
+signup always creates a pending client account and never accepts a requested
+role. The deployment-only bootstrap command is reserved for provisioning those
+fixed administrator accounts in a new environment.
 
 Both roles use the same `/login` page, labeled **Portal Login** on the public
 website. Supabase Auth verifies the credentials, and the application profile

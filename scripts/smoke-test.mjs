@@ -229,20 +229,6 @@ try {
     !pendingSelfPromotion.ok || !pendingSelfPromotion.data?.length,
     "pending user cannot grant itself administrator access",
   );
-
-  await setProfile(adminToken, sessionB.user.id, {
-    role: "admin",
-    client_id: null,
-    status: "active",
-  });
-
-  const promotedAdminClients = await request("/rest/v1/clients?select=*", {
-    token: sessionB.access_token,
-  });
-  assert(
-    promotedAdminClients.data.length >= 2,
-    "existing admin can promote a verified pending user to administrator",
-  );
 } finally {
   await setProfile(adminToken, sessionB.user.id, {
     role: "client",
@@ -250,7 +236,7 @@ try {
     status: "active",
   });
 }
-assert(true, "promoted test account was restored to its client role");
+assert(true, "pending test account was restored to its client role");
 
 await setProfile(adminToken, sessionA.user.id, { status: "suspended" });
 const suspendedAccess = await request("/rest/v1/stores?select=*", {

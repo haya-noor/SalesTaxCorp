@@ -20,7 +20,6 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { FlashMessage } from "@/components/shared/flash-message";
 import {
   approveUserAction,
-  promotePendingUserToAdminAction,
   rejectPendingUserAction,
   setUserStatusAction,
 } from "@/features/admin/actions";
@@ -161,32 +160,6 @@ export default async function UsersPage({
                 </form>
               </div>
 
-              <form
-                action={promotePendingUserToAdminAction}
-                className="mt-4 rounded-lg border border-slate-300 bg-white p-3"
-              >
-                <input type="hidden" name="profileId" value={profile.id} />
-                <p className="text-sm font-semibold text-slate-900">
-                  Administrator access
-                </p>
-                <p className="mt-1 text-xs text-slate-600">
-                  Grants management access to every client, store, and account.
-                  Only use this after separately verifying the person.
-                </p>
-                <label className="mt-3 flex items-start gap-2 text-sm text-slate-700">
-                  <input
-                    className="mt-1 size-4 accent-teal-700"
-                    type="checkbox"
-                    name="confirmAdmin"
-                    value="yes"
-                    required
-                  />
-                  I confirm this person should be an administrator.
-                </label>
-                <Button type="submit" variant="secondary" className="mt-3">
-                  Approve as administrator
-                </Button>
-              </form>
             </div>
           ))}
 
@@ -199,7 +172,8 @@ export default async function UsersPage({
       <Card>
         <h2 className="text-lg font-bold">Administrators</h2>
         <p className="mt-1 text-sm text-slate-500">
-          Administrators can manage all portal clients, stores, and accounts.
+          Fixed portal administrators. New administrators cannot be added from
+          this website.
         </p>
 
         <div className="mt-5 divide-y divide-slate-100">

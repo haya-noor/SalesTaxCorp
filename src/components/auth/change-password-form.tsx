@@ -6,6 +6,10 @@ import { changePasswordAction } from "@/features/auth/actions";
 import { INITIAL_ACTION_STATE } from "@/types/actions";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
+import {
+  PASSWORD_PATTERN,
+  PASSWORD_REQUIREMENTS,
+} from "@/lib/password-policy";
 
 function ChangePasswordButton() {
   const { pending } = useFormStatus();
@@ -40,6 +44,10 @@ export function ChangePasswordForm() {
         type="password"
         autoComplete="new-password"
         minLength={8}
+        maxLength={72}
+        pattern={PASSWORD_PATTERN}
+        title={PASSWORD_REQUIREMENTS}
+        hint={PASSWORD_REQUIREMENTS}
         required
         error={errors.newPassword?.[0]}
       />
@@ -49,6 +57,9 @@ export function ChangePasswordForm() {
         type="password"
         autoComplete="new-password"
         minLength={8}
+        maxLength={72}
+        pattern={PASSWORD_PATTERN}
+        title={PASSWORD_REQUIREMENTS}
         required
         error={errors.confirmPassword?.[0]}
       />

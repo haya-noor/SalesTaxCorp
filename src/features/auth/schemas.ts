@@ -1,4 +1,14 @@
 import { z } from "zod";
+import {
+  meetsPasswordRequirements,
+  PASSWORD_REQUIREMENTS,
+} from "@/lib/password-policy";
+
+const passwordSchema = z
+  .string()
+  .min(8, PASSWORD_REQUIREMENTS)
+  .max(72, "Password must be 72 characters or fewer.")
+  .refine(meetsPasswordRequirements, PASSWORD_REQUIREMENTS);
 
 export const loginSchema = z.object({
   email: z.email("Enter a valid email address."),
@@ -10,7 +20,7 @@ export const signupSchema = z
     fullName: z.string().trim().min(2).max(120),
     companyName: z.string().trim().min(2).max(120),
     email: z.email("Enter a valid email address."),
-    password: z.string().min(8, "Use at least 8 characters.").max(72),
+    password: passwordSchema,
     confirmPassword: z.string(),
   })
   .refine((values) => values.password === values.confirmPassword, {
@@ -21,7 +31,7 @@ export const signupSchema = z
 export const changePasswordSchema = z
   .object({
     currentPassword: z.string().min(1, "Enter your current password.").max(72),
-    newPassword: z.string().min(8, "Use at least 8 characters.").max(72),
+    newPassword: passwordSchema,
     confirmPassword: z.string(),
   })
   .refine((values) => values.newPassword === values.confirmPassword, {

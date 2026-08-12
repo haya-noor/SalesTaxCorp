@@ -9,10 +9,12 @@ SelectField is a dropdown select field component that can be used for selecting 
 export function Field({
   label,
   error,
+  hint,
   ...props
 }: InputHTMLAttributes<HTMLInputElement> & {
   label: string;
   error?: string;
+  hint?: string;
 }) {
   return (
     <label className="grid gap-2 text-base font-semibold text-slate-700">
@@ -20,9 +22,20 @@ export function Field({
       <input
         className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-950 shadow-sm transition placeholder:text-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
         aria-invalid={Boolean(error)}
+        aria-describedby={
+          error || hint ? `${props.name}-supporting-text` : undefined
+        }
         {...props}
       />
-      {error ? <span className="text-sm text-red-700">{error}</span> : null}
+      {error ? (
+        <span id={`${props.name}-supporting-text`} className="text-sm text-red-700">
+          {error}
+        </span>
+      ) : hint ? (
+        <span id={`${props.name}-supporting-text`} className="text-sm font-normal text-slate-500">
+          {hint}
+        </span>
+      ) : null}
     </label>
   );
 }

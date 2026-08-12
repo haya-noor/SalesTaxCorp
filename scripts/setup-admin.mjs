@@ -12,6 +12,21 @@ for (const name of required) {
   }
 }
 
+const passwordRequirements =
+  "ADMIN_PASSWORD must contain at least 8 characters, including 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.";
+const adminPassword = process.env.ADMIN_PASSWORD;
+
+if (
+  adminPassword.length < 8 ||
+  adminPassword.length > 72 ||
+  !/[A-Z]/.test(adminPassword) ||
+  !/[a-z]/.test(adminPassword) ||
+  !/[0-9]/.test(adminPassword) ||
+  !/[^A-Za-z0-9\s]/.test(adminPassword)
+) {
+  throw new Error(passwordRequirements);
+}
+
 const baseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const secret = process.env.SUPABASE_SECRET_KEY;
 const headers = {
@@ -34,7 +49,7 @@ const created = await request("/auth/v1/admin/users", {
   method: "POST",
   body: JSON.stringify({
     email: process.env.ADMIN_EMAIL,
-    password: process.env.ADMIN_PASSWORD,
+    password: adminPassword,
     email_confirm: true,
     user_metadata: { full_name: process.env.ADMIN_FULL_NAME },
   }),

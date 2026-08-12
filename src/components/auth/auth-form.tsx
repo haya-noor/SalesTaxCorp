@@ -7,6 +7,10 @@ import { loginAction, signupAction } from "@/features/auth/actions";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { INITIAL_ACTION_STATE } from "@/types/actions";
+import {
+  PASSWORD_PATTERN,
+  PASSWORD_REQUIREMENTS,
+} from "@/lib/password-policy";
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
@@ -57,6 +61,11 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         type="password"
         autoComplete={mode === "login" ? "current-password" : "new-password"}
         required
+        minLength={mode === "signup" ? 8 : undefined}
+        maxLength={mode === "signup" ? 72 : undefined}
+        pattern={mode === "signup" ? PASSWORD_PATTERN : undefined}
+        title={mode === "signup" ? PASSWORD_REQUIREMENTS : undefined}
+        hint={mode === "signup" ? PASSWORD_REQUIREMENTS : undefined}
         error={errors.password?.[0]}
       />
       {mode === "signup" ? (
@@ -65,6 +74,10 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
           name="confirmPassword"
           type="password"
           autoComplete="new-password"
+          minLength={8}
+          maxLength={72}
+          pattern={PASSWORD_PATTERN}
+          title={PASSWORD_REQUIREMENTS}
           required
           error={errors.confirmPassword?.[0]}
         />

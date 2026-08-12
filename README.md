@@ -80,6 +80,11 @@ the current password, Supabase Auth stores the new password securely, and all
 existing sessions are signed out after a successful change. Passwords are never
 stored in the application tables.
 
+New and changed passwords must contain at least 8 characters, including one
+uppercase letter, one lowercase letter, one number, and one special character.
+Existing passwords remain valid for login so users are not unexpectedly locked
+out; the policy is enforced the next time a password is created or changed.
+
 ## Verification
 
 ```bash

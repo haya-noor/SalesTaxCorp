@@ -5,7 +5,7 @@ import { useFormStatus } from "react-dom";
 import { changePasswordAction } from "@/features/auth/actions";
 import { INITIAL_ACTION_STATE } from "@/types/actions";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
+import { PasswordField } from "@/components/auth/password-field";
 import {
   PASSWORD_PATTERN,
   PASSWORD_REQUIREMENTS,
@@ -30,18 +30,16 @@ export function ChangePasswordForm() {
 
   return (
     <form action={formAction} className="mt-6 grid max-w-lg gap-4">
-      <Field
+      <PasswordField
         label="Current password"
         name="currentPassword"
-        type="password"
         autoComplete="current-password"
         required
         error={errors.currentPassword?.[0]}
       />
-      <Field
+      <PasswordField
         label="New password"
         name="newPassword"
-        type="password"
         autoComplete="new-password"
         minLength={8}
         maxLength={72}
@@ -51,10 +49,9 @@ export function ChangePasswordForm() {
         required
         error={errors.newPassword?.[0]}
       />
-      <Field
+      <PasswordField
         label="Confirm new password"
         name="confirmPassword"
-        type="password"
         autoComplete="new-password"
         minLength={8}
         maxLength={72}

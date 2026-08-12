@@ -6,6 +6,7 @@ import { useFormStatus } from "react-dom";
 import { loginAction, signupAction } from "@/features/auth/actions";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
+import { PasswordField } from "@/components/auth/password-field";
 import { INITIAL_ACTION_STATE } from "@/types/actions";
 import {
   PASSWORD_PATTERN,
@@ -55,10 +56,9 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         required
         error={errors.email?.[0]}
       />
-      <Field
+      <PasswordField
         label="Password"
         name="password"
-        type="password"
         autoComplete={mode === "login" ? "current-password" : "new-password"}
         required
         minLength={mode === "signup" ? 8 : undefined}
@@ -69,10 +69,9 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         error={errors.password?.[0]}
       />
       {mode === "signup" ? (
-        <Field
+        <PasswordField
           label="Confirm password"
           name="confirmPassword"
-          type="password"
           autoComplete="new-password"
           minLength={8}
           maxLength={72}

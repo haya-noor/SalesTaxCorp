@@ -1,5 +1,5 @@
 export const PASSWORD_REQUIREMENTS =
-  "Use at least 8 characters with 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.";
+  "Password must contain at least 8 characters, including 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.";
 
 export const PASSWORD_PATTERN =
   "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9\\s]).{8,72}";

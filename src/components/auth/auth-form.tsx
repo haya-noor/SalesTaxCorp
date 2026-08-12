@@ -65,7 +65,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         maxLength={mode === "signup" ? 72 : undefined}
         pattern={mode === "signup" ? PASSWORD_PATTERN : undefined}
         title={mode === "signup" ? PASSWORD_REQUIREMENTS : undefined}
-        hint={mode === "signup" ? PASSWORD_REQUIREMENTS : undefined}
+        hint={PASSWORD_REQUIREMENTS}
         error={errors.password?.[0]}
       />
       {mode === "signup" ? (

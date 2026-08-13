@@ -40,14 +40,18 @@ The values shown by the pricing estimator are temporary planning figures. Update
    - Disable email confirmation for this development-only no-email flow.
    - Enable **Require current password when changing password**.
 
-5. Bootstrap the first administrator from PowerShell:
+5. Bootstrap the two fixed administrators from PowerShell. Both temporary
+   passwords must satisfy the portal password policy:
 
    ```powershell
-   $env:ADMIN_EMAIL="admin-test@example.com"
-   $env:ADMIN_PASSWORD="choose-a-strong-test-password"
-   $env:ADMIN_FULL_NAME="Test Administrator"
    npm run bootstrap:admin
    ```
+
+   Store `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `ADMIN_FULL_NAME`,
+   `ADMIN_2_EMAIL`, `ADMIN_2_PASSWORD`, and `ADMIN_2_FULL_NAME` in the
+   ignored environment file used for that environment. Running the command
+   again synchronizes the existing administrators' temporary passwords and
+   profile details; it never creates a third administrator.
 
 6. Start the app:
 

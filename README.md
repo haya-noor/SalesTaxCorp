@@ -10,7 +10,7 @@ Sales Tax Corp is a public marketing website and secure client portal built with
 - Client self-signup with `pending` approval status
 - One login page with admin/client routing
 - Admin management for clients, stores, and pending accounts
-- Admin-only promotion of a verified pending signup to administrator
+- Two fixed administrator accounts provisioned outside the public website
 - Self-service password changes for active administrators and client users
 - Client access to every active store belonging to the approved company
 - Protected admin and client routes
@@ -104,4 +104,23 @@ The project includes `netlify.toml` and targets Node.js 22. Add these variables 
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - `SUPABASE_SECRET_KEY`
 
-The no-email signup flow is intended only for controlled development/testing. Add verified email and recovery before a real public launch.
+Use separate Supabase projects for development and production. Keep
+`.env.local` connected to development; configure the production Supabase values
+in Netlify's **production** deploy context.
+
+For the controlled no-email Version 1 demo, production Supabase Auth must allow
+new email/password signups with **Confirm email** disabled. Client accounts are
+still protected by the application's pending-admin-approval flow. Before a
+general public launch, add verified email, password recovery, CAPTCHA, and a
+production SMTP provider.
+
+Apply database changes through the checked-in migrations, never by copying the
+development data into production:
+
+```bash
+supabase db push --dry-run
+supabase db push
+```
+
+After a production deploy, verify public pages, admin login, client signup and
+pending approval, client isolation, logout, and password changes.

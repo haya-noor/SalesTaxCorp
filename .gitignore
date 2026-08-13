@@ -45,3 +45,6 @@ next-env.d.ts
 /salestaxcorp-app/
 /.artifacts/
 /.next-dev.*.log
+
+# Local Netlify folder
+.netlify

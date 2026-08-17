@@ -29,11 +29,6 @@ export async function uploadReportAction(formData: FormData) {
     storeId: formData.get("storeId"),
     periodYear: formData.get("periodYear"),
     periodMonth: formData.get("periodMonth"),
-    dueDate: formData.get("dueDate") || undefined,
-    preparedDate: formData.get("preparedDate") || undefined,
-    alertTitle: formData.get("alertTitle") || undefined,
-    alertBody: formData.get("alertBody") || undefined,
-    footnote: formData.get("footnote") || undefined,
     published: formData.get("published") ? "true" : "false",
   });
 
@@ -76,11 +71,6 @@ export async function uploadReportAction(formData: FormData) {
         store_id: parsed.data.storeId,
         period_year: parsed.data.periodYear,
         period_month: parsed.data.periodMonth,
-        due_date: parsed.data.dueDate || null,
-        prepared_date: parsed.data.preparedDate || null,
-        alert_title: parsed.data.alertTitle || null,
-        alert_body: parsed.data.alertBody || null,
-        footnote: parsed.data.footnote || null,
         file_path: filePath,
         published: parsed.data.published ?? false,
       },

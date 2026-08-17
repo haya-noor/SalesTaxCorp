@@ -112,24 +112,6 @@ export default async function AdminReportsPage({
                 defaultValue={currentYear}
                 required
               />
-              <Field label="Due date" name="dueDate" type="date" />
-              <Field label="Prepared date" name="preparedDate" type="date" />
-              <div className="sm:col-span-2">
-                <Field label="Alert title" name="alertTitle" />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="grid gap-2 text-base font-semibold text-slate-700">
-                  Alert body
-                  <textarea
-                    name="alertBody"
-                    rows={3}
-                    className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-950 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
-                  />
-                </label>
-              </div>
-              <div className="sm:col-span-2">
-                <Field label="Footnote" name="footnote" />
-              </div>
               <div className="sm:col-span-2">
                 <label className="grid gap-2 text-base font-semibold text-slate-700">
                   Report file (.html)

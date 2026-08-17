@@ -138,7 +138,7 @@ export default async function ReportsPage({
               key={selectedPeriod.id}
               src={`/api/reports/${selectedPeriod.id}/file`}
               title={`${monthName(selectedPeriod.period_month)} ${selectedPeriod.period_year} report`}
-              className="h-[80vh] w-full border-0"
+              className="h-[calc(100vh-13rem)] w-full border-0"
             />
           </Card>
         </>

@@ -19,7 +19,7 @@ export function ClientShell({
     <div className="min-h-screen bg-slate-50">
       <div className="h-1 bg-gradient-to-r from-teal-700 via-emerald-500 to-teal-700" />
       <header className="border-b border-slate-200/90 bg-white/95 shadow-sm backdrop-blur">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-5 px-4 py-5 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-[1920px] flex-wrap items-center justify-between gap-5 px-4 py-5 sm:px-6 lg:px-8">
           <Link href="/dashboard" className="flex items-center gap-3 text-slate-950">
             <span className="grid size-10 place-items-center rounded-xl bg-teal-700 text-lg font-bold text-white shadow-sm">
               ✓
@@ -50,8 +50,8 @@ export function ClientShell({
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-10 sm:px-6 lg:flex-row lg:px-8 lg:py-12">
-        <aside className="w-full shrink-0 lg:w-64">
+      <div className="mx-auto flex max-w-[1920px] flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-8 lg:py-8">
+        <aside className="w-full shrink-0 lg:w-48">
           <p className="mb-3 px-1 text-sm font-bold uppercase tracking-[0.16em] text-teal-700">
             {companyName}
           </p>

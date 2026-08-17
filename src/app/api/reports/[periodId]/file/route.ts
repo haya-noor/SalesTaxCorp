@@ -6,8 +6,9 @@ route:
 - confirms a client user is logged in and approved (requireClientUser)
 - relies on the filing_periods RLS policy to only return the row if it
   belongs to one of that client's stores and is published
-- uses the admin client (service role) to mint a short-lived signed URL
-  and redirects the browser to it
+- downloads the file server-side with the admin client and streams it back
+  with an explicit text/html content type, since Supabase's signed-URL
+  endpoint does not reliably preserve the stored content type
 */
 import { NextResponse } from "next/server";
 import { requireClientUser } from "@/lib/auth/guards";
@@ -32,16 +33,21 @@ export async function GET(
   }
 
   const adminClient = createSupabaseAdminClient();
-  const { data: signed, error } = await adminClient.storage
+  const { data: file, error } = await adminClient.storage
     .from("client-reports")
-    .createSignedUrl(period.file_path, 60);
+    .download(period.file_path);
 
-  if (error || !signed) {
+  if (error || !file) {
     return NextResponse.json(
       { error: "The report could not be loaded." },
       { status: 500 },
     );
   }
 
-  return NextResponse.redirect(signed.signedUrl);
+  return new NextResponse(await file.arrayBuffer(), {
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "private, no-store",
+    },
+  });
 }

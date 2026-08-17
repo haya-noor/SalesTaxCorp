@@ -73,6 +73,48 @@ export interface Database {
         };
         Relationships: [];
       };
+      filing_periods: {
+        Row: {
+          id: string;
+          store_id: string;
+          period_year: number;
+          period_month: number;
+          due_date: string | null;
+          prepared_date: string | null;
+          alert_title: string | null;
+          alert_body: string | null;
+          footnote: string | null;
+          file_path: string | null;
+          published: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          store_id: string;
+          period_year: number;
+          period_month: number;
+          due_date?: string | null;
+          prepared_date?: string | null;
+          alert_title?: string | null;
+          alert_body?: string | null;
+          footnote?: string | null;
+          file_path?: string | null;
+          published?: boolean;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          due_date?: string | null;
+          prepared_date?: string | null;
+          alert_title?: string | null;
+          alert_body?: string | null;
+          footnote?: string | null;
+          file_path?: string | null;
+          published?: boolean;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

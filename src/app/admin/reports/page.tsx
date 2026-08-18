@@ -5,10 +5,7 @@ import { Field, SelectField } from "@/components/ui/field";
 import { FlashMessage } from "@/components/shared/flash-message";
 import { requireAdmin } from "@/lib/auth/guards";
 import { monthName } from "@/lib/reports";
-import {
-  setPeriodPublishedAction,
-  uploadReportAction,
-} from "@/features/admin/reports-actions";
+import { uploadReportAction } from "@/features/admin/reports-actions";
 
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 
@@ -132,45 +129,6 @@ export default async function AdminReportsPage({
                 <Button type="submit">Save report</Button>
               </div>
             </form>
-          </Card>
-
-          <Card className="mt-6">
-            <h2 className="text-xl font-bold">Reports for this store</h2>
-            <div className="mt-4 divide-y divide-slate-200">
-              {periods?.map((period) => (
-                <div
-                  key={period.id}
-                  className="flex flex-wrap items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
-                >
-                  <div>
-                    <p className="font-semibold text-slate-950">
-                      {monthName(period.period_month)} {period.period_year}
-                    </p>
-                    <p className="mt-1 text-sm text-slate-500">
-                      {period.published ? "Published" : "Draft"}
-                    </p>
-                  </div>
-                  <form action={setPeriodPublishedAction}>
-                    <input type="hidden" name="periodId" value={period.id} />
-                    <input type="hidden" name="storeId" value={storeId} />
-                    <input
-                      type="hidden"
-                      name="published"
-                      value={period.published ? "false" : "true"}
-                    />
-                    <Button type="submit" variant="secondary">
-                      {period.published ? "Unpublish" : "Publish"}
-                    </Button>
-                  </form>
-                </div>
-              ))}
-
-              {!periods?.length ? (
-                <p className="py-8 text-center text-base text-slate-500">
-                  No reports uploaded yet for this store.
-                </p>
-              ) : null}
-            </div>
           </Card>
         </>
       ) : null}

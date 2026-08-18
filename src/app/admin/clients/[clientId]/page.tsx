@@ -8,7 +8,6 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import { FlashMessage } from "@/components/shared/flash-message";
 import {
   createStoreAction,
-  setClientStatusAction,
   setStoreStatusAction,
   updateClientNameAction,
   updateStoreNameAction,
@@ -222,37 +221,6 @@ export default async function ClientDetailPage({
         </div>
       </Card>
 
-      <Card className="mt-6 border-red-200 bg-red-50/40">
-        <h2 className="text-lg font-bold text-red-900">Danger zone</h2>
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <p className="font-semibold text-slate-900">
-              {client.status === "active" ? "Suspend this client" : "Reactivate this client"}
-            </p>
-            <p className="mt-1 max-w-3xl text-base text-slate-600">
-              {client.status === "active"
-                ? "Client users will temporarily lose portal access. Stores and existing relationships will not be deleted."
-                : "Restore portal access for approved users belonging to this company."}
-            </p>
-          </div>
-
-          <form action={setClientStatusAction}>
-            <input type="hidden" name="clientId" value={client.id} />
-            <input
-              type="hidden"
-              name="status"
-              value={client.status === "active" ? "suspended" : "active"}
-            />
-            {client.status === "active" ? (
-              <ConfirmSubmitButton message={`Suspend ${client.company_name}? Its client users will temporarily lose portal access.`}>
-                Suspend client
-              </ConfirmSubmitButton>
-            ) : (
-              <Button type="submit">Reactivate client</Button>
-            )}
-          </form>
-        </div>
-      </Card>
     </div>
   );
 }

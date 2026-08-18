@@ -106,12 +106,14 @@ export default async function ReportsPage({
             </div>
           </div>
 
-          <Card className="p-0 overflow-hidden flex-1">
+          <Card className="p-0 overflow-visible">
             <iframe
               key={selectedPeriod.id}
               src={`/api/reports/${selectedPeriod.id}/file`}
               title={`${monthName(selectedPeriod.period_month)} ${selectedPeriod.period_year} report`}
-              className="h-[calc(100vh-16rem)] w-full border-0"
+              className="w-full border-0"
+              style={{ height: "120vh" }}
+              scrolling="no"
             />
           </Card>
         </>

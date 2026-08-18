@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import { StoreSwitcher } from "@/components/client/store-switcher";
+import { YearSelector } from "@/components/client/year-selector";
 import { requireClientUser, requireStoreAccess } from "@/lib/auth/guards";
 import { listAllPublishedPeriods, monthName } from "@/lib/reports";
 
@@ -49,17 +50,7 @@ export default async function ReportsPage({
   }
 
   return (
-    <div className="grid gap-6">
-      {stores?.length ? (
-        <Card>
-          <StoreSwitcher
-            stores={stores}
-            selectedStoreId={selected?.store.id}
-            action="/dashboard/reports"
-          />
-        </Card>
-      ) : null}
-
+    <div className="flex flex-col gap-4">
       {!selected ? (
         <Card className="py-14 text-center">
           <p className="text-base leading-7 text-slate-600">
@@ -79,66 +70,48 @@ export default async function ReportsPage({
         </Card>
       ) : (
         <>
-          <Card>
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div className="flex items-center gap-3">
-                {prevPeriod ? (
-                  <Link
-                    href={periodHref(prevPeriod)}
-                    className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-base font-semibold text-slate-700 shadow-sm hover:border-teal-300"
-                  >
-                    {monthName(prevPeriod.period_month)}
-                  </Link>
-                ) : null}
-
-                <span className="rounded-xl bg-teal-700 px-5 py-2.5 text-base font-semibold text-white shadow-sm">
-                  {monthName(selectedPeriod.period_month)} {selectedPeriod.period_year}
-                </span>
-
-                {nextPeriod ? (
-                  <Link
-                    href={periodHref(nextPeriod)}
-                    className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-base font-semibold text-slate-700 shadow-sm hover:border-teal-300"
-                  >
-                    {monthName(nextPeriod.period_month)}
-                  </Link>
-                ) : null}
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            {stores?.length ? (
+              <div className="min-w-56">
+                <StoreSwitcher
+                  stores={stores}
+                  selectedStoreId={selected?.store.id}
+                  action="/dashboard/reports"
+                />
               </div>
+            ) : null}
 
-              {years.length > 1 ? (
-                <form className="flex items-end gap-3">
-                  <input type="hidden" name="store" value={storeId} />
-                  <label className="grid gap-2 text-base font-semibold text-slate-700">
-                    Year
-                    <select
-                      name="year"
-                      defaultValue={selectedYear}
-                      className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-950 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
-                    >
-                      {years.map((year) => (
-                        <option key={year} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <button
-                    type="submit"
-                    className="h-12 rounded-xl border border-slate-300 bg-white px-5 text-base font-semibold text-slate-700 shadow-sm hover:border-teal-300"
-                  >
-                    Go
-                  </button>
-                </form>
-              ) : null}
+            <YearSelector
+              years={years}
+              selectedYear={selectedYear}
+              storeId={storeId!}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-2">
+              {yearPeriods.map((period) => (
+                <Link
+                  key={period.id}
+                  href={periodHref(period)}
+                  className={`whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition ${
+                    period.id === selectedPeriod.id
+                      ? "bg-teal-700 text-white shadow-sm"
+                      : "border border-slate-300 bg-white text-slate-700 hover:border-teal-300"
+                  }`}
+                >
+                  {monthName(period.period_month)}
+                </Link>
+              ))}
             </div>
-          </Card>
+          </div>
 
-          <Card className="p-0 overflow-hidden">
+          <Card className="p-0 overflow-hidden flex-1">
             <iframe
               key={selectedPeriod.id}
               src={`/api/reports/${selectedPeriod.id}/file`}
               title={`${monthName(selectedPeriod.period_month)} ${selectedPeriod.period_year} report`}
-              className="h-[calc(100vh-13rem)] w-full border-0"
+              className="h-[calc(100vh-16rem)] w-full border-0"
             />
           </Card>
         </>

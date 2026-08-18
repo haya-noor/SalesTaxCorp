@@ -27,12 +27,14 @@ export default async function ReportsPage({
   const years = Array.from(new Set(periods.map((p) => p.period_year))).sort(
     (a, b) => b - a,
   );
-  const selectedYear = params.year ? Number(params.year) : years[0];
+  const requestedYear = params.year ? Number(params.year) : undefined;
+  const selectedYear =
+    requestedYear && years.includes(requestedYear) ? requestedYear : years[0];
 
   const yearPeriods = periods.filter((p) => p.period_year === selectedYear);
   const selectedPeriod =
     (params.period
-      ? periods.find((p) => p.id === params.period)
+      ? yearPeriods.find((p) => p.id === params.period)
       : undefined) ?? yearPeriods[yearPeriods.length - 1];
 
   function periodHref(period: { id: string; period_year: number }) {

@@ -18,13 +18,13 @@ export function YearSelector({
     router.push(`/dashboard/reports?store=${storeId}&year=${year}`);
   };
 
-  if (years.length <= 1) return null;
+  if (!years.length) return null;
 
   return (
     <div className="flex items-center gap-2">
       <span className="text-sm font-semibold text-slate-700">Year:</span>
       <select
-        defaultValue={selectedYear}
+        value={selectedYear}
         onChange={handleYearChange}
         className="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-950 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
       >

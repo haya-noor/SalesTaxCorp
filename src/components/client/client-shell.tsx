@@ -2,6 +2,9 @@ import Link from "next/link";
 import { ClientSidebar } from "@/components/client/client-sidebar";
 import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/features/auth/actions";
+import type { Database } from "@/types/database";
+
+type Store = Database["public"]["Tables"]["stores"]["Row"];
 
 /*
 Layout shell for the client portal: header with company name/account/logout,
@@ -10,9 +13,11 @@ the page content to its right. Reports is the default landing section.
 */
 export function ClientShell({
   companyName,
+  stores,
   children,
 }: {
   companyName: string;
+  stores: Store[];
   children: React.ReactNode;
 }) {
   return (
@@ -50,12 +55,12 @@ export function ClientShell({
         </div>
       </header>
 
-      <div className="mx-auto flex max-w-[1920px] flex-col gap-6 px-4 py-6 sm:px-6 lg:flex-row lg:px-8 lg:py-8">
-        <aside className="w-full shrink-0 lg:w-48">
+      <div className="mx-auto flex max-w-[1920px] flex-col gap-4 px-4 py-4 sm:px-5 lg:flex-row lg:px-6 lg:py-5">
+        <aside className="w-full shrink-0 lg:w-52">
           <p className="mb-3 px-1 text-sm font-bold uppercase tracking-[0.16em] text-teal-700">
             {companyName}
           </p>
-          <ClientSidebar />
+          <ClientSidebar stores={stores} />
         </aside>
         <main className="min-w-0 flex-1">{children}</main>
       </div>

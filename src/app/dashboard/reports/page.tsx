@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
-import { StoreSwitcher } from "@/components/client/store-switcher";
 import { YearSelector } from "@/components/client/year-selector";
 import { requireClientUser, requireStoreAccess } from "@/lib/auth/guards";
 import { listAllPublishedPeriods, monthName } from "@/lib/reports";
@@ -36,21 +35,12 @@ export default async function ReportsPage({
       ? periods.find((p) => p.id === params.period)
       : undefined) ?? yearPeriods[yearPeriods.length - 1];
 
-  const selectedIndex = selectedPeriod
-    ? periods.findIndex((p) => p.id === selectedPeriod.id)
-    : -1;
-  const prevPeriod = selectedIndex > 0 ? periods[selectedIndex - 1] : null;
-  const nextPeriod =
-    selectedIndex >= 0 && selectedIndex < periods.length - 1
-      ? periods[selectedIndex + 1]
-      : null;
-
   function periodHref(period: { id: string; period_year: number }) {
     return `/dashboard/reports?store=${storeId}&year=${period.period_year}&period=${period.id}`;
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2">
       {!selected ? (
         <Card className="py-14 text-center">
           <p className="text-base leading-7 text-slate-600">
@@ -70,26 +60,8 @@ export default async function ReportsPage({
         </Card>
       ) : (
         <>
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            {stores?.length ? (
-              <div className="min-w-56">
-                <StoreSwitcher
-                  stores={stores}
-                  selectedStoreId={selected?.store.id}
-                  action="/dashboard/reports"
-                />
-              </div>
-            ) : null}
-
-            <YearSelector
-              years={years}
-              selectedYear={selectedYear}
-              storeId={storeId!}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <div className="flex flex-wrap items-center gap-2 overflow-x-auto pb-2">
+          <div className="flex min-h-10 flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2 overflow-x-auto">
               {yearPeriods.map((period) => (
                 <Link
                   key={period.id}
@@ -104,18 +76,22 @@ export default async function ReportsPage({
                 </Link>
               ))}
             </div>
+
+            <YearSelector
+              years={years}
+              selectedYear={selectedYear}
+              storeId={storeId!}
+            />
           </div>
 
-          <Card className="p-0 overflow-visible">
-            <iframe
-              key={selectedPeriod.id}
-              src={`/api/reports/${selectedPeriod.id}/file`}
-              title={`${monthName(selectedPeriod.period_month)} ${selectedPeriod.period_year} report`}
-              className="w-full border-0"
-              style={{ height: "120vh" }}
-              scrolling="no"
-            />
-          </Card>
+          <iframe
+            key={selectedPeriod.id}
+            src={`/api/reports/${selectedPeriod.id}/file`}
+            title={`${monthName(selectedPeriod.period_month)} ${selectedPeriod.period_year} report`}
+            className="block h-[calc(100vh-6.5rem)] min-h-[900px] w-full border-0 bg-transparent"
+            sandbox="allow-scripts allow-downloads allow-popups"
+            referrerPolicy="no-referrer"
+          />
         </>
       )}
     </div>

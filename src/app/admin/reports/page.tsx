@@ -1,11 +1,16 @@
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+import { ConfirmSubmitButton } from "@/components/admin/confirm-submit-button";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Field, SelectField } from "@/components/ui/field";
 import { FlashMessage } from "@/components/shared/flash-message";
 import { requireAdmin } from "@/lib/auth/guards";
 import { monthName } from "@/lib/reports";
-import { uploadReportAction } from "@/features/admin/reports-actions";
+import {
+  deleteReportAction,
+  setPeriodPublishedAction,
+  uploadReportAction,
+} from "@/features/admin/reports-actions";
 
 const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 
@@ -65,10 +70,11 @@ export default async function AdminReportsPage({
 
       {clientId ? (
         <>
-          <Card className="mt-6">
+          <Card id="upload-report" className="mt-6 scroll-mt-28">
             <h2 className="text-xl font-bold">Upload report</h2>
             <p className="mt-1 text-base text-slate-500">
               Upload the standalone report file generated for this month.
+              Uploading the same client, month, and year replaces the existing file.
               Leave &quot;Publish now&quot; unchecked to save it as a draft for review first.
             </p>
             <form
@@ -108,7 +114,7 @@ export default async function AdminReportsPage({
                 Publish now (visible to the client immediately)
               </label>
               <div className="sm:col-span-2">
-                <Button type="submit">Save report</Button>
+                <Button type="submit">Save or replace report</Button>
               </div>
             </form>
           </Card>
@@ -124,15 +130,47 @@ export default async function AdminReportsPage({
                   <span className="font-semibold text-slate-900">
                     {monthName(period.period_month)} {period.period_year}
                   </span>
-                  <span
-                    className={`rounded-full px-3 py-1 text-sm font-semibold ${
-                      period.published
-                        ? "bg-emerald-50 text-emerald-700"
-                        : "bg-amber-50 text-amber-700"
-                    }`}
-                  >
-                    {period.published ? "Published" : "Draft"}
-                  </span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span
+                      className={`rounded-full px-3 py-1 text-sm font-semibold ${
+                        period.published
+                          ? "bg-emerald-50 text-emerald-700"
+                          : "bg-amber-50 text-amber-700"
+                      }`}
+                    >
+                      {period.published ? "Published" : "Draft"}
+                    </span>
+
+                    <form action={setPeriodPublishedAction}>
+                      <input type="hidden" name="periodId" value={period.id} />
+                      <input type="hidden" name="clientId" value={clientId} />
+                      <input
+                        type="hidden"
+                        name="published"
+                        value={period.published ? "false" : "true"}
+                      />
+                      {period.published ? (
+                        <ConfirmSubmitButton
+                          variant="secondary"
+                          message={`Unpublish ${monthName(period.period_month)} ${period.period_year}? It will immediately disappear from the client portal.`}
+                        >
+                          Unpublish
+                        </ConfirmSubmitButton>
+                      ) : (
+                        <Button type="submit" variant="secondary">
+                          Publish
+                        </Button>
+                      )}
+                    </form>
+
+                    <form action={deleteReportAction}>
+                      <input type="hidden" name="periodId" value={period.id} />
+                      <input type="hidden" name="clientId" value={clientId} />
+                      <ConfirmSubmitButton message={`Permanently delete ${monthName(period.period_month)} ${period.period_year}? This removes both the report record and its stored file.`}>
+                        Delete
+                      </ConfirmSubmitButton>
+                    </form>
+                  </div>
                 </div>
               ))}
               {!periods?.length ? (

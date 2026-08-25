@@ -67,3 +67,38 @@ export async function uploadDocumentAction(formData: FormData) {
 
   go("success", "Document uploaded successfully.");
 }
+
+export async function deleteDocumentAction(
+  documentId: string,
+  clientId: string,
+  filePath: string
+) {
+  "use server";
+  await requireAdmin();
+
+  const adminClient = createSupabaseAdminClient();
+
+  const { error: deleteStorageError } = await adminClient.storage
+    .from("client-documents")
+    .remove([filePath]);
+
+  if (deleteStorageError) {
+    throw new Error("Failed to delete file from storage");
+  }
+
+  const { error: deleteDbError } = await adminClient
+    .from("client_documents")
+    .delete()
+    .eq("id", documentId);
+
+  if (deleteDbError) {
+    throw new Error("Failed to delete document record");
+  }
+
+  revalidatePath("/admin/documents");
+}
+
+async function requireAdmin() {
+  const { requireAdmin: requireAdminGuard } = await import("@/lib/auth/guards");
+  return requireAdminGuard();
+}

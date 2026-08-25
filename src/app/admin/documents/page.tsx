@@ -2,6 +2,7 @@ import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { Card } from "@/components/ui/card";
 import { SelectField } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
+import { DeleteDocumentButton } from "@/components/admin/delete-document-button";
 import { requireAdmin } from "@/lib/auth/guards";
 
 export default async function AdminDocumentsPage({
@@ -76,14 +77,21 @@ export default async function AdminDocumentsPage({
                       })}
                     </p>
                   </div>
-                  <Button variant="secondary" asChild>
-                    <a
-                      href={`/api/documents/${doc.id}/download`}
-                      download={doc.file_name}
-                    >
-                      Download
-                    </a>
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button variant="secondary" asChild>
+                      <a
+                        href={`/api/documents/${doc.id}/download`}
+                        download={doc.file_name}
+                      >
+                        Download
+                      </a>
+                    </Button>
+                    <DeleteDocumentButton
+                      documentId={doc.id}
+                      clientId={clientId}
+                      filePath={doc.file_path}
+                    />
+                  </div>
                 </div>
               ))}
             </div>

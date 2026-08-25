@@ -45,7 +45,16 @@ export default async function DocumentsPage({
               className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-950 shadow-sm file:mr-4 file:rounded-lg file:border-0 file:bg-teal-700 file:px-4 file:py-2 file:text-white file:font-semibold"
             />
           </label>
-          <Button type="submit">Upload</Button>
+          <Button
+            type="submit"
+            onClick={(e) => {
+              const button = e.currentTarget;
+              button.disabled = true;
+              button.textContent = "Uploading...";
+            }}
+          >
+            Upload
+          </Button>
         </form>
       </Card>
 

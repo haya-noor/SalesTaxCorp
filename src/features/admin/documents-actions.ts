@@ -14,18 +14,22 @@ import { requireAdmin } from "@/lib/auth/guards";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { idSchema } from "./schemas";
 
-function go(path: string, kind: "success" | "error", message: string): never {
+function go(
+  clientId: string | undefined,
+  kind: "success" | "error",
+  message: string,
+): never {
   const params = new URLSearchParams({ [kind]: message });
-  redirect(`${path}?${params.toString()}`);
+  if (clientId) params.set("client", clientId);
+  redirect(`/admin/documents?${params.toString()}`);
 }
 
 export async function deleteDocumentAction(formData: FormData) {
   const documentId = idSchema.safeParse(formData.get("documentId"));
   const clientId = idSchema.safeParse(formData.get("clientId"));
-  const path = `/admin/documents?client=${formData.get("clientId") ?? ""}`;
 
   if (!documentId.success || !clientId.success) {
-    go(path, "error", "Invalid document.");
+    go(undefined, "error", "Invalid document.");
   }
 
   const { supabase } = await requireAdmin();
@@ -38,23 +42,31 @@ export async function deleteDocumentAction(formData: FormData) {
     .maybeSingle();
 
   if (!document) {
-    go(path, "error", "Document not found.");
+    go(clientId.data, "error", "Document not found.");
   }
 
   const adminClient = createSupabaseAdminClient();
 
-  await adminClient.storage.from("client-documents").remove([document.file_path]);
+  const { error: storageError } = await adminClient.storage
+    .from("client-documents")
+    .remove([document.file_path]);
+
+  if (storageError) {
+    go(clientId.data, "error", "The stored file could not be deleted.");
+  }
 
   const { error } = await adminClient
     .from("client_documents")
     .delete()
-    .eq("id", documentId.data);
+    .eq("id", documentId.data)
+    .eq("client_id", clientId.data);
 
   if (error) {
-    go(path, "error", "The document could not be deleted.");
+    go(clientId.data, "error", "The document could not be deleted.");
   }
 
   revalidatePath("/admin/documents");
+  revalidatePath(`/admin/clients/${clientId.data}`);
 
-  go(path, "success", "Document deleted.");
+  go(clientId.data, "success", "Document deleted.");
 }

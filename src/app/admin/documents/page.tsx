@@ -40,6 +40,7 @@ export default async function AdminDocumentsPage({
         description="Files uploaded by clients through the portal."
         breadcrumbs={[{ label: "Overview", href: "/admin" }, { label: "Documents" }]}
       />
+      <FlashMessage {...params} />
       <Card>
         <form className="flex flex-wrap items-end gap-3">
           <div className="min-w-64 flex-1">

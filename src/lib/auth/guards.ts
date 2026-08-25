@@ -7,12 +7,11 @@ It:
 - Restricts client pages/actions to approved, active client users.
 - Redirects pending client accounts to the pending-approval page.
 - Verifies that the client company itself is active.
-- Verifies that a requested store belongs to the logged-in client's company.
 These guards centralize access-control logic so it does not have to be
 repeated across individual pages, Server Actions, or future report routes.
 */
 
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { PROFILE_STATUSES, ROUTES, USER_ROLES } from "@/lib/constants";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { Database } from "@/types/database";
@@ -132,28 +131,69 @@ export async function requireClientUser() {
 }
 
 /*
-STORE ACCESS AUTHORIZATION
-Ensures that the requested store:
-  - exists
-  - belongs to the logged-in client's company
-  - is currently active
-This is important for store-specific dashboard pages now, and can later be reused for store-specific PDF/report
-access.
+REPORT FILE ACCESS
+Ensures the logged-in user is allowed to fetch *some* published report file
+— either an active admin (who can view any client's reports) or an approved
+client user. Unlike requireClientUser/requireAdminClientView, this does not
+scope to one client_id itself; the "admins manage filing periods" /
+"clients read their published filing periods" RLS policies on
+filing_periods do that scoping at the row level for whichever role is
+querying. Used by the report file API route, which is shared by both the
+client dashboard and the admin's read-only portal preview.
 */
-export async function requireStoreAccess(storeId: string) {
-  const context = await requireClientUser();
+export async function requireReportViewer() {
+  const { supabase, user } = await requireUser();
 
-  const { data: store } = await context.supabase
-    .from("stores")
+  const { data: profile } = await supabase
+    .from("profiles")
     .select("*")
-    .eq("id", storeId)
-    .eq("client_id", context.client.id)
-    .eq("status", "active")
+    .eq("id", user.id)
     .maybeSingle();
 
-  if (!store) {
+  if (!profile) {
     redirect(ROUTES.ACCESS_DENIED);
   }
 
-  return { ...context, store };
+  if (profile.role === USER_ROLES.ADMIN) {
+    if (profile.status !== PROFILE_STATUSES.ACTIVE) {
+      redirect(ROUTES.ACCESS_DENIED);
+    }
+    return { supabase, user, profile };
+  }
+
+  if (profile.role === USER_ROLES.CLIENT) {
+    if (profile.status === PROFILE_STATUSES.PENDING) {
+      redirect(ROUTES.PENDING);
+    }
+    if (profile.status !== PROFILE_STATUSES.ACTIVE || !profile.client_id) {
+      redirect(ROUTES.ACCESS_DENIED);
+    }
+    return { supabase, user, profile };
+  }
+
+  redirect(ROUTES.ACCESS_DENIED);
+}
+
+/*
+ADMIN READ-ONLY CLIENT PORTAL VIEW
+Lets an active admin view a specific client's portal exactly as that client
+sees it (report history, coming-soon sections, etc.), so they can check what
+they've published/reworked without needing a client login. Scoped by the
+clientId in the route rather than the admin's own profile. The "admins
+manage filing periods" / "admins manage client documents" RLS policies
+already grant admins full read access, so no client-scoped RLS is involved
+here.
+*/
+export async function requireAdminClientView(clientId: string) {
+  const { supabase, user, profile } = await requireAdmin();
+
+  const { data: client } = await supabase
+    .from("clients")
+    .select("*")
+    .eq("id", clientId)
+    .maybeSingle();
+
+  if (!client) notFound();
+
+  return { supabase, user, profile, client };
 }

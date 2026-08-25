@@ -13,10 +13,9 @@ export default async function ClientsPage({
   searchParams: Promise<{ success?: string; error?: string }>;
 }) {
   const { supabase } = await requireAdmin();
-  const [{ data: clients }, { data: stores }, { data: profiles }] =
+  const [{ data: clients }, { data: profiles }] =
     await Promise.all([
       supabase.from("clients").select("*").order("company_name"),
-      supabase.from("stores").select("client_id"),
       supabase.from("profiles").select("client_id").eq("role", "client"),
     ]);
   const messages = await searchParams;
@@ -24,8 +23,6 @@ export default async function ClientsPage({
   const directory =
     clients?.map((client) => ({
       ...client,
-      storeCount:
-        stores?.filter((store) => store.client_id === client.id).length ?? 0,
       userCount:
         profiles?.filter((profile) => profile.client_id === client.id).length ?? 0,
     })) ?? [];
@@ -34,7 +31,7 @@ export default async function ClientsPage({
     <div>
       <AdminPageHeader
         title="Clients"
-        description="Manage client companies, their stores, and portal access from one place."
+        description="Manage client companies and portal access from one place."
         breadcrumbs={[
           { label: "Overview", href: "/admin" },
           { label: "Clients" },
@@ -65,7 +62,7 @@ export default async function ClientsPage({
           <div>
             <h2 className="text-xl font-bold">Client companies</h2>
             <p className="mt-1 text-base text-slate-500">
-              Select a company to manage its details and stores.
+              Select a company to manage its details.
             </p>
           </div>
           <span className="rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-600">

@@ -3,15 +3,18 @@ Serves the HTML report file for a single filing period.
 
 The bucket is private, so files are never linked to directly. Instead this
 route:
-- confirms a client user is logged in and approved (requireClientUser)
-- relies on the filing_periods RLS policy to only return the row if it
-  belongs to one of that client's stores and is published
+- confirms the caller is an approved client user or an active admin
+  (requireReportViewer), since this is used both by the client dashboard
+  and the admin's read-only portal preview
+- relies on the filing_periods RLS policy to only return the row if it's
+  visible to the logged-in caller (their own client's published reports,
+  or any client's for an admin) and published
 - downloads the file server-side with the admin client and streams it back
   with an explicit text/html content type, since Supabase's signed-URL
   endpoint does not reliably preserve the stored content type
 */
 import { NextResponse } from "next/server";
-import { requireClientUser } from "@/lib/auth/guards";
+import { requireReportViewer } from "@/lib/auth/guards";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 export async function GET(
@@ -19,7 +22,7 @@ export async function GET(
   { params }: { params: Promise<{ periodId: string }> },
 ) {
   const { periodId } = await params;
-  const { supabase } = await requireClientUser();
+  const { supabase } = await requireReportViewer();
 
   const { data: period } = await supabase
     .from("filing_periods")

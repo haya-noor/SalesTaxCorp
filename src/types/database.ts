@@ -9,38 +9,20 @@ export interface Database {
         Row: {
           id: string;
           company_name: string;
+          client_code: string | null;
           status: EntityStatus;
           created_at: string;
         };
         Insert: {
           id?: string;
           company_name: string;
+          client_code?: string | null;
           status?: EntityStatus;
           created_at?: string;
         };
         Update: {
           company_name?: string;
-          status?: EntityStatus;
-        };
-        Relationships: [];
-      };
-      stores: {
-        Row: {
-          id: string;
-          client_id: string;
-          display_name: string;
-          status: EntityStatus;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          client_id: string;
-          display_name: string;
-          status?: EntityStatus;
-          created_at?: string;
-        };
-        Update: {
-          display_name?: string;
+          client_code?: string | null;
           status?: EntityStatus;
         };
         Relationships: [];
@@ -76,7 +58,7 @@ export interface Database {
       filing_periods: {
         Row: {
           id: string;
-          store_id: string;
+          client_id: string;
           period_year: number;
           period_month: number;
           file_path: string | null;
@@ -86,7 +68,7 @@ export interface Database {
         };
         Insert: {
           id?: string;
-          store_id: string;
+          client_id: string;
           period_year: number;
           period_month: number;
           file_path?: string | null;
@@ -97,6 +79,29 @@ export interface Database {
         Update: {
           file_path?: string | null;
           published?: boolean;
+        };
+        Relationships: [];
+      };
+      client_documents: {
+        Row: {
+          id: string;
+          client_id: string;
+          uploaded_by: string;
+          original_filename: string;
+          file_path: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          client_id: string;
+          uploaded_by: string;
+          original_filename: string;
+          file_path: string;
+          created_at?: string;
+        };
+        Update: {
+          original_filename?: string;
+          file_path?: string;
         };
         Relationships: [];
       };

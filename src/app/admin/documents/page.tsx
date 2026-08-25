@@ -1,14 +1,18 @@
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
+
+import { ConfirmSubmitButton } from "@/components/admin/confirm-submit-button";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { SelectField } from "@/components/ui/field";
-import { Button } from "@/components/ui/button";
-import { DeleteDocumentButton } from "@/components/admin/delete-document-button";
+import { FlashMessage } from "@/components/shared/flash-message";
+import { deleteDocumentAction } from "@/features/admin/documents-actions";
 import { requireAdmin } from "@/lib/auth/guards";
 
 export default async function AdminDocumentsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ client?: string }>;
+
+  searchParams: Promise<{ client?: string; success?: string; error?: string }>;
 }) {
   const { supabase } = await requireAdmin();
   const params = await searchParams;
@@ -20,14 +24,13 @@ export default async function AdminDocumentsPage({
     .order("company_name");
 
   const clientId = params.client ?? clients?.[0]?.id;
-  const selectedClient = clients?.find((c) => c.id === clientId);
 
   const { data: documents } = clientId
     ? await supabase
         .from("client_documents")
         .select("*")
         .eq("client_id", clientId)
-        .order("uploaded_at", { ascending: false })
+        .order("created_at", { ascending: false })
     : { data: null };
 
   return (
@@ -37,7 +40,6 @@ export default async function AdminDocumentsPage({
         description="Files uploaded by clients through the portal."
         breadcrumbs={[{ label: "Overview", href: "/admin" }, { label: "Documents" }]}
       />
-
       <Card>
         <form className="flex flex-wrap items-end gap-3">
           <div className="min-w-64 flex-1">
@@ -54,52 +56,46 @@ export default async function AdminDocumentsPage({
           </Button>
         </form>
       </Card>
-
-      {clientId && selectedClient ? (
+      {clientId ? (
         <Card className="mt-6">
           <h2 className="text-xl font-bold">Uploaded documents</h2>
-
-          {documents?.length ? (
-            <div className="mt-4 divide-y divide-slate-200">
-              {documents.map((doc) => (
-                <div
-                  key={doc.id}
-                  className="flex flex-wrap items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
-                >
-                  <div>
-                    <p className="font-semibold text-slate-950">{doc.file_name}</p>
-                    <p className="mt-1 text-sm text-slate-500">
-                      {(doc.file_size / 1024).toFixed(2)} KB • Uploaded{" "}
-                      {new Date(doc.uploaded_at).toLocaleDateString()}{" "}
-                      {new Date(doc.uploaded_at).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button variant="secondary" asChild>
-                      <a
-                        href={`/api/documents/${doc.id}/download`}
-                        download={doc.file_name}
-                      >
-                        Download
-                      </a>
-                    </Button>
-                    <DeleteDocumentButton
-                      documentId={doc.id}
-                      clientId={clientId}
-                      filePath={doc.file_path}
-                    />
-                  </div>
+          <div className="mt-4 divide-y divide-slate-200">
+            {documents?.map((document) => (
+              <div
+                key={document.id}
+                className="flex flex-wrap items-center justify-between gap-3 py-4"
+              >
+                <div>
+                  <p className="font-semibold text-slate-950">
+                    {document.original_filename}
+                  </p>
+                  <p className="mt-1 text-sm text-slate-500">
+                    Uploaded {new Date(document.created_at).toLocaleString()}
+                  </p>
                 </div>
-              ))}
-            </div>
-          ) : (
-            <p className="py-8 text-center text-base text-slate-500">
-              No documents uploaded yet by {selectedClient.company_name}.
-            </p>
-          )}
+                <div className="flex items-center gap-2">
+                  <a
+                    href={`/api/documents/${document.id}/file`}
+                    className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-base font-semibold text-slate-700 shadow-sm hover:border-teal-300"
+                  >
+                    Download
+                  </a>
+                  <form action={deleteDocumentAction}>
+                    <input type="hidden" name="documentId" value={document.id} />
+                    <input type="hidden" name="clientId" value={clientId} />
+                    <ConfirmSubmitButton message="Delete this document? This cannot be undone.">
+                      Delete
+                    </ConfirmSubmitButton>
+                  </form>
+                </div>
+              </div>
+            ))}
+            {!documents?.length ? (
+              <p className="py-8 text-center text-base text-slate-500">
+                No documents uploaded yet for this client.
+              </p>
+            ) : null}
+          </div>
         </Card>
       ) : null}
     </div>

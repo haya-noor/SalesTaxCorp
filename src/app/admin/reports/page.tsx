@@ -12,7 +12,7 @@ const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 export default async function AdminReportsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ client?: string; store?: string; success?: string; error?: string }>;
+  searchParams: Promise<{ client?: string; success?: string; error?: string }>;
 }) {
   const { supabase } = await requireAdmin();
   const params = await searchParams;
@@ -20,25 +20,16 @@ export default async function AdminReportsPage({
   const { data: clients } = await supabase
     .from("clients")
     .select("*")
+    .eq("status", "active")
     .order("company_name");
 
   const clientId = params.client ?? clients?.[0]?.id;
 
-  const { data: stores } = clientId
-    ? await supabase
-        .from("stores")
-        .select("*")
-        .eq("client_id", clientId)
-        .order("display_name")
-    : { data: null };
-
-  const storeId = params.store ?? stores?.[0]?.id;
-
-  const { data: periods } = storeId
+  const { data: periods } = clientId
     ? await supabase
         .from("filing_periods")
         .select("*")
-        .eq("store_id", storeId)
+        .eq("client_id", clientId)
         .order("period_year", { ascending: false })
         .order("period_month", { ascending: false })
     : { data: null };
@@ -49,7 +40,7 @@ export default async function AdminReportsPage({
     <div>
       <AdminPageHeader
         title="Reports"
-        description="Upload the generated monthly report for a store and publish it once reviewed."
+        description="Upload the generated monthly report for a client and publish it once reviewed."
         breadcrumbs={[{ label: "Overview", href: "/admin" }, { label: "Reports" }]}
       />
 
@@ -66,22 +57,13 @@ export default async function AdminReportsPage({
               ))}
             </SelectField>
           </div>
-          <div className="min-w-64 flex-1">
-            <SelectField label="Store" name="store" defaultValue={storeId}>
-              {stores?.map((store) => (
-                <option key={store.id} value={store.id}>
-                  {store.display_name}
-                </option>
-              ))}
-            </SelectField>
-          </div>
           <Button type="submit" variant="secondary">
             Switch
           </Button>
         </form>
       </Card>
 
-      {storeId ? (
+      {clientId ? (
         <>
           <Card className="mt-6">
             <h2 className="text-xl font-bold">Upload report</h2>
@@ -94,7 +76,7 @@ export default async function AdminReportsPage({
               encType="multipart/form-data"
               className="mt-5 grid gap-4 sm:grid-cols-2"
             >
-              <input type="hidden" name="storeId" value={storeId} />
+              <input type="hidden" name="clientId" value={clientId} />
               <SelectField label="Month" name="periodMonth" defaultValue={new Date().getMonth() + 1}>
                 {MONTHS.map((m) => (
                   <option key={m} value={m}>
@@ -129,6 +111,36 @@ export default async function AdminReportsPage({
                 <Button type="submit">Save report</Button>
               </div>
             </form>
+          </Card>
+
+          <Card className="mt-6">
+            <h2 className="text-xl font-bold">Report history</h2>
+            <div className="mt-4 divide-y divide-slate-200">
+              {periods?.map((period) => (
+                <div
+                  key={period.id}
+                  className="flex flex-wrap items-center justify-between gap-3 py-3"
+                >
+                  <span className="font-semibold text-slate-900">
+                    {monthName(period.period_month)} {period.period_year}
+                  </span>
+                  <span
+                    className={`rounded-full px-3 py-1 text-sm font-semibold ${
+                      period.published
+                        ? "bg-emerald-50 text-emerald-700"
+                        : "bg-amber-50 text-amber-700"
+                    }`}
+                  >
+                    {period.published ? "Published" : "Draft"}
+                  </span>
+                </div>
+              ))}
+              {!periods?.length ? (
+                <p className="py-6 text-center text-base text-slate-500">
+                  No reports uploaded yet for this client.
+                </p>
+              ) : null}
+            </div>
           </Card>
         </>
       ) : null}

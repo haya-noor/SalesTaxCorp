@@ -1,8 +1,14 @@
+
+/*
+This file contains the client-side Server Action for uploading a document.
+
+Uploaded files are never shown back to the client: the action only ever
+redirects with a success or error flash message. Only admins can see and
+download what was uploaded (see /admin/documents).
+*/
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { createHash } from "crypto";
 import { requireClientUser } from "@/lib/auth/guards";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
@@ -15,90 +21,33 @@ export async function uploadDocumentAction(formData: FormData) {
   const file = formData.get("file");
 
   if (!(file instanceof File) || file.size === 0) {
-    go("error", "Please choose a document file.");
+    go("error", "Choose a file to upload.");
   }
 
-  const { client, supabase } = await requireClientUser();
-
-  const fileBuffer = await file.arrayBuffer();
-  const fileHash = createHash("sha256").update(Buffer.from(fileBuffer)).digest("hex");
-
-  // Check if document with same hash already exists for this client
-  const { data: existing } = await supabase
-    .from("client_documents")
-    .select("id")
-    .eq("client_id", client.id)
-    .eq("file_hash", fileHash)
-    .maybeSingle();
-
-  if (existing) {
-    go("error", "This document has already been uploaded.");
-  }
+  const { user, client } = await requireClientUser();
 
   const adminClient = createSupabaseAdminClient();
   const filePath = `${client.id}/${Date.now()}-${file.name}`;
-
-  // Upload to storage
   const { error: uploadError } = await adminClient.storage
     .from("client-documents")
-    .upload(filePath, file, {
-      contentType: file.type || "application/octet-stream",
-    });
+    .upload(filePath, file);
 
   if (uploadError) {
-    go("error", "The document could not be uploaded. Please try again.");
+    go("error", "The document could not be uploaded.");
   }
 
-  // Insert document record
-  const { error: insertError } = await adminClient.from("client_documents").insert({
-    client_id: client.id,
-    file_name: file.name,
-    file_path: filePath,
-    file_hash: fileHash,
-    file_size: file.size,
-  });
+  const { error: insertError } = await adminClient
+    .from("client_documents")
+    .insert({
+      client_id: client.id,
+      uploaded_by: user.id,
+      original_filename: file.name,
+      file_path: filePath,
+    });
 
   if (insertError) {
-    go("error", "The document could not be saved. Please try again.");
+    go("error", "The document could not be saved.");
   }
 
-  revalidatePath("/dashboard/documents");
-  revalidatePath("/admin/documents");
-
-  go("success", "Document uploaded successfully.");
-}
-
-export async function deleteDocumentAction(
-  documentId: string,
-  clientId: string,
-  filePath: string
-) {
-  "use server";
-  await requireAdmin();
-
-  const adminClient = createSupabaseAdminClient();
-
-  const { error: deleteStorageError } = await adminClient.storage
-    .from("client-documents")
-    .remove([filePath]);
-
-  if (deleteStorageError) {
-    throw new Error("Failed to delete file from storage");
-  }
-
-  const { error: deleteDbError } = await adminClient
-    .from("client_documents")
-    .delete()
-    .eq("id", documentId);
-
-  if (deleteDbError) {
-    throw new Error("Failed to delete document record");
-  }
-
-  revalidatePath("/admin/documents");
-}
-
-async function requireAdmin() {
-  const { requireAdmin: requireAdminGuard } = await import("@/lib/auth/guards");
-  return requireAdminGuard();
+  go("success", "Document uploaded.");
 }

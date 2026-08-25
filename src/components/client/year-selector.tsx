@@ -5,17 +5,17 @@ import { useRouter } from "next/navigation";
 export function YearSelector({
   years,
   selectedYear,
-  storeId,
+  basePath = "/dashboard",
 }: {
   years: number[];
   selectedYear: number;
-  storeId: string;
+  basePath?: string;
 }) {
   const router = useRouter();
 
   const handleYearChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const year = e.target.value;
-    router.push(`/dashboard/reports?store=${storeId}&year=${year}`);
+    router.push(`${basePath}/reports?year=${year}`);
   };
 
   if (!years.length) return null;

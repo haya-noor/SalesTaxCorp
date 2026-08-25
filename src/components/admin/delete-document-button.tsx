@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { deleteDocumentAction } from "@/features/client/documents-actions";
 
@@ -14,6 +15,7 @@ export function DeleteDocumentButton({
   filePath: string;
 }) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
 
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this document?")) {
@@ -23,6 +25,7 @@ export function DeleteDocumentButton({
     setIsDeleting(true);
     try {
       await deleteDocumentAction(documentId, clientId, filePath);
+      router.refresh();
     } catch (error) {
       alert("Failed to delete document");
       setIsDeleting(false);

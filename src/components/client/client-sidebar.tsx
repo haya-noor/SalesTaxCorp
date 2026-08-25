@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { href: "/dashboard/registrations", label: "Registrations" },
   { href: "/dashboard/nexus-study", label: "Nexus study" },
   { href: "/dashboard/information", label: "Information" },
+  { href: "/dashboard/documents", label: "Documents" },
 ];
 
 export function ClientSidebar({ stores }: { stores: Store[] }) {

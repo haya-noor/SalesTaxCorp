@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { AdminReportActions } from "@/components/admin/admin-report-actions";
 import { Card } from "@/components/ui/card";
+import { ReportFrame } from "@/components/client/report-frame";
 import { YearSelector } from "@/components/client/year-selector";
 import {
   listAllClientPeriods,
@@ -108,13 +109,10 @@ export async function ReportsPortalView({
             </div>
           ) : null}
 
-          <iframe
+          <ReportFrame
             key={selectedPeriod.id}
-            src={`/api/reports/${selectedPeriod.id}/file`}
+            periodId={selectedPeriod.id}
             title={`${monthName(selectedPeriod.period_month)} ${selectedPeriod.period_year} report`}
-            className="block h-[calc(100vh-6.5rem)] min-h-[900px] w-full border-0 bg-transparent"
-            sandbox="allow-scripts allow-downloads allow-popups"
-            referrerPolicy="no-referrer"
           />
         </>
       )}

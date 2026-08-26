@@ -1,18 +1,12 @@
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
-import { ConfirmSubmitButton } from "@/components/admin/confirm-submit-button";
+import { AdminReportActions } from "@/components/admin/admin-report-actions";
+import { AdminReportUploadForm } from "@/components/admin/admin-report-upload-form";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Field, SelectField } from "@/components/ui/field";
+import { SelectField } from "@/components/ui/field";
 import { FlashMessage } from "@/components/shared/flash-message";
 import { requireAdmin } from "@/lib/auth/guards";
 import { monthName } from "@/lib/reports";
-import {
-  deleteReportAction,
-  setPeriodPublishedAction,
-  uploadReportAction,
-} from "@/features/admin/reports-actions";
-
-const MONTHS = Array.from({ length: 12 }, (_, i) => i + 1);
 
 export default async function AdminReportsPage({
   searchParams,
@@ -38,8 +32,6 @@ export default async function AdminReportsPage({
         .order("period_year", { ascending: false })
         .order("period_month", { ascending: false })
     : { data: null };
-
-  const currentYear = new Date().getFullYear();
 
   return (
     <div>
@@ -77,46 +69,7 @@ export default async function AdminReportsPage({
               Uploading the same client, month, and year replaces the existing file.
               Leave &quot;Publish now&quot; unchecked to save it as a draft for review first.
             </p>
-            <form
-              action={uploadReportAction}
-              encType="multipart/form-data"
-              className="mt-5 grid gap-4 sm:grid-cols-2"
-            >
-              <input type="hidden" name="clientId" value={clientId} />
-              <SelectField label="Month" name="periodMonth" defaultValue={new Date().getMonth() + 1}>
-                {MONTHS.map((m) => (
-                  <option key={m} value={m}>
-                    {monthName(m)}
-                  </option>
-                ))}
-              </SelectField>
-              <Field
-                label="Year"
-                name="periodYear"
-                type="number"
-                defaultValue={currentYear}
-                required
-              />
-              <div className="sm:col-span-2">
-                <label className="grid gap-2 text-base font-semibold text-slate-700">
-                  Report file (.html)
-                  <input
-                    type="file"
-                    name="file"
-                    accept=".html,text/html"
-                    required
-                    className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-950 shadow-sm"
-                  />
-                </label>
-              </div>
-              <label className="flex items-center gap-3 text-base font-semibold text-slate-700 sm:col-span-2">
-                <input type="checkbox" name="published" className="h-5 w-5" />
-                Publish now (visible to the client immediately)
-              </label>
-              <div className="sm:col-span-2">
-                <Button type="submit">Save or replace report</Button>
-              </div>
-            </form>
+            <AdminReportUploadForm clientId={clientId} />
           </Card>
 
           <Card className="mt-6">
@@ -130,47 +83,7 @@ export default async function AdminReportsPage({
                   <span className="font-semibold text-slate-900">
                     {monthName(period.period_month)} {period.period_year}
                   </span>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span
-                      className={`rounded-full px-3 py-1 text-sm font-semibold ${
-                        period.published
-                          ? "bg-emerald-50 text-emerald-700"
-                          : "bg-amber-50 text-amber-700"
-                      }`}
-                    >
-                      {period.published ? "Published" : "Draft"}
-                    </span>
-
-                    <form action={setPeriodPublishedAction}>
-                      <input type="hidden" name="periodId" value={period.id} />
-                      <input type="hidden" name="clientId" value={clientId} />
-                      <input
-                        type="hidden"
-                        name="published"
-                        value={period.published ? "false" : "true"}
-                      />
-                      {period.published ? (
-                        <ConfirmSubmitButton
-                          variant="secondary"
-                          message={`Unpublish ${monthName(period.period_month)} ${period.period_year}? It will immediately disappear from the client portal.`}
-                        >
-                          Unpublish
-                        </ConfirmSubmitButton>
-                      ) : (
-                        <Button type="submit" variant="secondary">
-                          Publish
-                        </Button>
-                      )}
-                    </form>
-
-                    <form action={deleteReportAction}>
-                      <input type="hidden" name="periodId" value={period.id} />
-                      <input type="hidden" name="clientId" value={clientId} />
-                      <ConfirmSubmitButton message={`Permanently delete ${monthName(period.period_month)} ${period.period_year}? This removes both the report record and its stored file.`}>
-                        Delete
-                      </ConfirmSubmitButton>
-                    </form>
-                  </div>
+                  <AdminReportActions clientId={clientId} period={period} />
                 </div>
               ))}
               {!periods?.length ? (

@@ -4,12 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 export function ClientSidebar({
   basePath = "/dashboard",
-  preview,
-  documentsHref,
 }: {
   basePath?: string;
-  preview?: boolean;
-  documentsHref?: string;
 }) {
   const pathname = usePathname();
 
@@ -18,11 +14,7 @@ export function ClientSidebar({
     { href: `${basePath}/registrations`, label: "Registrations" },
     { href: `${basePath}/nexus-study`, label: "Nexus study" },
     { href: `${basePath}/information`, label: "Information" },
-    ...(preview
-      ? documentsHref
-        ? [{ href: documentsHref, label: "Documents" }]
-        : []
-      : [{ href: `${basePath}/documents`, label: "Documents" }]),
+    { href: `${basePath}/documents`, label: "Documents" },
   ];
 
   return (

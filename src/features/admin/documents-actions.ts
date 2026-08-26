@@ -14,22 +14,36 @@ import { requireAdmin } from "@/lib/auth/guards";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import { idSchema } from "./schemas";
 
+type AdminWorkspace = "admin" | "client-portal";
+
+function getWorkspace(formData: FormData): AdminWorkspace {
+  return formData.get("workspace") === "client-portal"
+    ? "client-portal"
+    : "admin";
+}
+
 function go(
   clientId: string | undefined,
+  workspace: AdminWorkspace,
   kind: "success" | "error",
   message: string,
 ): never {
   const params = new URLSearchParams({ [kind]: message });
+  if (workspace === "client-portal" && clientId) {
+    redirect(`/client-portal/${clientId}/documents?${params.toString()}`);
+  }
+
   if (clientId) params.set("client", clientId);
   redirect(`/admin/documents?${params.toString()}`);
 }
 
 export async function deleteDocumentAction(formData: FormData) {
+  const workspace = getWorkspace(formData);
   const documentId = idSchema.safeParse(formData.get("documentId"));
   const clientId = idSchema.safeParse(formData.get("clientId"));
 
   if (!documentId.success || !clientId.success) {
-    go(undefined, "error", "Invalid document.");
+    go(undefined, workspace, "error", "Invalid document.");
   }
 
   const { supabase } = await requireAdmin();
@@ -42,7 +56,7 @@ export async function deleteDocumentAction(formData: FormData) {
     .maybeSingle();
 
   if (!document) {
-    go(clientId.data, "error", "Document not found.");
+    go(clientId.data, workspace, "error", "Document not found.");
   }
 
   const adminClient = createSupabaseAdminClient();
@@ -52,7 +66,12 @@ export async function deleteDocumentAction(formData: FormData) {
     .remove([document.file_path]);
 
   if (storageError) {
-    go(clientId.data, "error", "The stored file could not be deleted.");
+    go(
+      clientId.data,
+      workspace,
+      "error",
+      "The stored file could not be deleted.",
+    );
   }
 
   const { error } = await adminClient
@@ -62,11 +81,12 @@ export async function deleteDocumentAction(formData: FormData) {
     .eq("client_id", clientId.data);
 
   if (error) {
-    go(clientId.data, "error", "The document could not be deleted.");
+    go(clientId.data, workspace, "error", "The document could not be deleted.");
   }
 
   revalidatePath("/admin/documents");
   revalidatePath(`/admin/clients/${clientId.data}`);
+  revalidatePath(`/client-portal/${clientId.data}/documents`);
 
-  go(clientId.data, "success", "Document deleted.");
+  go(clientId.data, workspace, "success", "Document deleted.");
 }

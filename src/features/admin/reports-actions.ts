@@ -22,12 +22,25 @@ import {
   uploadReportSchema,
 } from "./reports-schemas";
 
+type AdminWorkspace = "admin" | "client-portal";
+
+function getWorkspace(formData: FormData): AdminWorkspace {
+  return formData.get("workspace") === "client-portal"
+    ? "client-portal"
+    : "admin";
+}
+
 function go(
   clientId: string | undefined,
+  workspace: AdminWorkspace,
   kind: "success" | "error",
   message: string,
 ): never {
   const params = new URLSearchParams({ [kind]: message });
+  if (workspace === "client-portal" && clientId) {
+    redirect(`/client-portal/${clientId}/reports?${params.toString()}`);
+  }
+
   if (clientId) params.set("client", clientId);
   redirect(`/admin/reports?${params.toString()}`);
 }
@@ -41,6 +54,7 @@ function revalidateReportPaths(clientId: string) {
 
 // Uploads a generated report file for a client/month and upserts its filing_periods row.
 export async function uploadReportAction(formData: FormData) {
+  const workspace = getWorkspace(formData);
   const parsed = uploadReportSchema.safeParse({
     clientId: formData.get("clientId"),
     periodYear: formData.get("periodYear"),
@@ -53,6 +67,7 @@ export async function uploadReportAction(formData: FormData) {
   if (!parsed.success || !(file instanceof File) || file.size === 0) {
     go(
       parsed.success ? parsed.data.clientId : undefined,
+      workspace,
       "error",
       "Fill in the required fields and choose a report file.",
     );
@@ -66,7 +81,12 @@ export async function uploadReportAction(formData: FormData) {
     .maybeSingle();
 
   if (!client) {
-    go(parsed.data.clientId, "error", "That client could not be found.");
+    go(
+      parsed.data.clientId,
+      workspace,
+      "error",
+      "That client could not be found.",
+    );
   }
 
   const adminClient = createSupabaseAdminClient();
@@ -80,7 +100,12 @@ export async function uploadReportAction(formData: FormData) {
     });
 
   if (uploadError) {
-    go(parsed.data.clientId, "error", "The report file could not be uploaded.");
+    go(
+      parsed.data.clientId,
+      workspace,
+      "error",
+      "The report file could not be uploaded.",
+    );
   }
 
   const { error: upsertError } = await adminClient
@@ -97,16 +122,17 @@ export async function uploadReportAction(formData: FormData) {
     );
 
   if (upsertError) {
-    go(parsed.data.clientId, "error", "The report could not be saved.");
+    go(parsed.data.clientId, workspace, "error", "The report could not be saved.");
   }
 
   revalidateReportPaths(parsed.data.clientId);
 
-  go(parsed.data.clientId, "success", "Report saved.");
+  go(parsed.data.clientId, workspace, "success", "Report saved.");
 }
 
 // Toggles a filing period between published (visible to the client) and draft.
 export async function setPeriodPublishedAction(formData: FormData) {
+  const workspace = getWorkspace(formData);
   const parsed = setPeriodPublishedSchema.safeParse({
     periodId: formData.get("periodId"),
     clientId: formData.get("clientId"),
@@ -114,7 +140,7 @@ export async function setPeriodPublishedAction(formData: FormData) {
   });
 
   if (!parsed.success) {
-    go(undefined, "error", "Invalid report update.");
+    go(undefined, workspace, "error", "Invalid report update.");
   }
 
   const { supabase } = await requireAdmin();
@@ -126,13 +152,14 @@ export async function setPeriodPublishedAction(formData: FormData) {
     .maybeSingle();
 
   if (!period) {
-    go(parsed.data.clientId, "error", "Report not found.");
+    go(parsed.data.clientId, workspace, "error", "Report not found.");
   }
 
   if (parsed.data.published) {
     if (!period.file_path) {
       go(
         parsed.data.clientId,
+        workspace,
         "error",
         "Upload or replace the report file before publishing.",
       );
@@ -146,6 +173,7 @@ export async function setPeriodPublishedAction(formData: FormData) {
     if (fileError || !file) {
       go(
         parsed.data.clientId,
+        workspace,
         "error",
         "The stored report file is missing. Replace it before publishing.",
       );
@@ -159,13 +187,19 @@ export async function setPeriodPublishedAction(formData: FormData) {
     .eq("client_id", parsed.data.clientId);
 
   if (error) {
-    go(parsed.data.clientId, "error", "The report status could not be changed.");
+    go(
+      parsed.data.clientId,
+      workspace,
+      "error",
+      "The report status could not be changed.",
+    );
   }
 
   revalidateReportPaths(parsed.data.clientId);
 
   go(
     parsed.data.clientId,
+    workspace,
     "success",
     parsed.data.published ? "Report published." : "Report unpublished.",
   );
@@ -174,13 +208,14 @@ export async function setPeriodPublishedAction(formData: FormData) {
 // Hides the report first, then removes its Storage object and database row.
 // If either deletion step fails, the unpublished row remains invisible to clients.
 export async function deleteReportAction(formData: FormData) {
+  const workspace = getWorkspace(formData);
   const parsed = deleteReportSchema.safeParse({
     periodId: formData.get("periodId"),
     clientId: formData.get("clientId"),
   });
 
   if (!parsed.success) {
-    go(undefined, "error", "Invalid report deletion.");
+    go(undefined, workspace, "error", "Invalid report deletion.");
   }
 
   const { supabase } = await requireAdmin();
@@ -192,7 +227,7 @@ export async function deleteReportAction(formData: FormData) {
     .maybeSingle();
 
   if (!period) {
-    go(parsed.data.clientId, "error", "Report not found.");
+    go(parsed.data.clientId, workspace, "error", "Report not found.");
   }
 
   const adminClient = createSupabaseAdminClient();
@@ -203,7 +238,12 @@ export async function deleteReportAction(formData: FormData) {
     .eq("client_id", parsed.data.clientId);
 
   if (unpublishError) {
-    go(parsed.data.clientId, "error", "The report could not be hidden from clients.");
+    go(
+      parsed.data.clientId,
+      workspace,
+      "error",
+      "The report could not be hidden from clients.",
+    );
   }
 
   revalidateReportPaths(parsed.data.clientId);
@@ -216,6 +256,7 @@ export async function deleteReportAction(formData: FormData) {
     if (storageError) {
       go(
         parsed.data.clientId,
+        workspace,
         "error",
         "The report is hidden, but its stored file could not be deleted. Try again.",
       );
@@ -231,11 +272,12 @@ export async function deleteReportAction(formData: FormData) {
   if (deleteError) {
     go(
       parsed.data.clientId,
+      workspace,
       "error",
       "The file was removed and the report is hidden, but its record could not be deleted. Try again.",
     );
   }
 
   revalidateReportPaths(parsed.data.clientId);
-  go(parsed.data.clientId, "success", "Report deleted.");
+  go(parsed.data.clientId, workspace, "success", "Report deleted.");
 }

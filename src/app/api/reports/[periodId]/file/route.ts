@@ -15,6 +15,7 @@ route:
 */
 import { NextResponse } from "next/server";
 import { requireReportViewer } from "@/lib/auth/guards";
+import { USER_ROLES } from "@/lib/constants";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 function unavailableReport(message: string, status: number) {
@@ -50,14 +51,18 @@ export async function GET(
   { params }: { params: Promise<{ periodId: string }> },
 ) {
   const { periodId } = await params;
-  const { supabase } = await requireReportViewer();
+  const { supabase, profile } = await requireReportViewer();
 
-  const { data: period } = await supabase
+  let periodQuery = supabase
     .from("filing_periods")
     .select("file_path")
-    .eq("id", periodId)
-    .eq("published", true)
-    .maybeSingle();
+    .eq("id", periodId);
+
+  if (profile.role !== USER_ROLES.ADMIN) {
+    periodQuery = periodQuery.eq("published", true);
+  }
+
+  const { data: period } = await periodQuery.maybeSingle();
 
   if (!period?.file_path) {
     return unavailableReport(

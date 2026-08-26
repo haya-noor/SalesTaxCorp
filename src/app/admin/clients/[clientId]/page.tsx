@@ -50,7 +50,7 @@ export default async function ClientDetailPage({
             target="_blank"
             className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-base font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50"
           >
-            View client portal
+            Open client workspace
           </Link>
         }
       />

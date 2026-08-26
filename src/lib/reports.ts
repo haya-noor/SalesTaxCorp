@@ -66,6 +66,22 @@ export async function listAllPublishedPeriods(
   return data ?? [];
 }
 
+// Returns drafts and published periods. Intended for an already-authorized
+// administrator viewing one client's management workspace; RLS remains active.
+export async function listAllClientPeriods(
+  supabase: SupabaseClient<Database>,
+  clientId: string,
+) {
+  const { data } = await supabase
+    .from("filing_periods")
+    .select("*")
+    .eq("client_id", clientId)
+    .order("period_year")
+    .order("period_month");
+
+  return data ?? [];
+}
+
 export async function getPublishedPeriod(
   supabase: SupabaseClient<Database>,
   clientId: string,

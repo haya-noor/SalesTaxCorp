@@ -15,6 +15,7 @@ performed by an authenticated administrator.
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth/guards";
+import { buildReportStoragePath } from "@/lib/storage-paths";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import {
   deleteReportSchema,
@@ -76,7 +77,7 @@ export async function uploadReportAction(formData: FormData) {
   const { supabase } = await requireAdmin();
   const { data: client } = await supabase
     .from("clients")
-    .select("id")
+    .select("id, client_code")
     .eq("id", parsed.data.clientId)
     .maybeSingle();
 
@@ -89,8 +90,21 @@ export async function uploadReportAction(formData: FormData) {
     );
   }
 
+  if (!client.client_code) {
+    go(
+      parsed.data.clientId,
+      workspace,
+      "error",
+      "This client needs an approved portal user before reports can be uploaded.",
+    );
+  }
+
   const adminClient = createSupabaseAdminClient();
-  const filePath = `${parsed.data.clientId}/${parsed.data.periodYear}-${String(parsed.data.periodMonth).padStart(2, "0")}.html`;
+  const filePath = buildReportStoragePath(
+    client.client_code,
+    parsed.data.periodYear,
+    parsed.data.periodMonth,
+  );
 
   const { error: uploadError } = await adminClient.storage
     .from("client-reports")

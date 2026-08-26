@@ -11,6 +11,7 @@
     "start": "next start",
     "lint": "eslint",
     "bootstrap:admin": "node --env-file=.env.local scripts/setup-admin.mjs",
+    "migrate:storage-paths": "node --env-file=.env.local scripts/migrate-storage-paths.mjs",
     "test:smoke": "node --env-file=.env.local scripts/smoke-test.mjs"
   },
   "dependencies": {

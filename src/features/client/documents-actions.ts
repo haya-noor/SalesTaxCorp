@@ -10,6 +10,7 @@ download what was uploaded (see /admin/documents).
 
 import { redirect } from "next/navigation";
 import { requireClientUser } from "@/lib/auth/guards";
+import { buildDocumentStoragePath } from "@/lib/storage-paths";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 function go(kind: "success" | "error", message: string): never {
@@ -26,8 +27,15 @@ export async function uploadDocumentAction(formData: FormData) {
 
   const { user, client } = await requireClientUser();
 
+  if (!client.client_code) {
+    go(
+      "error",
+      "Your client account is missing its document storage code. Contact an administrator.",
+    );
+  }
+
   const adminClient = createSupabaseAdminClient();
-  const filePath = `${client.id}/${Date.now()}-${file.name}`;
+  const filePath = buildDocumentStoragePath(client.client_code, file.name);
   const { error: uploadError } = await adminClient.storage
     .from("client-documents")
     .upload(filePath, file);

@@ -21,7 +21,6 @@ import { FlashMessage } from "@/components/shared/flash-message";
 import {
   approveUserAction,
   rejectPendingUserAction,
-  setUserStatusAction,
 } from "@/features/admin/actions";
 import { requireAdmin } from "@/lib/auth/guards";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
@@ -223,33 +222,7 @@ export default async function UsersPage({
                 </p>
               </div>
 
-              <div className="flex items-center gap-3">
-                <StatusBadge status={profile.status} />
-
-                <form action={setUserStatusAction}>
-                  <input
-                    type="hidden"
-                    name="profileId"
-                    value={profile.id}
-                  />
-
-                  <input
-                    type="hidden"
-                    name="status"
-                    value={
-                      profile.status === "active"
-                        ? "suspended"
-                        : "active"
-                    }
-                  />
-
-                  <Button type="submit" variant="secondary">
-                    {profile.status === "active"
-                      ? "Suspend"
-                      : "Reactivate"}
-                  </Button>
-                </form>
-              </div>
+              <StatusBadge status={profile.status} />
             </div>
           ))}
 

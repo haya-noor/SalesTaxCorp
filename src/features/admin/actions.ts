@@ -1,12 +1,12 @@
 /*
- This file contains the admin-side Server Actions for managing clients, stores, and client user accounts.
+ This file contains the admin-side Server Actions for managing clients and client user accounts.
 
  It handles:
  - Creating and renaming clients.
  - Suspending/reactivating clients.
- - Creating and renaming stores.
- - Suspending/reactivating stores.
- - Approving pending client signups and linking them to a client company.
+ - Approving pending client signups, linking them to a client company, and
+   assigning that company its readable client_code the first time it gets
+   an approved user.
  - Suspending/reactivating client users.
  - Rejecting pending signups by deleting the pending Supabase Auth account.
  - Revalidating affected admin pages after database changes.
@@ -22,13 +22,8 @@
 │   ├── Rename
 │   └── Suspend/reactivate
 │
-├── Stores
-│   ├── Create
-│   ├── Rename
-│   └── Suspend/reactivate
-│
 └── Client users
-    ├── Approve pending signup
+    ├── Approve pending signup (assigns client_code on first approval)
     ├── Suspend/reactivate
     └── Reject pending signup
 */
@@ -39,11 +34,13 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth/guards";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
+import { slugifyFullName } from "@/lib/slug";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import type { Database } from "@/types/database";
 import {
   approveUserSchema,
   clientSchema,
   idSchema,
-  storeSchema,
 } from "./schemas";
 
 
@@ -162,109 +159,43 @@ export async function setClientStatusAction(formData: FormData) {
   );
 }
 
+/*
+CLIENT CODE ASSIGNMENT
+Assigns a readable client_code (e.g. "johnsmith1") the first time a client
+company gets an approved user. Does nothing if the company already has one.
+Builds the base from the approved user's full name and appends the lowest
+free numeric suffix, starting at 1, to keep it unique.
+*/
+async function ensureClientCode(
+  supabase: SupabaseClient<Database>,
+  clientId: string,
+  fullName: string,
+) {
+  const { data: client } = await supabase
+    .from("clients")
+    .select("client_code")
+    .eq("id", clientId)
+    .maybeSingle();
 
-// STORE MANAGEMENT: Creates a new store belonging to a specific client.
-export async function createStoreAction(formData: FormData) {
-  const parsed = storeSchema.safeParse({
-    clientId: formData.get("clientId"),
-    displayName: formData.get("displayName"),
-  });
+  if (client?.client_code) return;
 
-  if (!parsed.success) {
-    go("/admin/clients", "error", "Enter a valid store name.");
+  const base = slugifyFullName(fullName);
+  let suffix = 1;
+  let code = `${base}${suffix}`;
+
+  while (true) {
+    const { data: existing } = await supabase
+      .from("clients")
+      .select("id")
+      .eq("client_code", code)
+      .maybeSingle();
+
+    if (!existing) break;
+    suffix += 1;
+    code = `${base}${suffix}`;
   }
 
-  const { supabase } = await requireAdmin();
-
-  const { error } = await supabase.from("stores").insert({
-    client_id: parsed.data.clientId,
-    display_name: parsed.data.displayName,
-  });
-
-  const path = `/admin/clients/${parsed.data.clientId}`;
-
-  if (error) {
-    go(
-      path,
-      "error",
-      "The store could not be created. Check for a duplicate name.",
-    );
-  }
-
-  revalidatePath(path);
-  revalidatePath("/admin");
-
-  go(path, "success", "Store created.");
-}
-
-
-// STORE MANAGEMENT: Changes the display name of an existing store.
-export async function updateStoreNameAction(formData: FormData) {
-  const storeId = idSchema.safeParse(formData.get("storeId"));
-
-  const parsed = storeSchema.safeParse({
-    clientId: formData.get("clientId"),
-    displayName: formData.get("displayName"),
-  });
-
-  if (!storeId.success || !parsed.success) {
-    go("/admin/clients", "error", "Invalid store update.");
-  }
-
-  const { supabase } = await requireAdmin();
-
-  const { error } = await supabase
-    .from("stores")
-    .update({
-      display_name: parsed.data.displayName,
-    })
-    .eq("id", storeId.data)
-    .eq("client_id", parsed.data.clientId);
-
-  const path = `/admin/clients/${parsed.data.clientId}`;
-
-  if (error) {
-    go(path, "error", "The store could not be updated.");
-  }
-
-  revalidatePath(path);
-
-  go(path, "success", "Store updated.");
-}
-
-
-// STORE STATUS MANAGEMENT: Switches a store between active and suspended.
-export async function setStoreStatusAction(formData: FormData) {
-  const storeId = idSchema.safeParse(formData.get("storeId"));
-  const clientId = idSchema.safeParse(formData.get("clientId"));
-  const status = formData.get("status");
-
-  if (
-    !storeId.success ||
-    !clientId.success ||
-    (status !== "active" && status !== "suspended")
-  ) {
-    go("/admin/clients", "error", "Invalid store status.");
-  }
-
-  const { supabase } = await requireAdmin();
-
-  const { error } = await supabase
-    .from("stores")
-    .update({ status })
-    .eq("id", storeId.data)
-    .eq("client_id", clientId.data);
-
-  const path = `/admin/clients/${clientId.data}`;
-
-  if (error) {
-    go(path, "error", "Store status could not be changed.");
-  }
-
-  revalidatePath(path);
-  revalidatePath("/admin");
-
-  go(path, "success", `Store ${status}.`);
+  await supabase.from("clients").update({ client_code: code }).eq("id", clientId);
 }
 
 /*
@@ -272,6 +203,7 @@ PENDING USER APPROVAL
 Approves a self-registered client account by:
 - linking the profile to the selected client company
 - changing the profile from pending to active
+- assigning the client company a client_code if it doesn't have one yet
 */
 export async function approveUserAction(formData: FormData) {
   const parsed = approveUserSchema.safeParse({
@@ -284,6 +216,12 @@ export async function approveUserAction(formData: FormData) {
   }
 
   const { supabase } = await requireAdmin();
+
+  const { data: pendingProfile } = await supabase
+    .from("profiles")
+    .select("full_name")
+    .eq("id", parsed.data.profileId)
+    .maybeSingle();
 
   const { error } = await supabase
     .from("profiles")
@@ -301,6 +239,10 @@ export async function approveUserAction(formData: FormData) {
       "error",
       "The account could not be approved.",
     );
+  }
+
+  if (pendingProfile) {
+    await ensureClientCode(supabase, parsed.data.clientId, pendingProfile.full_name);
   }
 
   revalidatePath("/admin");

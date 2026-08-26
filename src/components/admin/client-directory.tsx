@@ -6,7 +6,6 @@ import { StatusBadge } from "@/components/ui/status-badge";
 import type { Database } from "@/types/database";
 
 type Client = Database["public"]["Tables"]["clients"]["Row"] & {
-  storeCount: number;
   userCount: number;
 };
 
@@ -18,7 +17,8 @@ export function ClientDirectory({ clients }: { clients: Client[] }) {
     const normalizedQuery = query.trim().toLowerCase();
     return clients.filter(
       (client) =>
-        client.company_name.toLowerCase().includes(normalizedQuery) &&
+        (client.company_name.toLowerCase().includes(normalizedQuery) ||
+          client.client_code?.toLowerCase().includes(normalizedQuery)) &&
         (status === "all" || client.status === status),
     );
   }, [clients, query, status]);
@@ -64,11 +64,14 @@ export function ClientDirectory({ clients }: { clients: Client[] }) {
                 <h3 className="text-lg font-bold text-slate-950 group-hover:text-teal-800">
                   {client.company_name}
                 </h3>
+                {client.client_code ? (
+                  <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-semibold text-slate-600">
+                    {client.client_code}
+                  </span>
+                ) : null}
                 <StatusBadge status={client.status} />
               </div>
               <p className="mt-2 text-base text-slate-600">
-                {client.storeCount} {client.storeCount === 1 ? "store" : "stores"}
-                <span className="mx-2 text-slate-300">•</span>
                 {client.userCount} portal {client.userCount === 1 ? "user" : "users"}
               </p>
             </div>

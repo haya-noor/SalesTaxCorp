@@ -9,38 +9,20 @@ export interface Database {
         Row: {
           id: string;
           company_name: string;
+          client_code: string | null;
           status: EntityStatus;
           created_at: string;
         };
         Insert: {
           id?: string;
           company_name: string;
+          client_code?: string | null;
           status?: EntityStatus;
           created_at?: string;
         };
         Update: {
           company_name?: string;
-          status?: EntityStatus;
-        };
-        Relationships: [];
-      };
-      stores: {
-        Row: {
-          id: string;
-          client_id: string;
-          display_name: string;
-          status: EntityStatus;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          client_id: string;
-          display_name: string;
-          status?: EntityStatus;
-          created_at?: string;
-        };
-        Update: {
-          display_name?: string;
+          client_code?: string | null;
           status?: EntityStatus;
         };
         Relationships: [];
@@ -76,14 +58,9 @@ export interface Database {
       filing_periods: {
         Row: {
           id: string;
-          store_id: string;
+          client_id: string;
           period_year: number;
           period_month: number;
-          due_date: string | null;
-          prepared_date: string | null;
-          alert_title: string | null;
-          alert_body: string | null;
-          footnote: string | null;
           file_path: string | null;
           published: boolean;
           created_at: string;
@@ -91,27 +68,40 @@ export interface Database {
         };
         Insert: {
           id?: string;
-          store_id: string;
+          client_id: string;
           period_year: number;
           period_month: number;
-          due_date?: string | null;
-          prepared_date?: string | null;
-          alert_title?: string | null;
-          alert_body?: string | null;
-          footnote?: string | null;
           file_path?: string | null;
           published?: boolean;
           created_at?: string;
           updated_at?: string;
         };
         Update: {
-          due_date?: string | null;
-          prepared_date?: string | null;
-          alert_title?: string | null;
-          alert_body?: string | null;
-          footnote?: string | null;
           file_path?: string | null;
           published?: boolean;
+        };
+        Relationships: [];
+      };
+      client_documents: {
+        Row: {
+          id: string;
+          client_id: string;
+          uploaded_by: string;
+          original_filename: string;
+          file_path: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          client_id: string;
+          uploaded_by: string;
+          original_filename: string;
+          file_path: string;
+          created_at?: string;
+        };
+        Update: {
+          original_filename?: string;
+          file_path?: string;
         };
         Relationships: [];
       };

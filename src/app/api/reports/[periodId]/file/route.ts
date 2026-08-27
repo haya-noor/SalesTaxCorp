@@ -19,6 +19,7 @@ import { requireReportViewer } from "@/lib/auth/guards";
 import { USER_ROLES } from "@/lib/constants";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
+
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ periodId: string }> },

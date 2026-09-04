@@ -41,6 +41,7 @@ import {
   approveUserSchema,
   clientSchema,
   idSchema,
+  normalizeCompanyName,
 } from "./schemas";
 
 
@@ -58,6 +59,26 @@ function go(
   redirect(`${path}?${params.toString()}`);
 }
 
+async function clientNameExists(
+  supabase: SupabaseClient<Database>,
+  companyName: string,
+  excludedClientId?: string,
+) {
+  const { data } = await supabase.from("clients").select("id, company_name");
+  const normalizedName = normalizeCompanyName(companyName).toLocaleLowerCase("en-US");
+
+  return (data ?? []).some(
+    (client) =>
+      client.id !== excludedClientId &&
+      normalizeCompanyName(client.company_name).toLocaleLowerCase("en-US") ===
+        normalizedName,
+  );
+}
+
+function isDuplicateCompanyNameError(error: { code?: string }) {
+  return error.code === "23505";
+}
+
 
 // CLIENT MANAGEMENT: Creates a new client/company in the clients table.
 export async function createClientAction(formData: FormData) {
@@ -71,12 +92,26 @@ export async function createClientAction(formData: FormData) {
 
   const { supabase } = await requireAdmin();
 
+  if (await clientNameExists(supabase, parsed.data.companyName)) {
+    go(
+      "/admin/clients",
+      "error",
+      "A client with this company name already exists.",
+    );
+  }
+
   const { error } = await supabase.from("clients").insert({
     company_name: parsed.data.companyName,
   });
 
   if (error) {
-    go("/admin/clients", "error", "The client could not be created.");
+    go(
+      "/admin/clients",
+      "error",
+      isDuplicateCompanyNameError(error)
+        ? "A client with this company name already exists."
+        : "The client could not be created.",
+    );
   }
 
   revalidatePath("/admin");
@@ -100,6 +135,20 @@ export async function updateClientNameAction(formData: FormData) {
 
   const { supabase } = await requireAdmin();
 
+  if (
+    await clientNameExists(
+      supabase,
+      values.data.companyName,
+      id.data,
+    )
+  ) {
+    go(
+      `/admin/clients/${id.data}`,
+      "error",
+      "A client with this company name already exists.",
+    );
+  }
+
   const { error } = await supabase
     .from("clients")
     .update({
@@ -111,7 +160,9 @@ export async function updateClientNameAction(formData: FormData) {
     go(
       `/admin/clients/${id.data}`,
       "error",
-      "The client could not be updated.",
+      isDuplicateCompanyNameError(error)
+        ? "A client with this company name already exists."
+        : "The client could not be updated.",
     );
   }
 

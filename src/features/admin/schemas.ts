@@ -8,8 +8,15 @@ import { z } from "zod";
 
 export const idSchema = z.uuid();
 
+export function normalizeCompanyName(value: string) {
+  return value.trim().replace(/\s+/g, " ");
+}
+
 export const clientSchema = z.object({
-  companyName: z.string().trim().min(2).max(120),
+  companyName: z
+    .string()
+    .transform(normalizeCompanyName)
+    .pipe(z.string().min(2).max(120)),
 });
 
 export const approveUserSchema = z.object({

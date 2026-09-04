@@ -18,6 +18,12 @@ export const setPeriodPublishedSchema = z.object({
   published: formBooleanSchema,
 });
 
+export const setReportApprovalSchema = z.object({
+  periodId: idSchema,
+  clientId: idSchema,
+  approved: formBooleanSchema,
+});
+
 export const deleteReportSchema = z.object({
   periodId: idSchema,
   clientId: idSchema,

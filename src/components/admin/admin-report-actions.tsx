@@ -1,9 +1,9 @@
-import Link from "next/link";
 import { ConfirmSubmitButton } from "@/components/admin/confirm-submit-button";
 import { Button } from "@/components/ui/button";
 import {
   deleteReportAction,
   setPeriodPublishedAction,
+  setReportApprovalAction,
 } from "@/features/admin/reports-actions";
 import { monthName } from "@/lib/reports";
 import type { FilingPeriod } from "@/lib/reports";
@@ -12,12 +12,10 @@ export function AdminReportActions({
   clientId,
   period,
   workspace = "admin",
-  replaceHref = "#upload-report",
 }: {
   clientId: string;
   period: FilingPeriod;
   workspace?: "admin" | "client-portal";
-  replaceHref?: string;
 }) {
   const periodLabel = `${monthName(period.period_month)} ${period.period_year}`;
 
@@ -33,12 +31,31 @@ export function AdminReportActions({
         {period.published ? "Published" : "Draft"}
       </span>
 
-      <Link
-        href={replaceHref}
-        className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-base font-semibold text-slate-800 transition hover:bg-slate-50"
+      <span
+        className={`rounded-full px-3 py-1 text-sm font-semibold ${
+          period.client_approved_at
+            ? "bg-emerald-100 text-emerald-800"
+            : "bg-slate-100 text-slate-700"
+        }`}
       >
-        Replace
-      </Link>
+        Approval: {period.client_approved_at ? "Approved" : "Pending"}
+      </span>
+
+      {workspace === "client-portal" ? (
+        <form action={setReportApprovalAction}>
+          <input type="hidden" name="periodId" value={period.id} />
+          <input type="hidden" name="clientId" value={clientId} />
+          <input type="hidden" name="workspace" value={workspace} />
+          <input
+            type="hidden"
+            name="approved"
+            value={period.client_approved_at ? "false" : "true"}
+          />
+          <Button type="submit" variant="secondary">
+            {period.client_approved_at ? "Return to pending" : "Approve report"}
+          </Button>
+        </form>
+      ) : null}
 
       <form action={setPeriodPublishedAction}>
         <input type="hidden" name="periodId" value={period.id} />

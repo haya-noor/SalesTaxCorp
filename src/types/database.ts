@@ -63,6 +63,8 @@ export interface Database {
           period_month: number;
           file_path: string | null;
           published: boolean;
+          client_approved_at: string | null;
+          client_approved_by: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -73,12 +75,16 @@ export interface Database {
           period_month: number;
           file_path?: string | null;
           published?: boolean;
+          client_approved_at?: string | null;
+          client_approved_by?: string | null;
           created_at?: string;
           updated_at?: string;
         };
         Update: {
           file_path?: string | null;
           published?: boolean;
+          client_approved_at?: string | null;
+          client_approved_by?: string | null;
         };
         Relationships: [];
       };

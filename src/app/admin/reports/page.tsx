@@ -67,6 +67,7 @@ export default async function AdminReportsPage({
             <p className="mt-1 text-base text-slate-500">
               Upload the standalone report file generated for this month.
               Uploading the same client, month, and year replaces the existing file.
+              A replacement resets the client approval status to pending.
               Leave &quot;Publish now&quot; unchecked to save it as a draft for review first.
             </p>
             <AdminReportUploadForm clientId={clientId} />

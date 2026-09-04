@@ -3,6 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { AdminReportActions } from "@/components/admin/admin-report-actions";
 import { Card } from "@/components/ui/card";
 import { ReportFrame } from "@/components/client/report-frame";
+import { ReportApprovalStatus } from "@/components/client/report-approval-status";
 import { YearSelector } from "@/components/client/year-selector";
 import {
   listAllClientPeriods,
@@ -87,7 +88,10 @@ export async function ReportsPortalView({
               ))}
             </div>
 
-            <YearSelector years={years} selectedYear={selectedYear} basePath={basePath} />
+            <div className="flex flex-wrap items-center justify-end gap-3">
+              {!adminMode ? <ReportApprovalStatus period={selectedPeriod} /> : null}
+              <YearSelector years={years} selectedYear={selectedYear} basePath={basePath} />
+            </div>
           </div>
 
           {adminMode ? (
@@ -104,7 +108,6 @@ export async function ReportsPortalView({
                 clientId={clientId}
                 period={selectedPeriod}
                 workspace="client-portal"
-                replaceHref="#manage-report"
               />
             </div>
           ) : null}

@@ -33,8 +33,9 @@ export default async function ClientPortalPreviewReportsPage({
             Upload or replace a report
           </summary>
           <p className="mt-2 text-base text-slate-600">
-            Uploading the same month and year replaces its stored file. Leave
-            Publish now unchecked to review it here as a draft first.
+            Uploading the same month and year replaces its stored file and
+            resets client approval to pending. Leave Publish now unchecked to
+            review it here as a draft first.
           </p>
           <AdminReportUploadForm
             clientId={client.id}

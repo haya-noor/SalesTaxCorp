@@ -20,6 +20,7 @@ import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 import {
   deleteReportSchema,
   setPeriodPublishedSchema,
+  setReportApprovalSchema,
   uploadReportSchema,
 } from "./reports-schemas";
 
@@ -131,6 +132,8 @@ export async function uploadReportAction(formData: FormData) {
         period_month: parsed.data.periodMonth,
         file_path: filePath,
         published: parsed.data.published ?? false,
+        client_approved_at: null,
+        client_approved_by: null,
       },
       { onConflict: "client_id,period_year,period_month" },
     );
@@ -216,6 +219,61 @@ export async function setPeriodPublishedAction(formData: FormData) {
     workspace,
     "success",
     parsed.data.published ? "Report published." : "Report unpublished.",
+  );
+}
+
+// Lets an administrator record an approval on the client's behalf or return
+// a report to pending. The approving profile is retained with the timestamp.
+export async function setReportApprovalAction(formData: FormData) {
+  const workspace = getWorkspace(formData);
+  const parsed = setReportApprovalSchema.safeParse({
+    periodId: formData.get("periodId"),
+    clientId: formData.get("clientId"),
+    approved: formData.get("approved"),
+  });
+
+  if (!parsed.success) {
+    go(undefined, workspace, "error", "Invalid approval status update.");
+  }
+
+  const { supabase, user } = await requireAdmin();
+  const approvalUpdate = parsed.data.approved
+    ? {
+        client_approved_at: new Date().toISOString(),
+        client_approved_by: user.id,
+      }
+    : {
+        client_approved_at: null,
+        client_approved_by: null,
+      };
+
+  const { data: updatedPeriod, error } = await supabase
+    .from("filing_periods")
+    .update(approvalUpdate)
+    .eq("id", parsed.data.periodId)
+    .eq("client_id", parsed.data.clientId)
+    .select("id")
+    .maybeSingle();
+
+  if (error) {
+    const message = ["42703", "PGRST204"].includes(error.code)
+      ? "Report approval is not configured in this database yet. Apply the latest Supabase migration."
+      : "The report approval status could not be changed.";
+    go(parsed.data.clientId, workspace, "error", message);
+  }
+
+  if (!updatedPeriod) {
+    go(parsed.data.clientId, workspace, "error", "Report not found.");
+  }
+
+  revalidateReportPaths(parsed.data.clientId);
+  go(
+    parsed.data.clientId,
+    workspace,
+    "success",
+    parsed.data.approved
+      ? "Report marked as approved."
+      : "Report returned to pending approval.",
   );
 }
 

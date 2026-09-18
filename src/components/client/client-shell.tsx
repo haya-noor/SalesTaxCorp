@@ -88,11 +88,13 @@ export function ClientShell({
       </header>
 
       <div className="mx-auto flex max-w-[1920px] flex-col gap-4 px-4 py-4 sm:px-5 lg:flex-row lg:px-6 lg:py-5">
-        <aside className="w-full shrink-0 lg:w-52">
-          <p className="mb-3 px-1 text-sm font-bold uppercase tracking-[0.16em] text-teal-700">
-            {companyName}
-          </p>
-          <ClientSidebar basePath={basePath} />
+        <aside className="w-full shrink-0 lg:w-60">
+          <div className="rounded-2xl bg-slate-900 p-4 shadow-sm">
+            <p className="mb-3 px-1 text-xs font-bold uppercase tracking-[0.16em] text-emerald-400">
+              {companyName}
+            </p>
+            <ClientSidebar basePath={basePath} />
+          </div>
         </aside>
         <main className="min-w-0 flex-1">{children}</main>
       </div>

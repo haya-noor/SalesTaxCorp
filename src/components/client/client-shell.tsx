@@ -9,6 +9,12 @@ and a left sidebar (Reports, Registrations, Nexus study, Information,
 Documents) with the page content to its right. Reports is the default
 landing section.
 
+The sidebar is a full-height, edge-to-edge dark panel rather than a floating
+card: the row below the header uses `flex-1` + stretch alignment so the
+panel's background always matches the height of the page content next to
+it, and it sits flush against the row's edges (no gap/rounding) so it reads
+as one continuous layout instead of two separate boxes.
+
 When `adminMode` is set, this renders the same portal chrome for an admin
 managing a selected client. The admin keeps their own identity and receives
 an unmistakable management banner plus links back to the admin portal.
@@ -27,7 +33,7 @@ export function ClientShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="flex min-h-screen flex-col bg-slate-50">
       <div className="h-1 bg-gradient-to-r from-teal-700 via-emerald-500 to-teal-700" />
       <header className="border-b border-slate-200/90 bg-white/95 shadow-sm backdrop-blur">
         <div className="mx-auto flex max-w-[1920px] flex-wrap items-center justify-between gap-5 px-4 py-5 sm:px-6 lg:px-8">
@@ -87,16 +93,18 @@ export function ClientShell({
         ) : null}
       </header>
 
-      <div className="mx-auto flex max-w-[1920px] flex-col gap-4 px-4 py-4 sm:px-5 lg:flex-row lg:px-6 lg:py-5">
-        <aside className="w-full shrink-0 lg:w-60">
-          <div className="rounded-2xl bg-slate-900 p-4 shadow-sm">
-            <p className="mb-3 px-1 text-xs font-bold uppercase tracking-[0.16em] text-emerald-400">
+      <div className="mx-auto flex w-full max-w-[1920px] flex-1 flex-col lg:flex-row">
+        <aside className="w-full shrink-0 bg-slate-900 lg:w-64">
+          <div className="p-5 lg:sticky lg:top-0 lg:py-8">
+            <p className="mb-4 px-1 text-xs font-bold uppercase tracking-[0.16em] text-emerald-400">
               {companyName}
             </p>
             <ClientSidebar basePath={basePath} />
           </div>
         </aside>
-        <main className="min-w-0 flex-1">{children}</main>
+        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+          {children}
+        </main>
       </div>
     </div>
   );

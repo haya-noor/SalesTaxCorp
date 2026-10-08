@@ -55,7 +55,7 @@ export async function ReportsPortalView({
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="client-report-surface flex flex-col gap-2 lg:-m-5 lg:min-h-full lg:gap-0">
       {!selectedPeriod ? (
         <Card className="py-14 text-center">
           <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-teal-50 text-xl text-teal-700">
@@ -68,7 +68,7 @@ export async function ReportsPortalView({
         </Card>
       ) : (
         <>
-          <div className="flex min-h-10 flex-wrap items-center justify-between gap-2">
+          <div className="flex min-h-14 flex-wrap items-center justify-between gap-2 bg-slate-50 px-5 py-3">
             <div className="flex flex-wrap items-center gap-2 overflow-x-auto">
               {yearPeriods.map((p) => (
                 <Link
@@ -95,7 +95,7 @@ export async function ReportsPortalView({
           </div>
 
           {adminMode ? (
-            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+            <div className="mx-5 mb-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
               <div>
                 <p className="text-sm font-bold uppercase tracking-[0.12em] text-amber-800">
                   Administrator controls

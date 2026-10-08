@@ -27,7 +27,7 @@ export function ClientShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="flex min-h-screen flex-col bg-slate-50">
       <div className="h-1 bg-gradient-to-r from-teal-700 via-emerald-500 to-teal-700" />
       <header className="border-b border-slate-200/90 bg-white/95 shadow-sm backdrop-blur">
         <div className="mx-auto flex max-w-[1920px] flex-wrap items-center justify-between gap-5 px-4 py-5 sm:px-6 lg:px-8">
@@ -87,16 +87,16 @@ export function ClientShell({
         ) : null}
       </header>
 
-      <div className="mx-auto flex max-w-[1920px] flex-col gap-4 px-4 py-4 sm:px-5 lg:flex-row lg:px-6 lg:py-5">
-        <aside className="w-full shrink-0 lg:w-60">
-          <div className="rounded-2xl bg-slate-900 p-4 shadow-sm">
+      <div className="flex flex-1 flex-col px-4 py-4 sm:px-5 lg:flex-row lg:px-0 lg:py-0">
+        <aside className="w-full shrink-0 lg:w-64 lg:bg-slate-950">
+          <div className="rounded-2xl bg-slate-900 p-4 shadow-sm lg:sticky lg:top-0 lg:rounded-none lg:bg-transparent lg:px-5 lg:py-6 lg:shadow-none">
             <p className="mb-3 px-1 text-xs font-bold uppercase tracking-[0.16em] text-emerald-400">
               {companyName}
             </p>
             <ClientSidebar basePath={basePath} />
           </div>
         </aside>
-        <main className="min-w-0 flex-1">{children}</main>
+        <main className="min-w-0 flex-1 pt-4 lg:p-5">{children}</main>
       </div>
     </div>
   );

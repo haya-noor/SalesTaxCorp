@@ -9,6 +9,12 @@ and a left sidebar (Reports, Registrations, Nexus study, Information,
 Documents) with the page content to its right. Reports is the default
 landing section.
 
+The sidebar is a full-height, edge-to-edge dark panel rather than a floating
+card: the row below the header uses `flex-1` + stretch alignment so the
+panel's background always matches the height of the page content next to
+it, and it sits flush against the row's edges (no gap/rounding) so it reads
+as one continuous layout instead of two separate boxes.
+
 When `adminMode` is set, this renders the same portal chrome for an admin
 managing a selected client. The admin keeps their own identity and receives
 an unmistakable management banner plus links back to the admin portal.
@@ -87,16 +93,18 @@ export function ClientShell({
         ) : null}
       </header>
 
-      <div className="flex flex-1 flex-col px-4 py-4 sm:px-5 lg:flex-row lg:px-0 lg:py-0">
-        <aside className="w-full shrink-0 lg:w-64 lg:bg-slate-950">
-          <div className="rounded-2xl bg-slate-900 p-4 shadow-sm lg:sticky lg:top-0 lg:rounded-none lg:bg-transparent lg:px-5 lg:py-6 lg:shadow-none">
-            <p className="mb-3 px-1 text-xs font-bold uppercase tracking-[0.16em] text-emerald-400">
+      <div className="mx-auto flex w-full max-w-[1920px] flex-1 flex-col lg:flex-row">
+        <aside className="w-full shrink-0 bg-slate-900 lg:w-64">
+          <div className="p-5 lg:sticky lg:top-0 lg:py-8">
+            <p className="mb-4 px-1 text-xs font-bold uppercase tracking-[0.16em] text-emerald-400">
               {companyName}
             </p>
             <ClientSidebar basePath={basePath} />
           </div>
         </aside>
-        <main className="min-w-0 flex-1 pt-4 lg:p-5">{children}</main>
+        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+          {children}
+        </main>
       </div>
     </div>
   );

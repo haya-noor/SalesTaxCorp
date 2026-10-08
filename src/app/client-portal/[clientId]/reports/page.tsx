@@ -11,6 +11,7 @@ export default async function ClientPortalPreviewReportsPage({
   params: Promise<{ clientId: string }>;
   searchParams: Promise<{
     year?: string;
+    month?: string;
     period?: string;
     success?: string;
     error?: string;
@@ -49,6 +50,7 @@ export default async function ClientPortalPreviewReportsPage({
         clientId={client.id}
         basePath={`/client-portal/${clientId}`}
         year={query.year}
+        month={query.month}
         period={query.period}
         adminMode
       />

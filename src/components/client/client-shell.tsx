@@ -4,20 +4,9 @@ import { Button } from "@/components/ui/button";
 import { logoutAction } from "@/features/auth/actions";
 
 /*
-Layout shell for the client portal: header with company name/account/logout,
-and a left sidebar (Reports, Registrations, Nexus study, Information,
-Documents) with the page content to its right. Reports is the default
-landing section.
-
-The sidebar is a full-height, edge-to-edge dark panel rather than a floating
-card: the row below the header uses `flex-1` + stretch alignment so the
-panel's background always matches the height of the page content next to
-it, and it sits flush against the row's edges (no gap/rounding) so it reads
-as one continuous layout instead of two separate boxes.
-
-When `adminMode` is set, this renders the same portal chrome for an admin
-managing a selected client. The admin keeps their own identity and receives
-an unmistakable management banner plus links back to the admin portal.
+Shared client-portal shell. On desktop it uses a full-height dark navigation
+column and a separate content column, so report pages read as one integrated
+application rather than a centered page with a floating navigation card.
 */
 export function ClientShell({
   companyName,
@@ -33,13 +22,15 @@ export function ClientShell({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50">
-      <div className="h-1 bg-gradient-to-r from-teal-700 via-emerald-500 to-teal-700" />
-      <header className="border-b border-slate-200/90 bg-white/95 shadow-sm backdrop-blur">
-        <div className="mx-auto flex max-w-[1920px] flex-wrap items-center justify-between gap-5 px-4 py-5 sm:px-6 lg:px-8">
-          <Link href={basePath} className="flex items-center gap-3 text-slate-950">
+    <div className="min-h-screen bg-slate-50 lg:grid lg:grid-cols-[16rem_minmax(0,1fr)] lg:grid-rows-[auto_1fr]">
+      <header className="border-b border-slate-200 bg-white shadow-sm lg:col-start-2 lg:row-start-1">
+        <div className="flex min-h-20 flex-wrap items-center justify-between gap-5 px-4 py-4 sm:px-6 lg:px-8">
+          <Link
+            href={basePath}
+            className="flex items-center gap-3 text-slate-950 lg:hidden"
+          >
             <span className="grid size-10 place-items-center rounded-xl bg-teal-700 text-lg font-bold text-white shadow-sm">
-              ✓
+              {"\u2713"}
             </span>
             <span>
               <span className="block text-lg font-bold tracking-tight">
@@ -51,7 +42,7 @@ export function ClientShell({
             </span>
           </Link>
 
-          <div className="flex items-center gap-3">
+          <div className="ml-auto flex items-center gap-3">
             {adminMode ? (
               <>
                 <Link
@@ -87,25 +78,41 @@ export function ClientShell({
 
         {adminMode ? (
           <div className="border-t border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm font-semibold text-amber-900 sm:px-6 lg:px-8">
-            Administrator workspace — managing {companyName}. Changes made here
+            Administrator workspace &mdash; managing {companyName}. Changes made here
             can affect what the client sees.
           </div>
         ) : null}
       </header>
 
-      <div className="mx-auto flex w-full max-w-[1920px] flex-1 flex-col lg:flex-row">
-        <aside className="w-full shrink-0 bg-slate-900 lg:w-64">
-          <div className="p-5 lg:sticky lg:top-0 lg:py-8">
-            <p className="mb-4 px-1 text-xs font-bold uppercase tracking-[0.16em] text-emerald-400">
-              {companyName}
-            </p>
-            <ClientSidebar basePath={basePath} />
-          </div>
-        </aside>
-        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
-          {children}
-        </main>
-      </div>
+      <aside className="w-full bg-[#171e2a] lg:col-start-1 lg:row-span-2 lg:row-start-1">
+        <Link
+          href={basePath}
+          className="hidden min-h-20 items-center gap-3 border-b border-white/10 px-6 text-white lg:flex"
+        >
+          <span className="grid size-10 place-items-center rounded-full border border-emerald-400/40 bg-teal-900 text-lg font-bold text-emerald-300">
+            {"\u2713"}
+          </span>
+          <span>
+            <span className="block text-base font-bold tracking-tight">
+              SalesTaxCorp
+            </span>
+            <span className="block text-xs font-medium text-slate-400">
+              Client portal
+            </span>
+          </span>
+        </Link>
+
+        <div className="p-5 lg:sticky lg:top-0 lg:px-4 lg:py-7">
+          <p className="mb-4 px-2 text-xs font-bold uppercase tracking-[0.16em] text-emerald-400">
+            {companyName}
+          </p>
+          <ClientSidebar basePath={basePath} />
+        </div>
+      </aside>
+
+      <main className="min-w-0 px-4 py-6 sm:px-6 lg:col-start-2 lg:row-start-2 lg:px-8 lg:py-8">
+        {children}
+      </main>
     </div>
   );
 }

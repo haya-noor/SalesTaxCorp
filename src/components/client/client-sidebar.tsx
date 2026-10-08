@@ -30,9 +30,9 @@ export function ClientSidebar({
             key={item.href}
             href={item.href}
             aria-current={active ? "page" : undefined}
-            className={`flex items-center gap-3 rounded-xl px-3.5 py-3 text-base font-semibold transition ${
+            className={`flex items-center gap-3 rounded-lg px-3.5 py-3 text-base font-semibold transition ${
               active
-                ? "bg-slate-800 text-white shadow-sm ring-1 ring-inset ring-white/10"
+                ? "bg-slate-800 text-white shadow-sm ring-1 ring-inset ring-slate-500"
                 : "text-slate-400 hover:bg-slate-800/60 hover:text-white"
             }`}
           >

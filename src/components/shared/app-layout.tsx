@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PortalNavigation } from "@/components/shared/portal-navigation";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 
 /*
@@ -23,9 +24,9 @@ export function AppLayout({
 }) {
   const maxWidth = fullWidth ? "max-w-full" : "max-w-7xl";
   return (
-    <div className="portal-shell min-h-screen bg-slate-50">
+    <div className="app-theme portal-shell min-h-screen bg-slate-50 dark:bg-[#0f172a]">
       <div className="h-1 bg-gradient-to-r from-teal-700 via-emerald-500 to-teal-700" />
-      <header className="border-b border-slate-200/90 bg-white/95 shadow-sm backdrop-blur">
+      <header className="portal-header border-b border-slate-200/90 bg-white/95 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-[#111827]">
         <div className={`mx-auto flex ${maxWidth} flex-wrap items-center justify-between gap-5 px-4 py-5 sm:px-6 lg:px-8`}>
           <Link href="/" className="flex items-center gap-3 text-slate-950">
             <span className="grid size-10 place-items-center rounded-xl bg-teal-700 text-lg font-bold text-white shadow-sm">
@@ -41,7 +42,10 @@ export function AppLayout({
             </span>
           </Link>
 
-          <PortalNavigation navigation={navigation} />
+          <div className="flex flex-wrap items-center gap-3">
+            <ThemeToggle />
+            <PortalNavigation navigation={navigation} />
+          </div>
         </div>
       </header>
       <main className={`mx-auto ${maxWidth} px-4 py-10 sm:px-6 lg:px-8 lg:py-12`}>

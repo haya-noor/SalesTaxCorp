@@ -57,7 +57,7 @@ export default async function ClientDetailPage({
 
       <FlashMessage {...messages} />
 
-      <Card className="border-teal-100 bg-gradient-to-br from-white to-teal-50/50">
+      <Card className="border-teal-100 bg-gradient-to-br from-white to-teal-50/50 dark:border-slate-700 dark:from-slate-800 dark:to-teal-950/50">
         <div className="flex flex-wrap items-start justify-between gap-5">
           <div>
             <div className="flex flex-wrap items-center gap-3">

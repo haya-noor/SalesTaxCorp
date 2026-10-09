@@ -93,7 +93,7 @@ export async function ReportsPortalView({
   return (
     <div
       className={`client-report-surface flex flex-col gap-2 lg:min-h-full lg:gap-0 ${
-        adminMode ? "" : "lg:-m-8"
+        adminMode ? "lg:-mx-8 lg:-mb-8" : "lg:-m-8"
       }`}
     >
       {!periods.length ? (
@@ -110,7 +110,7 @@ export async function ReportsPortalView({
         </Card>
       ) : requestedPeriod ? (
         <>
-          <div className="flex min-h-16 flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-5 py-3">
+          <div className="flex min-h-16 flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-5 py-3 dark:border-slate-700 dark:bg-slate-900">
             <div className="flex flex-wrap items-center gap-3">
               <Link
                 href={listHref()}
@@ -158,8 +158,8 @@ export async function ReportsPortalView({
           />
         </>
       ) : (
-        <div className="flex min-h-[calc(100vh-5rem)] flex-1 flex-col bg-[#f3f1ec]">
-          <div className="border-b border-stone-200 bg-white px-5 py-5 sm:px-8">
+        <div className="flex min-h-[calc(100vh-5rem)] flex-1 flex-col bg-[#f3f1ec] dark:bg-[#0f172a]">
+          <div className="border-b border-stone-200 bg-white px-5 py-5 dark:border-slate-700 dark:bg-slate-900 sm:px-8">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-teal-700">
               Client portal
             </p>
@@ -193,7 +193,7 @@ export async function ReportsPortalView({
                 return (
                   <article
                     key={candidate.id}
-                    className="flex min-h-56 flex-col rounded-xl border border-stone-200 bg-white p-5 shadow-[0_10px_24px_-24px_rgba(15,23,42,0.5)] transition hover:-translate-y-0.5 hover:border-teal-200 hover:shadow-[0_18px_35px_-24px_rgba(15,118,110,0.4)]"
+                    className="flex min-h-56 flex-col rounded-xl border border-stone-200 bg-white p-5 shadow-[0_10px_24px_-24px_rgba(15,23,42,0.5)] transition hover:-translate-y-0.5 hover:border-teal-200 hover:shadow-[0_18px_35px_-24px_rgba(15,118,110,0.4)] dark:border-slate-700 dark:bg-slate-900 dark:hover:border-teal-700"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
@@ -207,8 +207,8 @@ export async function ReportsPortalView({
                       <span
                         className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-bold ${
                           candidate.published && (approved || adminMode)
-                            ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200"
-                            : "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200"
+                            ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 dark:bg-emerald-950/70 dark:text-emerald-200 dark:ring-emerald-800"
+                            : "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200 dark:bg-amber-950/70 dark:text-amber-200 dark:ring-amber-800"
                         }`}
                       >
                         {statusLabel}
@@ -238,7 +238,7 @@ export async function ReportsPortalView({
 
                     <Link
                       href={periodHref(candidate)}
-                      className="mt-auto inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-bold text-slate-800 transition hover:border-teal-700 hover:bg-teal-50 hover:text-teal-800"
+                      className="mt-auto inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-bold text-slate-800 transition hover:border-teal-700 hover:bg-teal-50 hover:text-teal-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-teal-500 dark:hover:bg-slate-700 dark:hover:text-teal-300"
                     >
                       Open report
                     </Link>
@@ -247,7 +247,7 @@ export async function ReportsPortalView({
               })}
             </div>
             ) : (
-            <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-white/70 px-6 py-14 text-center">
+            <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-white/70 px-6 py-14 text-center dark:border-slate-700 dark:bg-slate-900/70">
               <h2 className="text-lg font-bold text-slate-950">
                 No reports match these filters
               </h2>

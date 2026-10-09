@@ -24,8 +24,8 @@ export function AdminReportActions({
       <span
         className={`rounded-full px-3 py-1 text-sm font-semibold ${
           period.published
-            ? "bg-emerald-50 text-emerald-700"
-            : "bg-amber-50 text-amber-700"
+            ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/70 dark:text-emerald-200"
+            : "bg-amber-50 text-amber-700 dark:bg-amber-950/70 dark:text-amber-200"
         }`}
       >
         {period.published ? "Published" : "Draft"}
@@ -34,8 +34,8 @@ export function AdminReportActions({
       <span
         className={`rounded-full px-3 py-1 text-sm font-semibold ${
           period.client_approved_at
-            ? "bg-emerald-100 text-emerald-800"
-            : "bg-slate-100 text-slate-700"
+            ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-200"
+            : "bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-200"
         }`}
       >
         Approval: {period.client_approved_at ? "Approved" : "Pending"}

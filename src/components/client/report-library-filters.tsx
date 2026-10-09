@@ -25,7 +25,7 @@ export function ReportLibraryFilters({
   }
 
   return (
-    <div className="flex flex-wrap items-end justify-between gap-4 rounded-xl border border-stone-200 bg-white p-4 shadow-sm sm:p-5">
+    <div className="flex flex-wrap items-end justify-between gap-4 rounded-xl border border-stone-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-5">
       <div className="flex flex-wrap items-end gap-4">
         <label className="grid gap-1.5">
           <span className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
@@ -33,7 +33,7 @@ export function ReportLibraryFilters({
           </span>
           <select
             aria-label="Country"
-            className="h-11 rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-900 shadow-sm"
+            className="h-11 rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-900 shadow-sm dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
             defaultValue="us"
           >
             <option value="us">United States</option>
@@ -48,7 +48,7 @@ export function ReportLibraryFilters({
             aria-label="Filter reports by month"
             value={selectedMonth}
             onChange={(event) => navigate(selectedYear, event.target.value)}
-            className="h-11 rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-900 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
+            className="h-11 rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-900 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-teal-900"
           >
             <option value="all">All months</option>
             {Array.from({ length: 12 }, (_, index) => index + 1).map((month) => (
@@ -69,7 +69,7 @@ export function ReportLibraryFilters({
             onChange={(event) =>
               navigate(Number(event.target.value), selectedMonth)
             }
-            className="h-11 rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-900 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
+            className="h-11 rounded-lg border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-900 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:ring-teal-900"
           >
             {years.map((year) => (
               <option key={year} value={year}>

@@ -44,7 +44,7 @@ export default async function AdminPage() {
         ))}
         </div>
 
-        <Card className="border-teal-100 bg-gradient-to-br from-white to-teal-50/70">
+        <Card className="border-teal-100 bg-gradient-to-br from-white to-teal-50/70 dark:border-slate-700 dark:from-slate-800 dark:to-teal-950/50">
         <p className="text-sm font-bold uppercase tracking-[0.14em] text-teal-700">
           Portal management
         </p>

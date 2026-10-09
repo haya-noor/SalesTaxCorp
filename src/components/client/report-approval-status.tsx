@@ -6,12 +6,14 @@ export function ReportApprovalStatus({ period }: { period: FilingPeriod }) {
 
   return (
     <div className="flex flex-wrap items-center gap-2">
-      <span className="text-sm font-semibold text-slate-600">Status:</span>
+      <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">
+        Status:
+      </span>
       <span
         className={`rounded-full px-3 py-1 text-sm font-semibold ${
           approved
-            ? "bg-emerald-100 text-emerald-800"
-            : "bg-amber-100 text-amber-800"
+            ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-200"
+            : "bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-200"
         }`}
         role="status"
       >

@@ -7,7 +7,7 @@ export function Card({
 }: HTMLAttributes<HTMLElement>) {
   return (
     <section
-      className={`rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_12px_35px_-24px_rgba(15,23,42,0.35)] sm:p-7 ${className}`}
+      className={`rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_12px_35px_-24px_rgba(15,23,42,0.35)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-black/25 sm:p-7 ${className}`}
       {...props}
     >
       {children}

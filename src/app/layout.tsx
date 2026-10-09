@@ -31,12 +31,31 @@ export const metadata: Metadata = {
     "Managed U.S. sales tax compliance for growing businesses, from nexus reviews and registrations to filings and ongoing support.",
 };
 
+const themeScript = `
+  (function () {
+    try {
+      var savedTheme = window.localStorage.getItem("stc-theme");
+      var theme = savedTheme === "light" || savedTheme === "dark"
+        ? savedTheme
+        : (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    } catch (_) {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  })();
+`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
+      data-theme="light"
+      suppressHydrationWarning
       className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable}`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>{children}</body>
     </html>
   );

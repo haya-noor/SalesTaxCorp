@@ -2,6 +2,7 @@
   --paper: #edf1f2;
   --surface: #ffffff;
   --surface-2: #f6f8f9;
+  --dark-panel: #0b1a22;
   --ink: #0b1a22;
   --ink-soft: #33474f;
   --ink-faint: #6b7c83;
@@ -21,6 +22,25 @@
   font-family: var(--font-body), sans-serif;
   font-size: 16px;
   line-height: 1.6;
+}
+
+:global(html[data-theme="dark"]) .site {
+  --paper: #0f172a;
+  --surface: #1e293b;
+  --surface-2: #172033;
+  --dark-panel: #111827;
+  --ink: #f1f5f9;
+  --ink-soft: #c1ccd8;
+  --ink-faint: #94a3b8;
+  --line: #334155;
+  --line-soft: #29374a;
+  --emerald: #17a77d;
+  --emerald-deep: #128565;
+  --emerald-bright: #3dd8aa;
+  --emerald-wash: #153b32;
+  --amber: #d69b38;
+  --amber-bright: #f0b84b;
+  --amber-wash: #3d311d;
 }
 
 .site * {
@@ -131,11 +151,11 @@
 
 .buttonGhost:hover {
   border-color: var(--ink);
-  background: rgba(255, 255, 255, 0.45);
+  background: var(--surface);
 }
 
 .buttonDark {
-  background: var(--ink);
+  background: var(--dark-panel);
   color: #fff;
 }
 
@@ -184,6 +204,11 @@
   border-bottom: 1px solid rgba(214, 222, 225, 0.85);
   background: rgba(237, 241, 242, 0.93);
   backdrop-filter: blur(14px);
+}
+
+:global(html[data-theme="dark"]) .siteHeader {
+  border-bottom-color: rgba(71, 85, 105, 0.8);
+  background: rgba(17, 24, 39, 0.94);
 }
 
 .headerInner {
@@ -366,7 +391,7 @@
 .console {
   overflow: hidden;
   border-radius: 20px;
-  background: var(--ink);
+  background: var(--dark-panel);
   box-shadow: 0 2px 4px rgba(11, 26, 34, 0.05),
     0 40px 80px -30px rgba(11, 26, 34, 0.45);
   color: #dde6e9;
@@ -601,7 +626,7 @@
 }
 
 .darkBand {
-  background: var(--ink);
+  background: var(--dark-panel);
   color: #e5edef;
 }
 
@@ -775,7 +800,7 @@
 
 .footer {
   padding-block: 70px 28px;
-  background: var(--ink);
+  background: var(--dark-panel);
   color: #b4c3c8;
 }
 
@@ -949,7 +974,7 @@
   cursor: pointer;
   border: 0;
   border-top: 1px solid var(--line-soft);
-  background: #fff;
+  background: var(--surface);
   color: var(--ink-soft);
   text-align: left;
   transition: 150ms ease;
@@ -1004,7 +1029,7 @@
   align-self: start;
   padding: 30px;
   border-radius: 16px;
-  background: var(--ink);
+  background: var(--dark-panel);
   color: #fff;
 }
 

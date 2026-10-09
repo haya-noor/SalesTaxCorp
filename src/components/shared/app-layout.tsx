@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PortalNavigation } from "@/components/shared/portal-navigation";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 
 /*
@@ -23,11 +24,11 @@ export function AppLayout({
 }) {
   const maxWidth = fullWidth ? "max-w-full" : "max-w-7xl";
   return (
-    <div className="portal-shell min-h-screen bg-slate-50">
+    <div className="app-theme portal-shell min-h-screen bg-slate-50 dark:bg-[#0f172a]">
       <div className="h-1 bg-gradient-to-r from-teal-700 via-emerald-500 to-teal-700" />
-      <header className="border-b border-slate-200/90 bg-white/95 shadow-sm backdrop-blur">
+      <header className="portal-header border-b border-slate-200/90 bg-white/95 shadow-sm backdrop-blur dark:border-slate-700 dark:bg-[#111827]">
         <div className={`mx-auto flex ${maxWidth} flex-wrap items-center justify-between gap-5 px-4 py-5 sm:px-6 lg:px-8`}>
-          <Link href="/" className="flex items-center gap-3 text-slate-950">
+          <Link href="/" className="flex items-center gap-3 text-slate-950 dark:text-slate-100">
             <span className="grid size-10 place-items-center rounded-xl bg-teal-700 text-lg font-bold text-white shadow-sm">
               ✓
             </span>
@@ -35,22 +36,25 @@ export function AppLayout({
               <span className="block text-lg font-bold tracking-tight">
                 SalesTaxCorp
               </span>
-              <span className="block text-sm font-medium text-slate-500">
+              <span className="block text-sm font-medium text-slate-500 dark:text-slate-400">
                 {subtitle}
               </span>
             </span>
           </Link>
 
-          <PortalNavigation navigation={navigation} />
+          <div className="flex flex-wrap items-center gap-3">
+            <ThemeToggle />
+            <PortalNavigation navigation={navigation} />
+          </div>
         </div>
       </header>
       <main className={`mx-auto ${maxWidth} px-4 py-10 sm:px-6 lg:px-8 lg:py-12`}>
         {title ? (
           <div className="mb-8">
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-teal-700">
+            <p className="text-sm font-bold uppercase tracking-[0.16em] text-teal-700 dark:text-teal-300">
               {subtitle}
             </p>
-            <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+            <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950 dark:text-slate-100 sm:text-4xl">
               {title}
             </h1>
           </div>

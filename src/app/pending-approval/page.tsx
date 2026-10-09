@@ -27,7 +27,7 @@ export default async function PendingApprovalPage() {
       description="Your account was created successfully. An administrator must verify and approve it before you can access company information."
     >
       <div className="grid gap-4 text-center">
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-slate-600 dark:text-slate-300">
           You can return later and sign in again to check your status.
         </p>
         <form action={logoutAction}>

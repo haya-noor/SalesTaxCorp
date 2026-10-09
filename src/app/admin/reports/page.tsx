@@ -75,7 +75,7 @@ export default async function AdminReportsPage({
 
           <Card className="mt-6">
             <h2 className="text-xl font-bold">Report history</h2>
-            <div className="mt-4 divide-y divide-slate-200">
+            <div className="mt-4 divide-y divide-slate-200 dark:divide-slate-700">
               {periods?.map((period) => (
                 <div
                   key={period.id}

@@ -17,7 +17,7 @@ export function AdminDocumentList({
   return (
     <Card>
       <h2 className="text-xl font-bold">Uploaded documents</h2>
-      <div className="mt-4 divide-y divide-slate-200">
+      <div className="mt-4 divide-y divide-slate-200 dark:divide-slate-700">
         {documents.map((document) => (
           <div
             key={document.id}
@@ -34,7 +34,7 @@ export function AdminDocumentList({
             <div className="flex items-center gap-2">
               <a
                 href={`/api/documents/${document.id}/file`}
-                className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-base font-semibold text-slate-700 shadow-sm hover:border-teal-300"
+                className="rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-base font-semibold text-slate-700 shadow-sm hover:border-teal-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-teal-500 dark:hover:text-teal-300"
               >
                 Download
               </a>

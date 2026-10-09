@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
   --background: #f6f8fb;
   --foreground: #182230;
@@ -8,6 +10,21 @@
   --navy: #102a43;
   --muted: #62748a;
   --border: #dce3eb;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --brand: #2dd4bf;
+  --brand-dark: #5eead4;
+  --navy: #d8e7f2;
+  --muted: #b6c2d1;
+  --border: #334155;
+  color-scheme: dark;
 }
 
 * {
@@ -49,9 +66,108 @@ select {
 }
 
 .portal-shell {
-  color: #172033;
+  color: var(--foreground);
   font-size: 16px;
   line-height: 1.55;
+}
+
+.theme-toggle__sun {
+  display: none;
+}
+
+html[data-theme="dark"] .theme-toggle {
+  border-color: #475569;
+  background: #1e293b;
+  color: #f6c453;
+}
+
+html[data-theme="dark"] .theme-toggle:hover {
+  border-color: #2dd4bf;
+  background: #243247;
+  color: #fde68a;
+}
+
+html[data-theme="dark"] .theme-toggle__moon {
+  display: none;
+}
+
+html[data-theme="dark"] .theme-toggle__sun {
+  display: block;
+}
+
+/* Shared dark surfaces for authenticated pages. These compatibility rules
+   also cover portal screens that use the common light utility palette. */
+html[data-theme="dark"] .app-theme .bg-white,
+html[data-theme="dark"] .app-theme .bg-white\/95,
+html[data-theme="dark"] .app-theme .bg-white\/70 {
+  background-color: #1e293b !important;
+}
+
+html[data-theme="dark"] .app-theme .bg-slate-50,
+html[data-theme="dark"] .app-theme.bg-slate-50 {
+  background-color: #0f172a !important;
+}
+
+html[data-theme="dark"] .app-theme .bg-slate-100 {
+  background-color: #334155 !important;
+}
+
+html[data-theme="dark"] .app-theme .bg-slate-200 {
+  background-color: #475569 !important;
+}
+
+html[data-theme="dark"] .app-theme .divide-slate-100 > :not(:last-child),
+html[data-theme="dark"] .app-theme .divide-slate-200 > :not(:last-child) {
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .app-theme .portal-header {
+  background-color: #111827 !important;
+}
+
+html[data-theme="dark"] .app-theme .text-slate-950,
+html[data-theme="dark"] .app-theme .text-slate-900,
+html[data-theme="dark"] .app-theme .text-slate-800,
+html[data-theme="dark"] .auth-shell .text-slate-950,
+html[data-theme="dark"] .auth-shell .text-slate-900,
+html[data-theme="dark"] .auth-shell .text-slate-800 {
+  color: #f1f5f9 !important;
+}
+
+html[data-theme="dark"] .app-theme .text-slate-700,
+html[data-theme="dark"] .app-theme .text-slate-600,
+html[data-theme="dark"] .app-theme .text-slate-500,
+html[data-theme="dark"] .auth-shell .text-slate-700,
+html[data-theme="dark"] .auth-shell .text-slate-600,
+html[data-theme="dark"] .auth-shell .text-slate-500 {
+  color: #b6c2d1 !important;
+}
+
+html[data-theme="dark"] .app-theme .border-slate-200,
+html[data-theme="dark"] .app-theme .border-slate-200\/90,
+html[data-theme="dark"] .app-theme .border-slate-300,
+html[data-theme="dark"] .app-theme .border-stone-200,
+html[data-theme="dark"] .auth-shell .border-slate-200,
+html[data-theme="dark"] .auth-shell .border-slate-300 {
+  border-color: #334155 !important;
+}
+
+html[data-theme="dark"] .app-theme input,
+html[data-theme="dark"] .app-theme select,
+html[data-theme="dark"] .app-theme textarea,
+html[data-theme="dark"] .auth-shell input,
+html[data-theme="dark"] .auth-shell select,
+html[data-theme="dark"] .auth-shell textarea {
+  border-color: #475569;
+  background-color: #172033;
+  color: #f1f5f9;
+}
+
+html[data-theme="dark"] .app-theme input::placeholder,
+html[data-theme="dark"] .app-theme textarea::placeholder,
+html[data-theme="dark"] .auth-shell input::placeholder,
+html[data-theme="dark"] .auth-shell textarea::placeholder {
+  color: #71839a;
 }
 
 .portal-shell .text-xs {

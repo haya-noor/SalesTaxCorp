@@ -68,7 +68,7 @@ export function ReportFrame({
 
   if (frame.status === "loading") {
     return (
-      <div className="grid min-h-[60vh] place-items-center bg-slate-50 text-base font-semibold text-slate-600">
+      <div className="grid min-h-[60vh] place-items-center bg-slate-50 text-base font-semibold text-slate-600 dark:bg-slate-950 dark:text-slate-300">
         Loading report...
       </div>
     );
@@ -76,7 +76,7 @@ export function ReportFrame({
 
   if (frame.status === "error") {
     return (
-      <div className="grid min-h-[60vh] place-items-center bg-slate-50 px-6 text-center">
+      <div className="grid min-h-[60vh] place-items-center bg-slate-50 px-6 text-center dark:bg-slate-950">
         <div>
           <h2 className="text-xl font-bold text-slate-950">
             Report temporarily unavailable

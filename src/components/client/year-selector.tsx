@@ -22,11 +22,11 @@ export function YearSelector({
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm font-semibold text-slate-700">Year:</span>
+      <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Year:</span>
       <select
         value={selectedYear}
         onChange={handleYearChange}
-        className="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-950 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
+        className="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-950 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-teal-500 dark:focus:ring-teal-950"
       >
         {years.map((year) => (
           <option key={year} value={year}>

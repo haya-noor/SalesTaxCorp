@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { BrandLogo } from "./brand-logo";
 import styles from "./marketing.module.css";
 
@@ -34,6 +35,7 @@ export function SiteHeader() {
         </nav>
 
         <div className={styles.headerActions}>
+          <ThemeToggle />
           <Link href="/login" className={styles.loginLink}>
             <LockIcon />
             <span>Portal Login</span>

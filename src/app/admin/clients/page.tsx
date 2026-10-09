@@ -65,7 +65,7 @@ export default async function ClientsPage({
               Select a company to manage its details.
             </p>
           </div>
-          <span className="rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-600">
+          <span className="rounded-full bg-slate-100 px-3 py-1.5 text-sm font-semibold text-slate-600 dark:bg-slate-700 dark:text-slate-200">
             {directory.length} total
           </span>
         </div>
@@ -74,7 +74,7 @@ export default async function ClientsPage({
           <ClientDirectory clients={directory} />
         ) : (
           <div className="py-12 text-center">
-            <p className="font-semibold text-slate-700">No clients created yet</p>
+            <p className="font-semibold text-slate-700 dark:text-slate-200">No clients created yet</p>
             <p className="mt-1 text-base text-slate-500">
               Use Add client to create the first company.
             </p>

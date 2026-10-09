@@ -23,9 +23,9 @@ export default async function ClientPortalDocumentsPage({
   return (
     <div className="grid gap-4">
       <FlashMessage {...messages} />
-      <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
-        <p className="font-bold text-amber-900">Administrator document access</p>
-        <p className="mt-1 text-sm leading-6 text-amber-800">
+      <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800/70 dark:bg-amber-950/40">
+        <p className="font-bold text-amber-900 dark:text-amber-200">Administrator document access</p>
+        <p className="mt-1 text-sm leading-6 text-amber-800 dark:text-amber-300">
           Upload files for this client, or view, download, and permanently
           delete existing files.
         </p>

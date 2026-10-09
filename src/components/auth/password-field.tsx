@@ -61,12 +61,12 @@ export function PasswordField({
   const inputId = props.id ?? generatedInputId;
 
   return (
-    <div className="grid gap-2 text-base font-semibold text-slate-700">
+    <div className="grid gap-2 text-base font-semibold text-slate-700 dark:text-slate-200">
       <label htmlFor={inputId}>{label}</label>
       <span className="relative block">
         <input
           id={inputId}
-          className={`h-12 w-full rounded-xl border border-slate-300 bg-white py-0 pl-4 pr-12 text-base text-slate-950 shadow-sm transition placeholder:text-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100 ${className ?? ""}`}
+          className={`h-12 w-full rounded-xl border border-slate-300 bg-white py-0 pl-4 pr-12 text-base text-slate-950 shadow-sm transition placeholder:text-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-teal-500 dark:focus:ring-teal-950 ${className ?? ""}`}
           type={visible ? "text" : "password"}
           aria-invalid={Boolean(error)}
           aria-describedby={error || hint ? supportingTextId : undefined}
@@ -74,7 +74,7 @@ export function PasswordField({
         />
         <button
           type="button"
-          className="absolute inset-y-0 right-1 flex w-10 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600"
+          className="absolute inset-y-0 right-1 flex w-10 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-600 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-slate-100"
           aria-label={visible ? "Hide password" : "Show password"}
           aria-pressed={visible}
           title={visible ? "Hide password" : "Show password"}
@@ -84,13 +84,13 @@ export function PasswordField({
         </button>
       </span>
       {error ? (
-        <span id={supportingTextId} className="text-sm text-red-700">
+        <span id={supportingTextId} className="text-sm text-red-700 dark:text-red-300">
           {error}
         </span>
       ) : hint ? (
         <span
           id={supportingTextId}
-          className="text-sm font-normal text-slate-500"
+          className="text-sm font-normal text-slate-500 dark:text-slate-400"
         >
           {hint}
         </span>

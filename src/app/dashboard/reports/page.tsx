@@ -7,6 +7,7 @@ export default async function ReportsPage({
 }: {
   searchParams: Promise<{
     year?: string;
+    month?: string;
     period?: string;
     success?: string;
     error?: string;
@@ -23,6 +24,7 @@ export default async function ReportsPage({
         clientId={context.client.id}
         basePath="/dashboard"
         year={params.year}
+        month={params.month}
         period={params.period}
       />
     </div>

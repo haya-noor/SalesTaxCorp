@@ -83,18 +83,18 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       ) : null}
 
       {state.message ? (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950/60 dark:text-red-200" role="alert">
           {state.message}
         </p>
       ) : null}
 
       <SubmitButton label={mode === "login" ? "Sign in" : "Create account"} />
 
-      <p className="text-center text-sm text-slate-600">
+      <p className="text-center text-sm text-slate-600 dark:text-slate-300">
         {mode === "login" ? "Need client access?" : "Already registered?"}{" "}
         <Link
           href={mode === "login" ? "/signup" : "/login"}
-          className="font-semibold text-teal-700 hover:text-teal-800"
+          className="font-semibold text-teal-700 hover:text-teal-800 dark:text-teal-300 dark:hover:text-teal-200"
         >
           {mode === "login" ? "Create a client account" : "Sign in"}
         </Link>

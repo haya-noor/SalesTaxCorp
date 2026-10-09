@@ -97,7 +97,7 @@ export default async function UsersPage({
           {pending.map((profile) => (
             <div
               key={profile.id}
-              className="rounded-xl border border-amber-200 bg-amber-50/40 p-4"
+              className="rounded-xl border border-amber-200 bg-amber-50/40 p-4 dark:border-amber-800/70 dark:bg-amber-950/30"
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
@@ -175,7 +175,7 @@ export default async function UsersPage({
           this website.
         </p>
 
-        <div className="mt-5 divide-y divide-slate-100">
+        <div className="mt-5 divide-y divide-slate-100 dark:divide-slate-700">
           {administrators.map((profile) => (
             <div
               key={profile.id}
@@ -202,7 +202,7 @@ export default async function UsersPage({
       <Card>
         <h2 className="text-lg font-bold">Client users</h2>
 
-        <div className="mt-5 divide-y divide-slate-100">
+        <div className="mt-5 divide-y divide-slate-100 dark:divide-slate-700">
           {managed.map((profile) => (
             <div
               key={profile.id}

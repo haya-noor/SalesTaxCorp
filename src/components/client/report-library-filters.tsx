@@ -28,7 +28,7 @@ export function ReportLibraryFilters({
     <div className="flex flex-wrap items-end justify-between gap-4 rounded-xl border border-stone-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900 sm:p-5">
       <div className="flex flex-wrap items-end gap-4">
         <label className="grid gap-1.5">
-          <span className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+          <span className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
             Country
           </span>
           <select
@@ -41,7 +41,7 @@ export function ReportLibraryFilters({
         </label>
 
         <label className="grid gap-1.5">
-          <span className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+          <span className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
             Month
           </span>
           <select
@@ -60,7 +60,7 @@ export function ReportLibraryFilters({
         </label>
 
         <label className="grid gap-1.5">
-          <span className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500">
+          <span className="text-xs font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
             Year
           </span>
           <select
@@ -80,7 +80,7 @@ export function ReportLibraryFilters({
         </label>
       </div>
 
-      <p className="pb-2 text-sm font-semibold text-slate-500">
+      <p className="pb-2 text-sm font-semibold text-slate-500 dark:text-slate-400">
         {reportCount} {reportCount === 1 ? "report" : "reports"}
       </p>
     </div>

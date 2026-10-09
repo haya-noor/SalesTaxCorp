@@ -27,13 +27,13 @@
 :global(html[data-theme="dark"]) .site {
   --paper: #0f172a;
   --surface: #1e293b;
-  --surface-2: #172033;
-  --dark-panel: #111827;
+  --surface-2: #141f30;
+  --dark-panel: #172235;
   --ink: #f1f5f9;
   --ink-soft: #c1ccd8;
   --ink-faint: #94a3b8;
-  --line: #334155;
-  --line-soft: #29374a;
+  --line: #40516a;
+  --line-soft: #2c3b50;
   --emerald: #17a77d;
   --emerald-deep: #128565;
   --emerald-bright: #3dd8aa;
@@ -69,7 +69,7 @@
 }
 
 .section {
-  padding-block: 96px;
+  padding-block: 86px;
 }
 
 .sectionAlt {
@@ -152,6 +152,15 @@
 .buttonGhost:hover {
   border-color: var(--ink);
   background: var(--surface);
+}
+
+:global(html[data-theme="dark"]) .buttonGhost {
+  border-color: #4b5f79;
+}
+
+:global(html[data-theme="dark"]) .buttonGhost:hover {
+  border-color: #7890aa;
+  background: #1b293c;
 }
 
 .buttonDark {
@@ -340,7 +349,7 @@
   grid-template-columns: 1.03fr 0.97fr;
   align-items: center;
   gap: 58px;
-  padding-block: 78px 94px;
+  padding-block: 70px 78px;
 }
 
 .hero h1 {
@@ -395,6 +404,11 @@
   box-shadow: 0 2px 4px rgba(11, 26, 34, 0.05),
     0 40px 80px -30px rgba(11, 26, 34, 0.45);
   color: #dde6e9;
+}
+
+:global(html[data-theme="dark"]) .console {
+  border: 1px solid #34465e;
+  box-shadow: 0 28px 64px -34px rgba(0, 0, 0, 0.75);
 }
 
 .consoleTop,
@@ -582,6 +596,13 @@
   border-radius: 14px;
   background: var(--surface);
   box-shadow: 0 12px 34px -24px rgba(11, 26, 34, 0.25);
+}
+
+:global(html[data-theme="dark"]) .problemCard,
+:global(html[data-theme="dark"]) .serviceCard,
+:global(html[data-theme="dark"]) .resourceCard,
+:global(html[data-theme="dark"]) .contactCard {
+  box-shadow: 0 18px 42px -30px rgba(0, 0, 0, 0.85);
 }
 
 .problemCard {

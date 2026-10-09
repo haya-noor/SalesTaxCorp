@@ -27,7 +27,7 @@ export default async function ClientPortalPreviewReportsPage({
 
       <Card
         id="manage-report"
-        className="scroll-mt-28 border-amber-200 bg-amber-50/60"
+        className="scroll-mt-28 border-amber-200 bg-amber-50/60 dark:border-amber-800/70 dark:bg-amber-950/30"
       >
         <details open>
           <summary className="cursor-pointer text-lg font-bold text-slate-950">

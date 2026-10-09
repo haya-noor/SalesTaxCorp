@@ -24,7 +24,7 @@ export function AuthLayout({
 
           <Link
             href="/"
-            className="mb-3 inline-block text-sm font-bold uppercase tracking-[0.22em] text-teal-700 hover:text-teal-900"
+            className="mb-3 inline-block text-sm font-bold uppercase tracking-[0.22em] text-teal-700 hover:text-teal-900 dark:text-teal-300 dark:hover:text-teal-200"
           >
             Sales Tax Corp
           </Link>

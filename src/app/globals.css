@@ -108,6 +108,19 @@ html[data-theme="dark"] .app-theme.bg-slate-50 {
   background-color: #0f172a !important;
 }
 
+html[data-theme="dark"] .app-theme .bg-slate-100 {
+  background-color: #334155 !important;
+}
+
+html[data-theme="dark"] .app-theme .bg-slate-200 {
+  background-color: #475569 !important;
+}
+
+html[data-theme="dark"] .app-theme .divide-slate-100 > :not(:last-child),
+html[data-theme="dark"] .app-theme .divide-slate-200 > :not(:last-child) {
+  border-color: #334155 !important;
+}
+
 html[data-theme="dark"] .app-theme .portal-header {
   background-color: #111827 !important;
 }

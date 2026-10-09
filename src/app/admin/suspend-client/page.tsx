@@ -1,7 +1,6 @@
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { SelectField } from "@/components/ui/field";
 import { FlashMessage } from "@/components/shared/flash-message";
 import { setClientStatusAction } from "@/features/admin/actions";
 import { requireAdmin } from "@/lib/auth/guards";
@@ -42,7 +41,7 @@ export default async function SuspendClientPage({
           {clients?.map((client) => (
             <div
               key={client.id}
-              className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-slate-200 p-4"
+              className="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-slate-200 p-4 dark:border-slate-700 dark:bg-slate-800/40"
             >
               <div>
                 <p className="font-semibold text-slate-950">
@@ -50,11 +49,11 @@ export default async function SuspendClientPage({
                 </p>
                 <p className="mt-1 text-sm text-slate-500">
                   {client.status === "active" ? (
-                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700">
+                    <span className="rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-700 dark:bg-emerald-950/70 dark:text-emerald-200">
                       Active
                     </span>
                   ) : (
-                    <span className="rounded-full bg-red-100 px-2 py-1 text-xs font-semibold text-red-700">
+                    <span className="rounded-full bg-red-100 px-2 py-1 text-xs font-semibold text-red-700 dark:bg-red-950/70 dark:text-red-200">
                       Suspended
                     </span>
                   )}
@@ -85,11 +84,11 @@ export default async function SuspendClientPage({
         </div>
       </Card>
 
-      <Card className="mt-6 border-red-200 bg-red-50">
-        <h3 className="text-base font-semibold text-red-900">
+      <Card className="mt-6 border-red-200 bg-red-50 dark:border-red-900/70 dark:bg-red-950/40">
+        <h3 className="text-base font-semibold text-red-900 dark:text-red-200">
           What happens when a client is suspended?
         </h3>
-        <ul className="mt-3 space-y-2 text-sm text-red-800">
+        <ul className="mt-3 space-y-2 text-sm text-red-800 dark:text-red-300">
           <li>• Portal users will temporarily lose access</li>
           <li>• Reports and files remain stored and protected</li>
           <li>• All relationships and data are preserved</li>

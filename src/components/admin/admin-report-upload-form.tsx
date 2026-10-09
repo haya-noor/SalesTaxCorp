@@ -41,18 +41,18 @@ export function AdminReportUploadForm({
         required
       />
       <div className="sm:col-span-2">
-        <label className="grid gap-2 text-base font-semibold text-slate-700">
+        <label className="grid gap-2 text-base font-semibold text-slate-700 dark:text-slate-200">
           Report file (.html)
           <input
             type="file"
             name="file"
             accept=".html,text/html"
             required
-            className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-950 shadow-sm"
+            className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-950 shadow-sm file:mr-4 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:font-semibold dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:file:bg-slate-700 dark:file:text-slate-100"
           />
         </label>
       </div>
-      <label className="flex items-center gap-3 text-base font-semibold text-slate-700 sm:col-span-2">
+      <label className="flex items-center gap-3 text-base font-semibold text-slate-700 dark:text-slate-200 sm:col-span-2">
         <input type="checkbox" name="published" className="h-5 w-5" />
         Publish now (visible to the client immediately)
       </label>

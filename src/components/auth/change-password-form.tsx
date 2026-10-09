@@ -62,7 +62,7 @@ export function ChangePasswordForm() {
       />
 
       {state.message ? (
-        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
+        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950/60 dark:text-red-200" role="alert">
           {state.message}
         </p>
       ) : null}

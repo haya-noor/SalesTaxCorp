@@ -10,13 +10,13 @@ export function AdminDocumentUploadForm({ clientId }: { clientId: string }) {
     >
       <input type="hidden" name="clientId" value={clientId} />
       <input type="hidden" name="workspace" value="client-portal" />
-      <label className="grid gap-2 text-base font-semibold text-slate-700">
+      <label className="grid gap-2 text-base font-semibold text-slate-700 dark:text-slate-200">
         File
         <input
           type="file"
           name="file"
           required
-          className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-950 shadow-sm"
+          className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-base text-slate-950 shadow-sm file:mr-4 file:rounded-lg file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:font-semibold dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:file:bg-slate-700 dark:file:text-slate-100"
         />
       </label>
       <div>

@@ -56,7 +56,7 @@ export default async function AdminPage() {
           <Link className="rounded-xl bg-teal-700 px-5 py-3 text-base font-semibold text-white shadow-sm hover:bg-teal-800" href="/admin/clients">
             Manage clients
           </Link>
-          <Link className="rounded-xl border border-slate-300 bg-white px-5 py-3 text-base font-semibold shadow-sm hover:border-teal-300" href="/admin/users">
+          <Link className="rounded-xl border border-slate-300 bg-white px-5 py-3 text-base font-semibold shadow-sm hover:border-teal-300 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-teal-500 dark:hover:text-teal-300" href="/admin/users">
             Review accounts
           </Link>
         </div>

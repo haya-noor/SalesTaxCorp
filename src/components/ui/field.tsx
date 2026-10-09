@@ -17,10 +17,10 @@ export function Field({
   hint?: string;
 }) {
   return (
-    <label className="grid gap-2 text-base font-semibold text-slate-700">
+    <label className="grid gap-2 text-base font-semibold text-slate-700 dark:text-slate-200">
       {label}
       <input
-        className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-950 shadow-sm transition placeholder:text-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
+        className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-950 shadow-sm transition placeholder:text-slate-400 focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-teal-500 dark:focus:ring-teal-950"
         aria-invalid={Boolean(error)}
         aria-describedby={
           error || hint ? `${props.name}-supporting-text` : undefined
@@ -28,11 +28,11 @@ export function Field({
         {...props}
       />
       {error ? (
-        <span id={`${props.name}-supporting-text`} className="text-sm text-red-700">
+        <span id={`${props.name}-supporting-text`} className="text-sm text-red-700 dark:text-red-300">
           {error}
         </span>
       ) : hint ? (
-        <span id={`${props.name}-supporting-text`} className="text-sm font-normal text-slate-500">
+        <span id={`${props.name}-supporting-text`} className="text-sm font-normal text-slate-500 dark:text-slate-400">
           {hint}
         </span>
       ) : null}
@@ -49,10 +49,10 @@ export function SelectField({
   children: React.ReactNode;
 }) {
   return (
-    <label className="grid gap-2 text-base font-semibold text-slate-700">
+    <label className="grid gap-2 text-base font-semibold text-slate-700 dark:text-slate-200">
       {label}
       <select
-        className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-950 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100"
+        className="h-12 rounded-xl border border-slate-300 bg-white px-4 text-base text-slate-950 shadow-sm focus:border-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:focus:border-teal-500 dark:focus:ring-teal-950"
         {...props}
       >
         {children}

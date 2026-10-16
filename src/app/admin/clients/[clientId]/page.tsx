@@ -48,6 +48,7 @@ export default async function ClientDetailPage({
           <Link
             href={`/client-portal/${client.id}`}
             target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-base font-semibold text-slate-800 shadow-sm transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-teal-500 dark:hover:bg-slate-700"
           >
             Open client workspace

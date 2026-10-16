@@ -1,7 +1,5 @@
-import { AdminReportUploadForm } from "@/components/admin/admin-report-upload-form";
 import { ReportsPortalView } from "@/components/client/reports-portal-view";
 import { FlashMessage } from "@/components/shared/flash-message";
-import { Card } from "@/components/ui/card";
 import { requireAdminClientView } from "@/lib/auth/guards";
 
 export default async function ClientPortalPreviewReportsPage({
@@ -24,26 +22,6 @@ export default async function ClientPortalPreviewReportsPage({
   return (
     <div className="grid gap-4">
       <FlashMessage {...query} />
-
-      <Card
-        id="manage-report"
-        className="scroll-mt-28 border-amber-200 bg-amber-50/60 dark:border-amber-800/70 dark:bg-amber-950/30"
-      >
-        <details open>
-          <summary className="cursor-pointer text-lg font-bold text-slate-950">
-            Upload or replace a report
-          </summary>
-          <p className="mt-2 text-base text-slate-600">
-            Uploading the same month and year replaces its stored file and
-            resets client approval to pending. Leave Publish now unchecked to
-            review it here as a draft first.
-          </p>
-          <AdminReportUploadForm
-            clientId={client.id}
-            workspace="client-portal"
-          />
-        </details>
-      </Card>
 
       <ReportsPortalView
         supabase={supabase}

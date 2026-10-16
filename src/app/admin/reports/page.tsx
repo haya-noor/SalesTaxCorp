@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AdminPageHeader } from "@/components/admin/admin-page-header";
 import { AdminReportActions } from "@/components/admin/admin-report-actions";
 import { AdminReportUploadForm } from "@/components/admin/admin-report-upload-form";
@@ -57,6 +58,16 @@ export default async function AdminReportsPage({
           <Button type="submit" variant="secondary">
             Switch
           </Button>
+          {clientId ? (
+            <Link
+              href={`/client-portal/${clientId}/reports`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-base font-semibold text-slate-800 shadow-sm transition hover:border-teal-300 hover:bg-teal-50 hover:text-teal-800 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-teal-500 dark:hover:bg-slate-700 dark:hover:text-teal-300"
+            >
+              Open client workspace
+            </Link>
+          ) : null}
         </form>
       </Card>
 

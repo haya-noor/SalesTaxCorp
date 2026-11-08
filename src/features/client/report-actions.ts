@@ -7,14 +7,20 @@ import { requireClientUser } from "@/lib/auth/guards";
 import { createSupabaseAdminClient } from "@/lib/supabase/admin";
 
 const reportIdSchema = z.uuid();
+// Which client tab to land back on after approving: the Overview tab or the
+// Reports library (the default).
+const returnToSchema = z.enum(["reports", "overview"]).catch("reports");
+type ReturnPage = z.infer<typeof returnToSchema>;
 
 function go(
+  page: ReturnPage,
   periodId: string | undefined,
   year: number | undefined,
   kind: "success" | "error",
   message: string,
 ): never {
   const params = new URLSearchParams({ [kind]: message });
+  if (page === "overview") redirect(`/dashboard/overview?${params.toString()}`);
   if (periodId) params.set("period", periodId);
   if (year) params.set("year", String(year));
   redirect(`/dashboard/reports?${params.toString()}`);
@@ -24,10 +30,11 @@ function go(
 // company. The privileged write happens only after the user's RLS-scoped read
 // confirms ownership, so clients cannot approve another company's report.
 export async function approveReportAction(formData: FormData) {
+  const page = returnToSchema.parse(formData.get("returnTo"));
   const parsedId = reportIdSchema.safeParse(formData.get("periodId"));
 
   if (!parsedId.success) {
-    go(undefined, undefined, "error", "Invalid report approval request.");
+    go(page, undefined, undefined, "error", "Invalid report approval request.");
   }
 
   const { supabase, user, client } = await requireClientUser();
@@ -43,11 +50,11 @@ export async function approveReportAction(formData: FormData) {
     const message = ["42703", "PGRST204"].includes(lookupError.code)
       ? "Report approval is temporarily unavailable. The portal database needs its latest update."
       : "The report could not be checked. Refresh the page and try again.";
-    go(parsedId.data, undefined, "error", message);
+    go(page, parsedId.data, undefined, "error", message);
   }
 
   if (!period) {
-    go(
+    go(page,
       undefined,
       undefined,
       "error",
@@ -56,7 +63,7 @@ export async function approveReportAction(formData: FormData) {
   }
 
   if (period.client_approved_at) {
-    go(period.id, period.period_year, "success", "Report already approved.");
+    go(page, period.id, period.period_year, "success", "Report already approved.");
   }
 
   const adminClient = createSupabaseAdminClient();
@@ -74,7 +81,7 @@ export async function approveReportAction(formData: FormData) {
     .maybeSingle();
 
   if (error || !approvedPeriod) {
-    go(
+    go(page,
       period.id,
       period.period_year,
       "error",
@@ -83,8 +90,9 @@ export async function approveReportAction(formData: FormData) {
   }
 
   revalidatePath("/dashboard/reports");
+  revalidatePath("/dashboard/overview");
   revalidatePath("/admin/reports");
   revalidatePath(`/client-portal/${client.id}/reports`);
 
-  go(period.id, period.period_year, "success", "Report approved.");
+  go(page, period.id, period.period_year, "success", "Report approved.");
 }

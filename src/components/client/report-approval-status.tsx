@@ -1,7 +1,13 @@
 import { approveReportAction } from "@/features/client/report-actions";
 import type { FilingPeriod } from "@/lib/reports";
 
-export function ReportApprovalStatus({ period }: { period: FilingPeriod }) {
+export function ReportApprovalStatus({
+  period,
+  returnTo = "reports",
+}: {
+  period: FilingPeriod;
+  returnTo?: "reports" | "overview";
+}) {
   const approved = Boolean(period.client_approved_at);
 
   return (
@@ -23,6 +29,7 @@ export function ReportApprovalStatus({ period }: { period: FilingPeriod }) {
       {!approved ? (
         <form action={approveReportAction}>
           <input type="hidden" name="periodId" value={period.id} />
+          <input type="hidden" name="returnTo" value={returnTo} />
           <button
             type="submit"
             className="inline-flex min-h-9 items-center justify-center rounded-lg bg-teal-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-800"

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PortalPreview } from "@/components/marketing/portal-preview";
+import { ServiceShowcase } from "@/components/marketing/service-showcase";
 import styles from "@/components/marketing/marketing.module.css";
 
 export const metadata: Metadata = {
@@ -14,6 +15,13 @@ const complianceRows = [
   { code: "TX", name: "Texas", status: "Due Aug 20", kind: "due" },
   { code: "NY", name: "New York", status: "Filed", kind: "ok" },
   { code: "FL", name: "Florida", status: "Monitoring", kind: "monitor" },
+] as const;
+
+const proofPoints = [
+  { value: "End to end", label: "Nexus, registrations, filings and notices" },
+  { value: "Specialist reviewed", label: "Every return checked before it's filed" },
+  { value: "Monthly", label: "Summary of what was filed and paid" },
+  { value: "One portal", label: "Reports, approvals and documents" },
 ] as const;
 
 const problems = [
@@ -62,24 +70,6 @@ const process = [
   },
 ] as const;
 
-const serviceGroups = [
-  {
-    phase: "Understand",
-    title: "Nexus and exposure",
-    items: ["Nexus analysis", "Channel review", "Historical exposure", "Product taxability context"],
-  },
-  {
-    phase: "Get compliant",
-    title: "Registrations and cleanup",
-    items: ["State registrations", "Outstanding returns", "Account setup", "Filing-calendar review"],
-  },
-  {
-    phase: "Stay compliant",
-    title: "Ongoing management",
-    items: ["Recurring filings", "Notice management", "Certificate support", "Audit assistance"],
-  },
-] as const;
-
 const resources = [
   {
     label: "Nexus fundamentals",
@@ -122,51 +112,69 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className={styles.console} aria-label="Illustrative compliance overview">
-            <div className={styles.consoleTop}>
-              <span className={styles.consoleTitle}>
-                <span className={styles.liveDot} /> Compliance overview
-              </span>
-              <span>Illustrative</span>
-            </div>
-            <div className={styles.consoleStats}>
-              <div className={styles.consoleStat}>
-                <strong>18</strong>
-                <span>Registered states</span>
+          <div className={styles.heroVisual}>
+            <div className={styles.console} aria-label="Illustrative compliance overview">
+              <div className={styles.consoleTop}>
+                <span className={styles.consoleTitle}>
+                  <span className={styles.liveDot} /> Compliance overview
+                </span>
+                <span>Illustrative</span>
               </div>
-              <div className={styles.consoleStat}>
-                <strong>3</strong>
-                <span>Upcoming filings</span>
-              </div>
-              <div className={styles.consoleStat}>
-                <strong>100%</strong>
-                <span>On schedule</span>
-              </div>
-            </div>
-            <div className={styles.consoleRows}>
-              {complianceRows.map((row) => (
-                <div key={row.code} className={styles.consoleRow}>
-                  <span className={styles.consoleState}>{row.code}</span>
-                  <span className={styles.consoleStateName}>{row.name}</span>
-                  <span
-                    className={`${styles.statusChip} ${
-                      row.kind === "due"
-                        ? styles.statusDue
-                        : row.kind === "monitor"
-                          ? styles.statusMonitor
-                          : ""
-                    }`}
-                  >
-                    {row.status}
-                  </span>
+              <div className={styles.consoleStats}>
+                <div className={styles.consoleStat}>
+                  <strong>18</strong>
+                  <span>Registered states</span>
                 </div>
-              ))}
+                <div className={styles.consoleStat}>
+                  <strong>3</strong>
+                  <span>Upcoming filings</span>
+                </div>
+                <div className={styles.consoleStat}>
+                  <strong>100%</strong>
+                  <span>On schedule</span>
+                </div>
+              </div>
+              <div className={styles.consoleRows}>
+                {complianceRows.map((row) => (
+                  <div key={row.code} className={styles.consoleRow}>
+                    <span className={styles.consoleState}>{row.code}</span>
+                    <span className={styles.consoleStateName}>{row.name}</span>
+                    <span
+                      className={`${styles.statusChip} ${
+                        row.kind === "due"
+                          ? styles.statusDue
+                          : row.kind === "monitor"
+                            ? styles.statusMonitor
+                            : ""
+                      }`}
+                    >
+                      {row.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className={styles.consoleFooter}>
+                <span>Monthly summary prepared</span>
+                <span>Specialist reviewed</span>
+              </div>
             </div>
-            <div className={styles.consoleFooter}>
-              <span>Monthly summary prepared</span>
-              <span>Specialist reviewed</span>
+            <div className={styles.heroToast} aria-hidden="true">
+              <span className={styles.heroToastIcon}>✓</span>
+              <div>
+                <strong>California Q3 return filed</strong>
+                <span>Payment confirmed · Specialist reviewed</span>
+              </div>
             </div>
           </div>
+        </div>
+
+        <div className={`${styles.wrap} ${styles.proofStrip}`}>
+          {proofPoints.map((point) => (
+            <div key={point.label} className={styles.proofItem}>
+              <strong>{point.value}</strong>
+              <span>{point.label}</span>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -222,31 +230,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="services" className={styles.section}>
-        <div className={styles.wrap}>
-          <div className={styles.sectionHeading}>
-            <p className={styles.eyebrow}>What we manage</p>
-            <h2>One team across the compliance lifecycle</h2>
-            <p>
-              From the first nexus review through ongoing filings and state correspondence,
-              the work stays connected under one managed process.
-            </p>
-          </div>
-          <div className={styles.serviceGrid}>
-            {serviceGroups.map((group) => (
-              <article key={group.title} className={styles.serviceCard}>
-                <p className={styles.servicePhase}>{group.phase}</p>
-                <h3>{group.title}</h3>
-                <ul>
-                  {group.items.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <ServiceShowcase />
 
       <section id="resources" className={`${styles.section} ${styles.sectionAlt}`}>
         <div className={styles.wrap}>

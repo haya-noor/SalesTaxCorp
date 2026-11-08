@@ -1448,6 +1448,119 @@
   }
 }
 
+/* Client portal preview */
+.portalSection {
+  padding-top: 24px;
+}
+
+.portalGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 40px;
+  margin-top: 44px;
+}
+
+.portalFrame {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 2px 4px rgba(11, 26, 34, 0.05),
+    0 40px 80px -36px rgba(11, 26, 34, 0.4);
+}
+
+:global(html[data-theme="dark"]) .portalFrame {
+  box-shadow: 0 28px 64px -34px rgba(0, 0, 0, 0.75);
+}
+
+.portalChrome {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.portalChrome span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--line);
+}
+
+.portalChrome p {
+  margin-left: 12px !important;
+  overflow: hidden;
+  color: var(--ink-faint);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.portalShot {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.portalShotDark {
+  display: none;
+}
+
+:global(html[data-theme="dark"]) .portalShotLight {
+  display: none;
+}
+
+:global(html[data-theme="dark"]) .portalShotDark {
+  display: block;
+}
+
+.portalFrame figcaption {
+  padding: 10px 16px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-faint);
+  font-size: 13px;
+}
+
+.portalHighlights {
+  display: grid;
+  gap: 22px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.portalHighlights li:not(.portalCta) {
+  padding-left: 18px;
+  border-left: 2px solid var(--emerald);
+}
+
+.portalHighlights h3 {
+  margin: 0;
+  font-size: 1.08rem;
+}
+
+.portalHighlights p {
+  margin-top: 6px !important;
+  color: var(--ink-soft);
+  font-size: 0.97rem;
+  line-height: 1.55;
+}
+
+.portalCta {
+  padding-top: 6px;
+}
+
+@media (max-width: 1020px) {
+  .portalGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .site *,
   .site *::before,

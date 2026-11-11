@@ -1566,6 +1566,125 @@
   position: relative;
 }
 
+/* Hero spider: walks around the compliance card carrying figures */
+.spiderLayer {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+}
+
+.spider,
+.spiderFigure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.spider {
+  z-index: 2;
+}
+
+.spiderBody {
+  filter: drop-shadow(0 6px 8px rgba(11, 26, 34, 0.35));
+}
+
+.spiderBody svg {
+  display: block;
+  overflow: visible;
+}
+
+.spiderLegsA,
+.spiderLegsB {
+  stroke: #0a5a41;
+  stroke-width: 2.3;
+  transform-box: view-box;
+  transform-origin: 24px 24px;
+}
+
+:global(html[data-theme="dark"]) .spiderLegsA,
+:global(html[data-theme="dark"]) .spiderLegsB {
+  stroke: #7fe3c1;
+}
+
+.spiderAbdomen {
+  fill: #19b487;
+}
+
+.spiderHead {
+  fill: #0f7a58;
+}
+
+.spiderEye {
+  fill: #fff;
+}
+
+.spiderMark {
+  stroke: #fff;
+  stroke-width: 1.8;
+}
+
+.spiderLayer[data-walking="true"] .spiderLegsA {
+  animation: spiderLegs 260ms ease-in-out infinite alternate;
+}
+
+.spiderLayer[data-walking="true"] .spiderLegsB {
+  animation: spiderLegs 260ms ease-in-out infinite alternate-reverse;
+}
+
+@keyframes spiderLegs {
+  from {
+    transform: rotate(-7deg);
+  }
+
+  to {
+    transform: rotate(7deg);
+  }
+}
+
+.spiderFigure {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 14px 28px -16px rgba(11, 26, 34, 0.45);
+  color: var(--ink);
+  white-space: nowrap;
+  transition: box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.spiderFigure strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.spiderFigure span {
+  color: var(--ink-faint);
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.spiderFigure[data-carried="true"] {
+  border-color: var(--emerald);
+  box-shadow: 0 22px 34px -16px rgba(15, 122, 88, 0.55);
+}
+
+@media (max-width: 680px) {
+  .spiderFigure {
+    padding: 5px 8px;
+  }
+
+  .spiderFigure strong {
+    font-size: 13px;
+  }
+}
+
 /* Proof strip under the hero */
 .proofStrip {
   position: relative;
@@ -1916,6 +2035,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .spiderLegsA,
+  .spiderLegsB {
+    animation: none !important;
+  }
+
   .site *,
   .site *::before,
   .site *::after {

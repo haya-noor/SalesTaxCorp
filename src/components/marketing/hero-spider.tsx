@@ -31,7 +31,7 @@ const FIGURES = [
 const START = [0, 3, 4];
 const SPIDER_HOME = { x: 0.995, y: 0.02 };
 const SPEED = 120; // px per second
-const SPIDER_SIZE = 52;
+const SPIDER_SIZE = 72;
 // Gap between a carried figure's edge and the spider, in px.
 const LEAD = 14;
 
@@ -157,9 +157,75 @@ export function HeroSpider() {
       });
     }
 
+    // The status pills in the card's rows ("Filed", "Due Aug 20"...). On
+    // every other trip (starting with the first) the spider walks over to one and moves it along:
+    // Due -> Preparing -> Filed, and a filed state rolls over to its next
+    // due date.
+    const statusChips = Array.from(
+      layer.parentElement?.querySelectorAll<HTMLElement>(
+        "[data-spider-status]",
+      ) ?? [],
+    );
+
+    function nextStatus(chip: HTMLElement) {
+      const text = chip.textContent?.trim() ?? "";
+      const due = chip.dataset.spiderStatus ?? "Due";
+      if (text.startsWith("Due")) return { label: "Preparing", kind: "due" };
+      if (text === "Preparing") return { label: "Filed", kind: "ok" };
+      return { label: due, kind: "due" };
+    }
+
+    async function visitStatus(signal: AbortSignal) {
+      if (!statusChips.length) return;
+      // Prefer a row that still has work to do.
+      const open = statusChips.filter(
+        (chip) => chip.textContent?.trim() !== "Filed",
+      );
+      const pool = open.length ? open : statusChips;
+      const chip = pool[Math.floor(Math.random() * pool.length)];
+
+      const layerRect = layer.getBoundingClientRect();
+      const chipRect = chip.getBoundingClientRect();
+      const { w, h } = size();
+      const approach = {
+        x: (chipRect.left - layerRect.left - SPIDER_SIZE * 0.42) / w,
+        y: (chipRect.top - layerRect.top + chipRect.height / 2) / h,
+      };
+
+      await wait(1200, signal);
+      await walkTo(approach, signal);
+      await wait(300, signal);
+      const next = nextStatus(chip);
+      chip.classList.remove(styles.statusDue, styles.statusMonitor);
+      if (next.kind === "due") chip.classList.add(styles.statusDue);
+      chip.textContent = next.label;
+      chip.animate(
+        [
+          { transform: "scale(1)" },
+          { transform: "scale(1.18)" },
+          { transform: "scale(1)" },
+        ],
+        { duration: 420, easing: "ease-out" },
+      );
+      await wait(900, signal);
+      await walkTo(
+        {
+          x: approach.x - 0.2,
+          y: approach.y + (approach.y > 0.6 ? -0.1 : 0.1),
+        },
+        signal,
+      );
+    }
+
     async function run(signal: AbortSignal) {
       let pick = 0;
+      let trip = 0;
       for (;;) {
+        trip += 1;
+        if (trip % 2 === 1) {
+          await visitStatus(signal);
+          continue;
+        }
         const figureIndex = pick % figures.length;
         pick += 1;
         const figure = figures[figureIndex];

@@ -1621,7 +1621,7 @@
   position: absolute;
   inset: 0;
   transform-origin: 0 0;
-  transition: transform 0.9s cubic-bezier(0.65, 0, 0.25, 1),
+  transition: transform 0.6s cubic-bezier(0.65, 0, 0.25, 1),
     opacity 0.45s ease;
 }
 
@@ -1654,10 +1654,10 @@
   border-radius: 12px;
   box-shadow: 0 0 0 9999px rgba(8, 20, 28, 0.38);
   pointer-events: none;
-  transition: left 0.9s cubic-bezier(0.65, 0, 0.25, 1),
-    top 0.9s cubic-bezier(0.65, 0, 0.25, 1),
-    width 0.9s cubic-bezier(0.65, 0, 0.25, 1),
-    height 0.9s cubic-bezier(0.65, 0, 0.25, 1);
+  transition: left 0.6s cubic-bezier(0.65, 0, 0.25, 1),
+    top 0.6s cubic-bezier(0.65, 0, 0.25, 1),
+    width 0.6s cubic-bezier(0.65, 0, 0.25, 1),
+    height 0.6s cubic-bezier(0.65, 0, 0.25, 1);
 }
 
 .portalFrame figcaption {

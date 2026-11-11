@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PortalPreview } from "@/components/marketing/portal-preview";
 import styles from "@/components/marketing/marketing.module.css";
 
 export const metadata: Metadata = {
@@ -169,7 +170,7 @@ export default function HomePage() {
         </div>
       </section>
 
-     
+      <PortalPreview />
 
       <section className={styles.section}>
         <div className={styles.wrap}>

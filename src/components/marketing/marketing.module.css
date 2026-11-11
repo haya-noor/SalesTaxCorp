@@ -1453,11 +1453,11 @@
   padding-top: 24px;
 }
 
+/* The screenshot takes the full content width so the portal reads at a
+   comfortable size; the highlights sit underneath as a row. */
 .portalGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
-  align-items: start;
-  gap: 40px;
+  gap: 48px;
   margin-top: 44px;
 }
 
@@ -1528,13 +1528,14 @@
 
 .portalHighlights {
   display: grid;
-  gap: 22px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.portalHighlights li:not(.portalCta) {
+.portalHighlights li {
   padding-left: 18px;
   border-left: 2px solid var(--emerald);
 }
@@ -1552,12 +1553,25 @@
 }
 
 .portalCta {
-  padding-top: 6px;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
 }
 
 @media (max-width: 1020px) {
+  .portalHighlights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
   .portalGrid {
+    gap: 32px;
+  }
+
+  .portalHighlights {
     grid-template-columns: 1fr;
+    gap: 22px;
   }
 }
 

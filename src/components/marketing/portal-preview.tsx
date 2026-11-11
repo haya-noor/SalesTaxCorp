@@ -53,7 +53,7 @@ export function PortalPreview() {
               alt="Client portal Overview showing a report waiting for approval, report statistics, recent reports and the latest monthly summary"
               width={2000}
               height={1194}
-              sizes="(max-width: 1020px) 100vw, 760px"
+              sizes="(max-width: 1228px) 100vw, 1180px"
               className={`${styles.portalShot} ${styles.portalShotLight}`}
             />
             <Image
@@ -62,7 +62,7 @@ export function PortalPreview() {
               aria-hidden="true"
               width={2000}
               height={1194}
-              sizes="(max-width: 1020px) 100vw, 760px"
+              sizes="(max-width: 1228px) 100vw, 1180px"
               className={`${styles.portalShot} ${styles.portalShotDark}`}
             />
             <figcaption>Illustrative example using a demo client.</figcaption>
@@ -75,12 +75,13 @@ export function PortalPreview() {
                 <p>{item.text}</p>
               </li>
             ))}
-            <li className={styles.portalCta}>
-              <Link href="/contact" className={`${styles.button} ${styles.buttonPrimary}`}>
-                Get your portal set up
-              </Link>
-            </li>
           </ul>
+        </div>
+
+        <div className={styles.portalCta}>
+          <Link href="/contact" className={`${styles.button} ${styles.buttonPrimary}`}>
+            Get your portal set up
+          </Link>
         </div>
       </div>
     </section>

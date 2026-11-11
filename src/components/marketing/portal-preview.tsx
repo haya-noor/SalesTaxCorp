@@ -1,13 +1,13 @@
-import Image from "next/image";
 import Link from "next/link";
+import { PortalPreviewFrame } from "@/components/marketing/portal-preview-frame";
 import styles from "@/components/marketing/marketing.module.css";
 
 /*
 Landing-page preview of the client portal. The screenshots are captured from
 the real portal UI using a fictional demo client ("Northwind Outfitters"), so
 no real client data appears on the public site. Both a light and a dark
-capture ship; CSS shows the one that matches the site theme. They are served
-as-is (unoptimized) so the small UI text stays crisp.
+capture ship for each view; CSS shows the one that matches the site theme.
+They are served as-is (unoptimized) so the small UI text stays crisp.
 */
 const highlights = [
   {
@@ -51,46 +51,7 @@ export function PortalPreview() {
         </div>
 
         <div className={styles.portalGrid}>
-          <figure className={styles.portalFrame}>
-            <div className={styles.portalChrome} aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <p>Client portal / Overview</p>
-            </div>
-            <div className={styles.portalShotWrap}>
-              <Image
-                src="/images/portal/overview-light.webp"
-                alt="Client portal Overview showing a report waiting for approval, report statistics, recent reports and the latest monthly summary"
-                width={2640}
-                height={1612}
-                sizes="(max-width: 1228px) 100vw, 1180px"
-                unoptimized
-                className={`${styles.portalShot} ${styles.portalShotLight}`}
-              />
-              <Image
-                src="/images/portal/overview-dark.webp"
-                alt=""
-                aria-hidden="true"
-                width={2640}
-                height={1612}
-                sizes="(max-width: 1228px) 100vw, 1180px"
-                unoptimized
-                className={`${styles.portalShot} ${styles.portalShotDark}`}
-              />
-              {highlights.map((item, index) => (
-                <span
-                  key={item.title}
-                  aria-hidden="true"
-                  className={styles.portalPin}
-                  style={{ left: `${item.pin.x}%`, top: `${item.pin.y}%` }}
-                >
-                  {index + 1}
-                </span>
-              ))}
-            </div>
-            <figcaption>Illustrative example using a demo client.</figcaption>
-          </figure>
+          <PortalPreviewFrame pins={highlights.map((item) => item.pin)} />
 
           <ul className={styles.portalHighlights}>
             {highlights.map((item, index) => (

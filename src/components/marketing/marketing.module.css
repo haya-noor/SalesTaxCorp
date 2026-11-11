@@ -1506,6 +1506,46 @@
   position: relative;
 }
 
+.portalShotWrap[hidden] {
+  display: none;
+}
+
+.portalTabs {
+  display: flex;
+  gap: 4px;
+  margin-left: 14px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.portalTab {
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.portalTab:hover {
+  color: var(--ink);
+}
+
+.portalTab[aria-selected="true"] {
+  background: var(--emerald);
+  color: #fff;
+}
+
+.portalTab:focus-visible {
+  outline: 2px solid var(--emerald);
+  outline-offset: 2px;
+}
+
 /* Numbered markers on the screenshot, matched by the highlights below. */
 .portalPin,
 .portalHighlightNumber {

@@ -10,9 +10,11 @@ type ReportFrameState =
 export function ReportFrame({
   periodId,
   title,
+  className = "h-[calc(100vh-4.5rem)] min-h-[900px]",
 }: {
   periodId: string;
   title: string;
+  className?: string;
 }) {
   const [frame, setFrame] = useState<ReportFrameState>({
     status: "loading",
@@ -68,20 +70,26 @@ export function ReportFrame({
 
   if (frame.status === "loading") {
     return (
-      <div className="grid min-h-[60vh] place-items-center bg-slate-50 text-base font-semibold text-slate-600 dark:bg-slate-950 dark:text-slate-300">
-        Loading report...
+      <div className={`grid place-items-center bg-slate-50 dark:bg-slate-950 ${className}`}>
+        <div className="flex items-center gap-3 text-[15px] font-semibold text-slate-600 dark:text-slate-300">
+          <span
+            aria-hidden="true"
+            className="size-4 animate-spin rounded-full border-2 border-brand/25 border-t-brand"
+          />
+          Loading report&hellip;
+        </div>
       </div>
     );
   }
 
   if (frame.status === "error") {
     return (
-      <div className="grid min-h-[60vh] place-items-center bg-slate-50 px-6 text-center dark:bg-slate-950">
+      <div className={`grid place-items-center bg-slate-50 px-6 text-center dark:bg-slate-950 ${className}`}>
         <div>
-          <h2 className="text-xl font-bold text-slate-950">
+          <h2 className="font-heading text-xl font-semibold text-slate-950 dark:text-slate-100">
             Report temporarily unavailable
           </h2>
-          <p className="mt-2 text-base text-slate-600">
+          <p className="mt-2 text-base text-slate-600 dark:text-slate-300">
             Refresh the page or contact an administrator if the problem
             continues.
           </p>
@@ -96,7 +104,7 @@ export function ReportFrame({
     <iframe
       src={frame.source}
       title={title}
-      className="block h-[calc(100vh-6.5rem)] min-h-[900px] w-full border-0 bg-transparent"
+      className={`block w-full border-0 bg-transparent ${className}`}
       sandbox="allow-scripts allow-same-origin allow-downloads allow-popups"
       referrerPolicy="no-referrer"
     />

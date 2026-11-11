@@ -17,16 +17,14 @@ export default async function ReportsPage({
   const params = await searchParams;
 
   return (
-    <div>
-      <FlashMessage success={params.success} error={params.error} />
-      <ReportsPortalView
-        supabase={context.supabase}
-        clientId={context.client.id}
-        basePath="/dashboard"
-        year={params.year}
-        month={params.month}
-        period={params.period}
-      />
-    </div>
+    <ReportsPortalView
+      supabase={context.supabase}
+      clientId={context.client.id}
+      basePath="/dashboard"
+      year={params.year}
+      month={params.month}
+      period={params.period}
+      notice={<FlashMessage success={params.success} error={params.error} />}
+    />
   );
 }

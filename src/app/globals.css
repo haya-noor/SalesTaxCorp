@@ -2,6 +2,22 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/* Brand palette shared with the marketing site, so the client portal and the
+   public pages read as one product. */
+@theme inline {
+  --color-brand: #0f7a58;
+  --color-brand-deep: #0a5a41;
+  --color-brand-bright: #19b487;
+  --color-brand-wash: #dceee7;
+  --color-ink: #0b1a22;
+  --color-ink-soft: #33474f;
+  --color-ink-faint: #6b7c83;
+  --color-paper: #edf1f2;
+  --color-line: #d6dee1;
+  --font-heading: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+  --font-code: var(--font-mono), ui-monospace, monospace;
+}
+
 :root {
   --background: #f6f8fb;
   --foreground: #182230;
@@ -47,10 +63,12 @@ body {
     BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-button,
-input,
-select {
-  font: inherit;
+@layer base {
+  button,
+  input,
+  select {
+    font: inherit;
+  }
 }
 
 @layer base {

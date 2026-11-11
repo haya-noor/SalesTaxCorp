@@ -9,5 +9,5 @@ export default async function ClientPortalPreviewRegistrationsPage({
   const { clientId } = await params;
   await requireAdminClientView(clientId);
 
-  return <ComingSoonCard title="Registrations" />;
+  return <ComingSoonCard title="Registrations" basePath={`/client-portal/${clientId}`} />;
 }

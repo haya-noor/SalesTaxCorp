@@ -2,6 +2,7 @@ import { AdminDocumentList } from "@/components/admin/admin-document-list";
 import { AdminDocumentUploadForm } from "@/components/admin/admin-document-upload-form";
 import { FlashMessage } from "@/components/shared/flash-message";
 import { Card } from "@/components/ui/card";
+import { PortalPage } from "@/components/client/portal-page";
 import { requireAdminClientView } from "@/lib/auth/guards";
 
 export default async function ClientPortalDocumentsPage({
@@ -21,27 +22,36 @@ export default async function ClientPortalDocumentsPage({
     .order("created_at", { ascending: false });
 
   return (
-    <div className="grid gap-4">
-      <FlashMessage {...messages} />
-      <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800/70 dark:bg-amber-950/40">
-        <p className="font-bold text-amber-900 dark:text-amber-200">Administrator document access</p>
-        <p className="mt-1 text-sm leading-6 text-amber-800 dark:text-amber-300">
-          Upload files for this client, or view, download, and permanently
-          delete existing files.
-        </p>
+    <PortalPage
+      eyebrow="Documents"
+      title="Documents"
+      description="Files shared between this client and your team."
+    >
+      <div className="grid gap-4">
+        <FlashMessage {...messages} />
+        <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800/70 dark:bg-amber-950/40">
+          <p className="font-bold text-amber-900 dark:text-amber-200">
+            Administrator document access
+          </p>
+          <p className="mt-1 text-sm leading-6 text-amber-800 dark:text-amber-300">
+            Upload files for this client, or view, download, and permanently
+            delete existing files.
+          </p>
+        </div>
+        <Card>
+          <h2 className="text-xl font-bold">Upload a document</h2>
+          <p className="mt-1 text-base text-slate-500">
+            Add a document directly to this client&apos;s private document
+            storage.
+          </p>
+          <AdminDocumentUploadForm clientId={client.id} />
+        </Card>
+        <AdminDocumentList
+          clientId={client.id}
+          documents={documents ?? []}
+          workspace="client-portal"
+        />
       </div>
-      <Card>
-        <h2 className="text-xl font-bold">Upload a document</h2>
-        <p className="mt-1 text-base text-slate-500">
-          Add a document directly to this client&apos;s private document storage.
-        </p>
-        <AdminDocumentUploadForm clientId={client.id} />
-      </Card>
-      <AdminDocumentList
-        clientId={client.id}
-        documents={documents ?? []}
-        workspace="client-portal"
-      />
-    </div>
+    </PortalPage>
   );
 }

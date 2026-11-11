@@ -20,18 +20,15 @@ export default async function ClientPortalPreviewReportsPage({
   const query = await searchParams;
 
   return (
-    <div className="grid gap-4">
-      <FlashMessage {...query} />
-
-      <ReportsPortalView
-        supabase={supabase}
-        clientId={client.id}
-        basePath={`/client-portal/${clientId}`}
-        year={query.year}
-        month={query.month}
-        period={query.period}
-        adminMode
-      />
-    </div>
+    <ReportsPortalView
+      supabase={supabase}
+      clientId={client.id}
+      basePath={`/client-portal/${clientId}`}
+      year={query.year}
+      month={query.month}
+      period={query.period}
+      adminMode
+      notice={<FlashMessage {...query} />}
+    />
   );
 }

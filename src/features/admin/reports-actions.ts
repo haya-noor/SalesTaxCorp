@@ -50,6 +50,7 @@ function go(
 function revalidateReportPaths(clientId: string) {
   revalidatePath("/admin/reports");
   revalidatePath("/dashboard/reports");
+  revalidatePath("/dashboard/overview");
   revalidatePath(`/client-portal/${clientId}`);
   revalidatePath(`/client-portal/${clientId}/reports`);
 }

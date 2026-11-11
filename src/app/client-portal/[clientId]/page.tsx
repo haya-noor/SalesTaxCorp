@@ -6,5 +6,5 @@ export default async function ClientPortalPreviewIndexPage({
   params: Promise<{ clientId: string }>;
 }) {
   const { clientId } = await params;
-  redirect(`/client-portal/${clientId}/reports`);
+  redirect(`/client-portal/${clientId}/overview`);
 }

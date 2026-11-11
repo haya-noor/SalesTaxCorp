@@ -10,6 +10,7 @@ export function ClientSidebar({
   const pathname = usePathname();
 
   const navItems = [
+    { href: `${basePath}/overview`, label: "Overview" },
     { href: `${basePath}/reports`, label: "Reports" },
     { href: `${basePath}/registrations`, label: "Registrations" },
     { href: `${basePath}/nexus-study`, label: "Nexus study" },
@@ -23,7 +24,7 @@ export function ClientSidebar({
         const active =
           pathname === item.href ||
           pathname.startsWith(`${item.href}/`) ||
-          (item.href === `${basePath}/reports` && pathname === basePath);
+          (item.href === `${basePath}/overview` && pathname === basePath);
 
         return (
           <Link
@@ -47,13 +48,6 @@ export function ClientSidebar({
           </Link>
         );
       })}
-
-      <span
-        aria-disabled="true"
-        className="mt-1 cursor-not-allowed px-3.5 py-2 text-sm font-medium text-slate-600"
-      >
-        Coming soon
-      </span>
     </nav>
   );
 }

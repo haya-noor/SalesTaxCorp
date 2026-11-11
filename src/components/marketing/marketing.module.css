@@ -1566,42 +1566,6 @@
   position: relative;
 }
 
-.heroToast {
-  position: absolute;
-  bottom: -46px;
-  left: -34px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 13px 18px 13px 13px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--surface);
-  box-shadow: 0 22px 44px -22px rgba(11, 26, 34, 0.45);
-}
-
-.heroToastIcon {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border-radius: 10px;
-  background: var(--emerald-wash);
-  color: var(--emerald);
-  font-weight: 700;
-}
-
-.heroToast strong {
-  display: block;
-  font-size: 14px;
-  line-height: 1.3;
-}
-
-.heroToast span:not(.heroToastIcon) {
-  color: var(--ink-faint);
-  font-size: 12.5px;
-}
-
 /* Proof strip under the hero */
 .proofStrip {
   position: relative;
@@ -1669,6 +1633,10 @@
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   align-items: center;
   gap: 28px;
+}
+
+.bentoWide .mock {
+  margin-top: 0;
 }
 
 .bentoText h3 {
@@ -1878,10 +1846,6 @@
 }
 
 @media (max-width: 1020px) {
-  .heroToast {
-    left: 12px;
-  }
-
   .proofStrip {
     grid-template-columns: repeat(2, 1fr);
     margin-top: 40px;
@@ -1915,13 +1879,6 @@
   .bento,
   .bentoWide {
     grid-template-columns: 1fr;
-  }
-
-  .heroToast {
-    position: relative;
-    bottom: auto;
-    left: auto;
-    margin: -18px 12px 0;
   }
 }
 

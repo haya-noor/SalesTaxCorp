@@ -1,3 +1,5 @@
+import { CheckIcon } from "@/components/client/portal-icons";
+import { StatusPill, formatDate } from "@/components/client/portal-page";
 import { approveReportAction } from "@/features/client/report-actions";
 import type { FilingPeriod } from "@/lib/reports";
 
@@ -11,33 +13,36 @@ export function ReportApprovalStatus({
   const approved = Boolean(period.client_approved_at);
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">
-        Status:
-      </span>
-      <span
-        className={`rounded-full px-3 py-1 text-sm font-semibold ${
-          approved
-            ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-200"
-            : "bg-amber-100 text-amber-800 dark:bg-amber-950/70 dark:text-amber-200"
-        }`}
-        role="status"
-      >
-        {approved ? "Approved" : "Pending approval"}
-      </span>
-
-      {!approved ? (
-        <form action={approveReportAction}>
-          <input type="hidden" name="periodId" value={period.id} />
-          <input type="hidden" name="returnTo" value={returnTo} />
-          <button
-            type="submit"
-            className="inline-flex min-h-9 items-center justify-center rounded-lg bg-teal-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-800"
-          >
-            Approve report
-          </button>
-        </form>
-      ) : null}
+    <div className="flex flex-wrap items-center gap-2.5" role="status">
+      {approved ? (
+        <>
+          <StatusPill tone="approved" size="md">
+            Approved
+          </StatusPill>
+          {period.client_approved_at ? (
+            <span className="text-[13px] text-ink-faint dark:text-slate-400">
+              on {formatDate(period.client_approved_at)}
+            </span>
+          ) : null}
+        </>
+      ) : (
+        <>
+          <StatusPill tone="pending" size="md">
+            Waiting for your approval
+          </StatusPill>
+          <form action={approveReportAction}>
+            <input type="hidden" name="periodId" value={period.id} />
+            <input type="hidden" name="returnTo" value={returnTo} />
+            <button
+              type="submit"
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-brand px-4 text-sm font-semibold text-white shadow-[0_8px_18px_-10px_rgba(15,122,88,0.8)] transition hover:bg-brand-deep"
+            >
+              <CheckIcon className="size-4" />
+              Approve report
+            </button>
+          </form>
+        </>
+      )}
     </div>
   );
 }

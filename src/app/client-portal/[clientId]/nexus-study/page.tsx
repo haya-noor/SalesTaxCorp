@@ -9,5 +9,5 @@ export default async function ClientPortalPreviewNexusStudyPage({
   const { clientId } = await params;
   await requireAdminClientView(clientId);
 
-  return <ComingSoonCard title="Nexus study" />;
+  return <ComingSoonCard title="Nexus study" basePath={`/client-portal/${clientId}`} />;
 }

@@ -158,13 +158,6 @@ export default function HomePage() {
                 <span>Specialist reviewed</span>
               </div>
             </div>
-            <div className={styles.heroToast} aria-hidden="true">
-              <span className={styles.heroToastIcon}>✓</span>
-              <div>
-                <strong>California Q3 return filed</strong>
-                <span>Payment confirmed · Specialist reviewed</span>
-              </div>
-            </div>
           </div>
         </div>
 

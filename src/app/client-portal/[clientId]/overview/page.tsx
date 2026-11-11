@@ -13,6 +13,7 @@ export default async function ClientPortalPreviewOverviewPage({
     <OverviewPortalView
       supabase={supabase}
       clientId={client.id}
+      companyName={client.company_name}
       basePath={`/client-portal/${clientId}`}
       adminMode
     />

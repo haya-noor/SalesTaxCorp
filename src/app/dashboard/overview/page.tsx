@@ -11,13 +11,12 @@ export default async function OverviewPage({
   const params = await searchParams;
 
   return (
-    <div>
-      <FlashMessage success={params.success} error={params.error} />
-      <OverviewPortalView
-        supabase={context.supabase}
-        clientId={context.client.id}
-        basePath="/dashboard"
-      />
-    </div>
+    <OverviewPortalView
+      supabase={context.supabase}
+      clientId={context.client.id}
+      companyName={context.client.company_name}
+      basePath="/dashboard"
+      notice={<FlashMessage success={params.success} error={params.error} />}
+    />
   );
 }

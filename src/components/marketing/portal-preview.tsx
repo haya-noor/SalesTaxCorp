@@ -10,16 +10,16 @@ capture ship; CSS shows the one that matches the site theme.
 */
 const highlights = [
   {
-    title: "Monthly reports",
-    text: "Every month's sales tax summary in one library, filterable by month and year.",
+    title: "Overview at a glance",
+    text: "Open the portal to your latest report, what needs your approval and how the year is going.",
   },
   {
     title: "Review and approve",
     text: "See which reports are waiting on you and approve them in a click.",
   },
   {
-    title: "Registrations and nexus study",
-    text: "Coming soon: see where you're registered and where your sales create obligations.",
+    title: "Monthly report library",
+    text: "Every month's sales tax summary in one place, filterable by month and year.",
   },
   {
     title: "Secure document exchange",
@@ -46,18 +46,18 @@ export function PortalPreview() {
               <span />
               <span />
               <span />
-              <p>Client portal / Reports</p>
+              <p>Client portal / Overview</p>
             </div>
             <Image
-              src="/images/portal/reports-light.webp"
-              alt="Client portal Reports page showing six monthly sales tax reports with their approval status"
+              src="/images/portal/overview-light.webp"
+              alt="Client portal Overview showing a report waiting for approval, report statistics, recent reports and the latest monthly summary"
               width={2000}
               height={1194}
               sizes="(max-width: 1020px) 100vw, 760px"
               className={`${styles.portalShot} ${styles.portalShotLight}`}
             />
             <Image
-              src="/images/portal/reports-dark.webp"
+              src="/images/portal/overview-dark.webp"
               alt=""
               aria-hidden="true"
               width={2000}

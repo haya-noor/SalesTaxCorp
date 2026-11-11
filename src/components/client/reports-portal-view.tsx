@@ -1,10 +1,22 @@
 import Link from "next/link";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { AdminReportActions } from "@/components/admin/admin-report-actions";
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CheckIcon,
+  ReportIcon,
+} from "@/components/client/portal-icons";
+import {
+  PortalPage,
+  StatusPill,
+  formatDate,
+  portalButton,
+  portalCard,
+} from "@/components/client/portal-page";
 import { ReportApprovalStatus } from "@/components/client/report-approval-status";
 import { ReportFrame } from "@/components/client/report-frame";
 import { ReportLibraryFilters } from "@/components/client/report-library-filters";
-import { Card } from "@/components/ui/card";
 import {
   listAllClientPeriods,
   listAllPublishedPeriods,
@@ -25,8 +37,10 @@ export async function ReportsPortalView({
   year,
   month,
   period,
+  notice,
   adminMode = false,
 }: {
+  notice?: React.ReactNode;
   supabase: SupabaseClient<Database>;
   clientId: string;
   basePath: string;
@@ -82,183 +96,217 @@ export async function ReportsPortalView({
     return `${basePath}/reports?${params.toString()}`;
   }
 
-  function updatedLabel(updatedAt: string) {
-    return new Intl.DateTimeFormat("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    }).format(new Date(updatedAt));
+  const pendingCount = periods.filter(
+    (candidate) => candidate.published && !candidate.client_approved_at,
+  ).length;
+
+  if (requestedPeriod) {
+    const label = `${monthName(requestedPeriod.period_month)} ${requestedPeriod.period_year}`;
+
+    return (
+      <div className="flex min-h-full flex-col">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-white px-4 py-3.5 dark:border-slate-700/80 dark:bg-slate-900 sm:px-6 lg:px-8">
+          <div className="flex min-w-0 items-center gap-3.5">
+            <Link
+              href={listHref()}
+              className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg border border-line text-ink-soft transition hover:border-brand hover:text-brand dark:border-slate-600 dark:text-slate-300 dark:hover:border-brand-bright dark:hover:text-brand-bright"
+              aria-label="Back to all reports"
+              title="All reports"
+            >
+              <ArrowLeftIcon className="size-4" />
+            </Link>
+            <div className="min-w-0">
+              <p className="font-code text-[11px] uppercase tracking-[0.16em] text-ink-faint dark:text-slate-400">
+                Monthly summary · United States
+              </p>
+              <h1 className="truncate font-heading text-xl font-semibold tracking-tight text-ink dark:text-slate-50">
+                {label}
+              </h1>
+            </div>
+          </div>
+
+          {!adminMode ? <ReportApprovalStatus period={requestedPeriod} /> : null}
+        </div>
+
+        {notice ? <div className="px-4 pt-4 sm:px-6 lg:px-8">{notice}</div> : null}
+
+        {adminMode ? (
+          <div className="mx-4 mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800/70 dark:bg-amber-950/40 sm:mx-6 lg:mx-8">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.12em] text-amber-800 dark:text-amber-300">
+                Administrator controls
+              </p>
+              <p className="mt-1 text-sm text-amber-900 dark:text-amber-200">
+                Managing {label}.
+              </p>
+            </div>
+            <AdminReportActions
+              clientId={clientId}
+              period={requestedPeriod}
+              workspace="client-portal"
+            />
+          </div>
+        ) : null}
+
+        <ReportFrame
+          key={requestedPeriod.id}
+          periodId={requestedPeriod.id}
+          title={`${label} report`}
+          className="h-[calc(100vh-9rem)] min-h-[720px]"
+        />
+      </div>
+    );
   }
 
   return (
-    <div
-      className={`client-report-surface flex flex-col gap-2 lg:min-h-full lg:gap-0 ${
-        adminMode ? "lg:-mx-8 lg:-mb-8" : "lg:-m-8"
-      }`}
+    <PortalPage
+      eyebrow="Reports"
+      title="Report library"
+      description="Every monthly sales tax summary we've prepared for you, with its approval status."
+      notice={notice}
+      actions={
+        periods.length && !adminMode ? (
+          pendingCount ? (
+            <StatusPill tone="pending" size="md">
+              {pendingCount} waiting for approval
+            </StatusPill>
+          ) : (
+            <StatusPill tone="approved" size="md">
+              All reports approved
+            </StatusPill>
+          )
+        ) : null
+      }
     >
       {!periods.length ? (
-        <Card className={`py-14 text-center ${adminMode ? "" : "lg:m-8"}`}>
-          <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-teal-50 text-xl text-teal-700 dark:bg-teal-950/70 dark:text-teal-300">
-            ≡
+        <div className={portalCard("mx-auto max-w-2xl px-6 py-14 text-center")}>
+          <div className="mx-auto grid size-14 place-items-center rounded-2xl bg-brand-wash text-brand dark:bg-emerald-950/60 dark:text-brand-bright">
+            <ReportIcon className="size-7" />
           </div>
-          <h2 className="mt-5 text-xl font-bold">
-            No reports are currently available
+          <h2 className="mt-5 font-heading text-xl font-semibold">
+            No reports are available yet
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-base leading-7 text-slate-600 dark:text-slate-300">
+          <p className="mx-auto mt-2 max-w-md text-[15px] leading-6 text-ink-soft dark:text-slate-300">
             Reports will appear here once a monthly report has been published.
           </p>
-        </Card>
-      ) : requestedPeriod ? (
-        <>
-          <div className="flex min-h-16 flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-5 py-3 dark:border-slate-700 dark:bg-slate-900">
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href={listHref()}
-                className="inline-flex min-h-10 items-center rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-teal-300 hover:text-teal-800 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-teal-500 dark:hover:text-teal-300"
-              >
-                &larr; All reports
-              </Link>
-              <div>
-                <p className="text-lg font-bold text-slate-950 dark:text-slate-100">
-                  {monthName(requestedPeriod.period_month)}{" "}
-                  {requestedPeriod.period_year}
-                </p>
-                <p className="text-sm text-slate-500 dark:text-slate-400">United States</p>
-              </div>
-            </div>
-
-            {!adminMode ? (
-              <ReportApprovalStatus period={requestedPeriod} />
-            ) : null}
-          </div>
-
-          {adminMode ? (
-            <div className="mx-5 mb-3 mt-3 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-800/70 dark:bg-amber-950/40">
-              <div>
-                <p className="text-sm font-bold uppercase tracking-[0.12em] text-amber-800 dark:text-amber-300">
-                  Administrator controls
-                </p>
-                <p className="mt-1 text-sm text-amber-900 dark:text-amber-200">
-                  Managing {monthName(requestedPeriod.period_month)}{" "}
-                  {requestedPeriod.period_year}.
-                </p>
-              </div>
-              <AdminReportActions
-                clientId={clientId}
-                period={requestedPeriod}
-                workspace="client-portal"
-              />
-            </div>
-          ) : null}
-
-          <ReportFrame
-            key={requestedPeriod.id}
-            periodId={requestedPeriod.id}
-            title={`${monthName(requestedPeriod.period_month)} ${requestedPeriod.period_year} report`}
-          />
-        </>
+        </div>
       ) : (
-        <div className="flex min-h-[calc(100vh-5rem)] flex-1 flex-col bg-[#f3f1ec] dark:bg-[#0f172a]">
-          <div className="border-b border-stone-200 bg-white px-5 py-5 dark:border-slate-700 dark:bg-slate-900 sm:px-8">
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-teal-700 dark:text-teal-300">
-              Client portal
-            </p>
-            <h1 className="mt-1 text-2xl font-bold text-slate-950 dark:text-slate-100">Reports</h1>
-            <p className="mt-1 text-base text-slate-600 dark:text-slate-300">
-              Review your available monthly sales tax reports.
-            </p>
-          </div>
+        <>
+          <ReportLibraryFilters
+            years={years}
+            selectedYear={selectedYear}
+            selectedMonth={selectedMonth}
+            reportCount={visiblePeriods.length}
+            basePath={basePath}
+          />
 
-          <div className="flex-1 p-4 sm:p-6 lg:p-8">
-            <ReportLibraryFilters
-              years={years}
-              selectedYear={selectedYear}
-              selectedMonth={selectedMonth}
-              reportCount={visiblePeriods.length}
-              basePath={basePath}
-            />
-
-            {visiblePeriods.length ? (
-            <div className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fill,minmax(285px,1fr))]">
+          {visiblePeriods.length ? (
+            <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-[repeat(auto-fill,minmax(270px,1fr))]">
               {visiblePeriods.map((candidate) => {
                 const approved = Boolean(candidate.client_approved_at);
+                const needsReview = !adminMode && !approved;
+                const statusTone = adminMode
+                  ? candidate.published
+                    ? "approved"
+                    : "draft"
+                  : approved
+                    ? "approved"
+                    : "pending";
                 const statusLabel = adminMode
                   ? candidate.published
                     ? "Published"
                     : "Draft"
                   : approved
                     ? "Approved"
-                    : "Pending approval";
+                    : "Needs approval";
 
                 return (
                   <article
                     key={candidate.id}
-                    className="flex min-h-56 flex-col rounded-xl border border-stone-200 bg-white p-5 shadow-[0_10px_24px_-24px_rgba(15,23,42,0.5)] transition hover:-translate-y-0.5 hover:border-teal-200 hover:shadow-[0_18px_35px_-24px_rgba(15,118,110,0.4)] dark:border-slate-700 dark:bg-slate-900 dark:hover:border-teal-700"
+                    className={`group relative flex flex-col overflow-hidden rounded-2xl border bg-white p-5 shadow-[0_12px_34px_-26px_rgba(11,26,34,0.35)] transition hover:-translate-y-0.5 hover:shadow-[0_20px_40px_-26px_rgba(15,122,88,0.45)] dark:bg-slate-900 ${
+                      needsReview
+                        ? "border-amber-300/80 hover:border-amber-400 dark:border-amber-700/60"
+                        : "border-line hover:border-brand/60 dark:border-slate-700/80 dark:hover:border-brand-bright/60"
+                    }`}
                   >
+                    {needsReview ? (
+                      <span aria-hidden="true" className="absolute inset-x-0 top-0 h-1 bg-amber-400" />
+                    ) : null}
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <h2 className="text-lg font-bold text-slate-950 dark:text-slate-100">
-                          {monthName(candidate.period_month)} {candidate.period_year}
-                        </h2>
-                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
-                          United States
+                        <p className="font-code text-[11px] uppercase tracking-[0.16em] text-ink-faint dark:text-slate-400">
+                          {candidate.period_year}
                         </p>
+                        <h2 className="mt-1 font-heading text-[1.6rem] font-semibold leading-none tracking-tight text-ink dark:text-slate-50">
+                          {monthName(candidate.period_month)}
+                        </h2>
                       </div>
-                      <span
-                        className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-bold ${
-                          candidate.published && (approved || adminMode)
-                            ? "bg-emerald-50 text-emerald-700 ring-1 ring-inset ring-emerald-200 dark:bg-emerald-950/70 dark:text-emerald-200 dark:ring-emerald-800"
-                            : "bg-amber-50 text-amber-700 ring-1 ring-inset ring-amber-200 dark:bg-amber-950/70 dark:text-amber-200 dark:ring-amber-800"
-                        }`}
-                      >
-                        {statusLabel}
-                      </span>
+                      <StatusPill tone={statusTone}>{statusLabel}</StatusPill>
                     </div>
 
-                    <dl className="mt-5 grid gap-3 text-sm">
+                    <ol className="mt-5 grid grid-cols-2 gap-2" aria-label="Report progress">
+                      {[
+                        { label: "Published", done: candidate.published },
+                        { label: "Approved", done: approved },
+                      ].map((step) => (
+                        <li key={step.label}>
+                          <span
+                            className={`block h-1.5 rounded-full ${
+                              step.done ? "bg-brand dark:bg-brand-bright" : "bg-slate-200 dark:bg-slate-700"
+                            }`}
+                          />
+                          <span
+                            className={`mt-1.5 flex items-center gap-1 text-xs font-medium ${
+                              step.done
+                                ? "text-ink-soft dark:text-slate-300"
+                                : "text-ink-faint dark:text-slate-500"
+                            }`}
+                          >
+                            {step.done ? <CheckIcon className="size-3" /> : null}
+                            {step.label}
+                          </span>
+                        </li>
+                      ))}
+                    </ol>
+
+                    <dl className="mt-5 grid gap-2 border-t border-line pt-4 text-sm dark:border-slate-700/80">
                       <div className="flex items-center justify-between gap-4">
-                        <dt className="text-slate-500 dark:text-slate-400">Report</dt>
-                        <dd className="font-semibold text-slate-800 dark:text-slate-100">
-                          Monthly summary
-                        </dd>
+                        <dt className="text-ink-faint dark:text-slate-400">Report</dt>
+                        <dd className="font-medium text-ink dark:text-slate-100">Monthly summary</dd>
                       </div>
                       <div className="flex items-center justify-between gap-4">
-                        <dt className="text-slate-500 dark:text-slate-400">Client approval</dt>
-                        <dd className="font-semibold text-slate-800 dark:text-slate-100">
-                          {approved ? "Approved" : "Pending"}
-                        </dd>
-                      </div>
-                      <div className="flex items-center justify-between gap-4">
-                        <dt className="text-slate-500 dark:text-slate-400">Updated</dt>
-                        <dd className="font-semibold text-slate-800 dark:text-slate-100">
-                          {updatedLabel(candidate.updated_at)}
+                        <dt className="text-ink-faint dark:text-slate-400">
+                          {approved ? "Approved" : "Updated"}
+                        </dt>
+                        <dd className="font-medium text-ink dark:text-slate-100">
+                          {formatDate(candidate.client_approved_at ?? candidate.updated_at)}
                         </dd>
                       </div>
                     </dl>
 
                     <Link
                       href={periodHref(candidate)}
-                      className="mt-auto inline-flex min-h-11 items-center justify-center rounded-lg border border-slate-300 bg-white px-4 text-sm font-bold text-slate-800 transition hover:border-teal-700 hover:bg-teal-50 hover:text-teal-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:hover:border-teal-500 dark:hover:bg-slate-700 dark:hover:text-teal-300"
+                      className={`mt-5 w-full ${needsReview ? portalButton.primary : portalButton.secondary}`}
                     >
-                      Open report
+                      {needsReview ? "Review and approve" : "Open report"}
+                      <ArrowRightIcon className="size-4 transition group-hover:translate-x-0.5" />
                     </Link>
                   </article>
                 );
               })}
             </div>
-            ) : (
-            <div className="mt-5 rounded-xl border border-dashed border-slate-300 bg-white/70 px-6 py-14 text-center dark:border-slate-700 dark:bg-slate-900/70">
-              <h2 className="text-lg font-bold text-slate-950 dark:text-slate-100">
+          ) : (
+            <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-white/70 px-6 py-14 text-center dark:border-slate-700 dark:bg-slate-900/70">
+              <h2 className="font-heading text-lg font-semibold text-ink dark:text-slate-100">
                 No reports match these filters
               </h2>
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              <p className="mt-2 text-sm text-ink-soft dark:text-slate-300">
                 Select another month or year to view available reports.
               </p>
             </div>
-            )}
-          </div>
-        </div>
+          )}
+        </>
       )}
-    </div>
+    </PortalPage>
   );
 }

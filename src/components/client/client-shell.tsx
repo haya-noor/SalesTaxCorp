@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ClientSidebar, PortalBreadcrumb } from "@/components/client/client-sidebar";
-import { BrandMark, LogoutIcon, UserIcon } from "@/components/client/portal-icons";
+import { BrandMark, GlobeIcon, LogoutIcon, UserIcon } from "@/components/client/portal-icons";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 import { logoutAction } from "@/features/auth/actions";
 
@@ -86,6 +86,18 @@ export function ClientShell({
               Send a document <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener"
+            className="mt-3 flex items-center justify-between rounded-lg px-3 py-2.5 text-[13px] font-semibold text-white/60 transition hover:bg-white/[0.06] hover:text-white"
+          >
+            <span className="flex items-center gap-2.5">
+              <GlobeIcon className="size-4" />
+              Visit our website
+            </span>
+            <span aria-hidden="true">&#8599;</span>
+          </a>
         </div>
       </aside>
 
@@ -98,6 +110,16 @@ export function ClientShell({
             </p>
 
             <div className="ml-auto flex items-center gap-2 sm:gap-3">
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener"
+                aria-label="Visit our website"
+                title="Visit our website"
+                className="inline-flex size-10 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-ink lg:hidden dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-white"
+              >
+                <GlobeIcon className="size-[18px]" />
+              </a>
               <ThemeToggle className="size-10" />
               {adminMode ? (
                 <>

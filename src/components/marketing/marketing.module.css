@@ -1453,15 +1453,16 @@
   padding-top: 24px;
 }
 
+/* The screenshot takes the full content width so the portal reads at a
+   comfortable size; the highlights sit underneath as a row. */
 .portalGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
-  align-items: start;
-  gap: 40px;
+  gap: 48px;
   margin-top: 44px;
 }
 
 .portalFrame {
+  position: relative;
   margin: 0;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -1501,6 +1502,96 @@
   white-space: nowrap;
 }
 
+.portalShotWrap {
+  position: relative;
+}
+
+.portalShotWrap[hidden] {
+  display: none;
+}
+
+.portalTabs {
+  display: flex;
+  gap: 4px;
+  margin-left: 14px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.portalTab {
+  padding: 5px 12px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.portalTab:hover {
+  color: var(--ink);
+}
+
+.portalTab[aria-selected="true"] {
+  background: var(--emerald);
+  color: #fff;
+}
+
+.portalTab:focus-visible {
+  outline: 2px solid var(--emerald);
+  outline-offset: 2px;
+}
+
+/* Numbered markers on the screenshot, matched by the highlights below. */
+.portalPin,
+.portalHighlightNumber {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--emerald);
+  color: #fff;
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.portalPin {
+  position: absolute;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85),
+    0 8px 18px -6px rgba(11, 26, 34, 0.55);
+  animation: portalPinPulse 2.4s ease-out infinite;
+}
+
+@keyframes portalPinPulse {
+  0% {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85),
+      0 0 0 4px rgba(15, 122, 88, 0.45), 0 8px 18px -6px rgba(11, 26, 34, 0.55);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85),
+      0 0 0 16px rgba(15, 122, 88, 0), 0 8px 18px -6px rgba(11, 26, 34, 0.55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portalPin {
+    animation: none;
+  }
+}
+
+.portalHighlightNumber {
+  margin-bottom: 12px;
+}
+
 .portalShot {
   display: block;
   width: 100%;
@@ -1528,15 +1619,18 @@
 
 .portalHighlights {
   display: grid;
-  gap: 22px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 28px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.portalHighlights li:not(.portalCta) {
-  padding-left: 18px;
-  border-left: 2px solid var(--emerald);
+.portalHighlights li {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
 }
 
 .portalHighlights h3 {
@@ -1552,18 +1646,101 @@
 }
 
 .portalCta {
-  padding-top: 6px;
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
 }
 
 @media (max-width: 1020px) {
+  .portalHighlights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
   .portalGrid {
+    gap: 32px;
+  }
+
+  .portalPin {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+  }
+
+  .portalHighlights {
     grid-template-columns: 1fr;
+    gap: 22px;
   }
 }
 
 /* Hero visual: console with a floating "filed" notification */
 .heroVisual {
   position: relative;
+}
+
+/* Home page spider: procedurally animated on a canvas (hero-spider.tsx) */
+.spiderLayer {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  pointer-events: none;
+}
+
+.spiderFigure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+/* The spider itself is drawn on a canvas that overhangs the layer. */
+.spiderCanvas {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.spiderFigure {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 7px 11px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: 0 14px 28px -16px rgba(11, 26, 34, 0.45);
+  color: var(--ink);
+  white-space: nowrap;
+  transition: box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.spiderFigure strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.spiderFigure span {
+  color: var(--ink-faint);
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+}
+
+.spiderFigure[data-carried="true"] {
+  border-color: var(--emerald);
+  box-shadow: 0 22px 34px -16px rgba(15, 122, 88, 0.55);
+}
+
+@media (max-width: 680px) {
+  .spiderFigure {
+    padding: 5px 8px;
+  }
+
+  .spiderFigure strong {
+    font-size: 13px;
+  }
 }
 
 /* Proof strip under the hero */
@@ -1604,6 +1781,7 @@
 
 /* What we manage: bento grid with mini product mockups */
 .bento {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;

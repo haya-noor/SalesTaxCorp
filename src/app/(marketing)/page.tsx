@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { HeroSpider } from "@/components/marketing/hero-spider";
 import { PortalPreview } from "@/components/marketing/portal-preview";
 import { ServiceShowcase } from "@/components/marketing/service-showcase";
 import styles from "@/components/marketing/marketing.module.css";
@@ -113,6 +114,7 @@ export default function HomePage() {
           </div>
 
           <div className={styles.heroVisual}>
+            <HeroSpider />
             <div className={styles.console} aria-label="Illustrative compliance overview">
               <div className={styles.consoleTop}>
                 <span className={styles.consoleTitle}>

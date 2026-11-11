@@ -365,7 +365,7 @@
 
 .heroLead {
   max-width: 38ch;
-  margin-top: 24px;
+  margin-top: 28px !important;
   color: var(--ink-soft);
   font-size: clamp(1rem, 1.35vw, 1.08rem);
 }
@@ -1559,6 +1559,403 @@
   .portalGrid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Hero visual: console with a floating "filed" notification */
+.heroVisual {
+  position: relative;
+}
+
+.heroToast {
+  position: absolute;
+  bottom: -46px;
+  left: -34px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px 13px 13px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  box-shadow: 0 22px 44px -22px rgba(11, 26, 34, 0.45);
+}
+
+.heroToastIcon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--emerald-wash);
+  color: var(--emerald);
+  font-weight: 700;
+}
+
+.heroToast strong {
+  display: block;
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.heroToast span:not(.heroToastIcon) {
+  color: var(--ink-faint);
+  font-size: 12.5px;
+}
+
+/* Proof strip under the hero */
+.proofStrip {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-top: 24px;
+  margin-bottom: 64px;
+  border-top: 1px solid var(--line);
+}
+
+.proofItem {
+  padding: 22px 22px 0 0;
+}
+
+.proofItem + .proofItem {
+  padding-left: 22px;
+  border-left: 1px solid var(--line);
+}
+
+.proofItem strong {
+  display: block;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.proofItem span {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink-faint);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+/* What we manage: bento grid with mini product mockups */
+.bento {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.bentoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 26px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 12px 34px -26px rgba(11, 26, 34, 0.3);
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.bentoCard:hover {
+  border-color: var(--emerald);
+  transform: translateY(-2px);
+}
+
+.bentoWide {
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: 28px;
+}
+
+.bentoText h3 {
+  font-size: 1.3rem;
+}
+
+.bentoText p:last-child {
+  margin-top: 9px;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.55;
+}
+
+.bentoNote {
+  margin-top: 18px !important;
+  color: var(--ink-faint);
+  font-size: 13px;
+}
+
+.mock {
+  margin-top: auto;
+  padding: 14px;
+  border: 1px solid var(--line-soft);
+  border-radius: 13px;
+  background: var(--surface-2);
+}
+
+.mock .consoleState {
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.mockHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  color: var(--ink-faint);
+  font-family: var(--font-mono), monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mockChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--emerald-wash);
+  color: var(--emerald);
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.mockChip::before {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  content: "";
+}
+
+.mockChip.statusDue {
+  background: var(--amber-wash);
+  color: var(--amber);
+}
+
+.mockChip.statusMonitor {
+  background: var(--line-soft);
+  color: var(--ink-soft);
+}
+
+.mockRow {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 6px;
+}
+
+.mockRow + .mockRow {
+  border-top: 1px solid var(--line-soft);
+}
+
+.mockRowLabel {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+.mockMeter + .mockMeter {
+  margin-top: 12px;
+}
+
+.mockMeterTop {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13.5px;
+}
+
+.mockMeterLabel {
+  color: var(--ink-soft);
+}
+
+.mockMeterValue {
+  color: var(--ink-faint);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+}
+
+.mockTrack {
+  height: 7px;
+  margin-top: 7px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--line-soft);
+}
+
+.mockFill,
+.mockFillWarn {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--emerald);
+}
+
+.mockFillWarn {
+  background: var(--amber-bright);
+}
+
+.mockNotice {
+  padding: 4px;
+}
+
+.mockNoticeTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--ink-faint);
+  font-family: var(--font-mono), monospace;
+  font-size: 11.5px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mockNoticeTitle {
+  margin-top: 9px !important;
+  font-size: 14.5px;
+  font-weight: 600;
+}
+
+.mockTimeline {
+  display: grid;
+  gap: 7px;
+  margin: 11px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+}
+
+.mockTimeline li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.mockTimeline li::before {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--emerald-wash);
+  box-shadow: inset 0 0 0 4px var(--surface-2), inset 0 0 0 10px var(--emerald);
+  content: "";
+}
+
+.mockStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.mockStats div {
+  padding: 10px;
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.mockStats strong {
+  display: block;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.25rem;
+  letter-spacing: -0.02em;
+}
+
+.mockStats span {
+  color: var(--ink-faint);
+  font-size: 12.5px;
+}
+
+@media (max-width: 1020px) {
+  .heroToast {
+    left: 12px;
+  }
+
+  .proofStrip {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 40px;
+  }
+
+  .proofItem:nth-child(3) {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .bento {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bentoWide {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 680px) {
+  .proofStrip {
+    grid-template-columns: 1fr;
+    margin-top: 28px;
+  }
+
+  .proofItem + .proofItem {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .bento,
+  .bentoWide {
+    grid-template-columns: 1fr;
+  }
+
+  .heroToast {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    margin: -18px 12px 0;
+  }
+}
+
+/* Closing call to action: a dark band for a stronger finish */
+.closingBand {
+  background: linear-gradient(135deg, #0b1a22 0%, #0d2a24 100%);
+  color: #e5edef;
+}
+
+.closingBand::after {
+  background: radial-gradient(circle, rgba(25, 180, 135, 0.35), transparent 70%);
+  opacity: 1;
+}
+
+.closingBand .eyebrow {
+  color: var(--emerald-bright);
+}
+
+.closingBand h2 {
+  color: #fff;
+}
+
+.closingBand > p {
+  color: #a7bbc1 !important;
+}
+
+.closingBand .buttonGhost {
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+.closingBand .buttonGhost:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 @media (prefers-reduced-motion: reduce) {

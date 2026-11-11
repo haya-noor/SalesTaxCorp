@@ -78,7 +78,7 @@ const STEPS: Array<{
   },
 ];
 
-const STEP_MS = 5200;
+const STEP_MS = 3500;
 
 const clamp = (v: number, min: number, max: number) =>
   Math.min(max, Math.max(min, v));

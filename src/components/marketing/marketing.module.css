@@ -1448,17 +1448,123 @@
   }
 }
 
-/* Client portal preview */
+/* Client portal preview: a guided tour. Steps on the left, a browser frame
+   on the right that zooms into the part of the portal each step is about. */
 .portalSection {
   padding-top: 24px;
 }
 
-/* The screenshot takes the full content width so the portal reads at a
-   comfortable size; the highlights sit underneath as a row. */
-.portalGrid {
+.tour {
   display: grid;
-  gap: 48px;
+  grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  align-items: center;
+  gap: 40px;
   margin-top: 44px;
+}
+
+.tourSteps {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tourStep {
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 4px 14px;
+  width: 100%;
+  padding: 16px 18px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.tourStep:hover {
+  background: var(--surface);
+}
+
+.tourStep:focus-visible {
+  outline: 2px solid var(--emerald);
+  outline-offset: 2px;
+}
+
+.tourStep[aria-selected="true"] {
+  border-color: var(--line);
+  background: var(--surface);
+  box-shadow: 0 18px 36px -24px rgba(11, 26, 34, 0.45);
+}
+
+.tourNumber {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  color: var(--ink-faint);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.tourStep[aria-selected="true"] .tourNumber {
+  border-color: var(--emerald);
+  background: var(--emerald);
+  color: #fff;
+}
+
+.tourTitle {
+  align-self: center;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.tourText {
+  grid-column: 2;
+  display: none;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.tourStep[aria-selected="true"] .tourText {
+  display: block;
+}
+
+/* Thin progress line along the bottom of the active step while the tour
+   auto-advances. */
+.tourProgress {
+  position: absolute;
+  right: 18px;
+  bottom: 0;
+  left: 18px;
+  height: 2px;
+  background: var(--line-soft);
+}
+
+.tourProgress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--emerald);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.tourCta {
+  margin-top: 18px;
+  padding-left: 18px;
 }
 
 .portalFrame {
@@ -1502,94 +1608,25 @@
   white-space: nowrap;
 }
 
-.portalShotWrap {
+/* The viewport keeps the screenshots' aspect ratio; the stage inside it is
+   scaled and moved to zoom into the active step's area. */
+.tourViewport {
   position: relative;
+  aspect-ratio: 1320 / 806;
+  overflow: hidden;
+  background: var(--surface-2);
 }
 
-.portalShotWrap[hidden] {
-  display: none;
-}
-
-.portalTabs {
-  display: flex;
-  gap: 4px;
-  margin-left: 14px;
-  padding: 3px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface);
-}
-
-.portalTab {
-  padding: 5px 12px;
-  border: 0;
-  border-radius: 7px;
-  background: transparent;
-  color: var(--ink-soft);
-  font-family: var(--font-mono), monospace;
-  font-size: 12px;
-  cursor: pointer;
-  transition: background 0.15s, color 0.15s;
-}
-
-.portalTab:hover {
-  color: var(--ink);
-}
-
-.portalTab[aria-selected="true"] {
-  background: var(--emerald);
-  color: #fff;
-}
-
-.portalTab:focus-visible {
-  outline: 2px solid var(--emerald);
-  outline-offset: 2px;
-}
-
-/* Numbered markers on the screenshot, matched by the highlights below. */
-.portalPin,
-.portalHighlightNumber {
-  display: grid;
-  place-items: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--emerald);
-  color: #fff;
-  font-family: var(--font-mono), monospace;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.portalPin {
+.tourStage {
   position: absolute;
-  z-index: 1;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85),
-    0 8px 18px -6px rgba(11, 26, 34, 0.55);
-  animation: portalPinPulse 2.4s ease-out infinite;
+  inset: 0;
+  transform-origin: 0 0;
+  transition: transform 0.9s cubic-bezier(0.65, 0, 0.25, 1),
+    opacity 0.45s ease;
 }
 
-@keyframes portalPinPulse {
-  0% {
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85),
-      0 0 0 4px rgba(15, 122, 88, 0.45), 0 8px 18px -6px rgba(11, 26, 34, 0.55);
-  }
-  70%,
-  100% {
-    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85),
-      0 0 0 16px rgba(15, 122, 88, 0), 0 8px 18px -6px rgba(11, 26, 34, 0.55);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .portalPin {
-    animation: none;
-  }
-}
-
-.portalHighlightNumber {
-  margin-bottom: 12px;
+.tourStage[data-shown="false"] {
+  opacity: 0;
 }
 
 .portalShot {
@@ -1610,6 +1647,19 @@
   display: block;
 }
 
+/* Spotlight: the area the step is about stays bright, the rest dims. */
+.tourFocus {
+  position: absolute;
+  border: 2px solid var(--emerald);
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(8, 20, 28, 0.38);
+  pointer-events: none;
+  transition: left 0.9s cubic-bezier(0.65, 0, 0.25, 1),
+    top 0.9s cubic-bezier(0.65, 0, 0.25, 1),
+    width 0.9s cubic-bezier(0.65, 0, 0.25, 1),
+    height 0.9s cubic-bezier(0.65, 0, 0.25, 1);
+}
+
 .portalFrame figcaption {
   padding: 10px 16px;
   border-top: 1px solid var(--line);
@@ -1617,60 +1667,22 @@
   font-size: 13px;
 }
 
-.portalHighlights {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 28px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.portalHighlights li {
-  padding: 20px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--surface);
-}
-
-.portalHighlights h3 {
-  margin: 0;
-  font-size: 1.08rem;
-}
-
-.portalHighlights p {
-  margin-top: 6px !important;
-  color: var(--ink-soft);
-  font-size: 0.97rem;
-  line-height: 1.55;
-}
-
-.portalCta {
-  display: flex;
-  justify-content: center;
-  margin-top: 40px;
+@media (prefers-reduced-motion: reduce) {
+  .tourStage,
+  .tourFocus {
+    transition: none;
+  }
 }
 
 @media (max-width: 1020px) {
-  .portalHighlights {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 620px) {
-  .portalGrid {
-    gap: 32px;
-  }
-
-  .portalPin {
-    width: 22px;
-    height: 22px;
-    font-size: 11px;
-  }
-
-  .portalHighlights {
+  .tour {
     grid-template-columns: 1fr;
-    gap: 22px;
+    gap: 24px;
+  }
+
+  /* On narrow screens the screenshot comes first, steps underneath. */
+  .tourAside {
+    order: 2;
   }
 }
 

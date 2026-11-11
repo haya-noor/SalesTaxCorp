@@ -1,38 +1,7 @@
-import Link from "next/link";
-import { PortalPreviewFrame } from "@/components/marketing/portal-preview-frame";
+import { PortalTour } from "@/components/marketing/portal-tour";
 import styles from "@/components/marketing/marketing.module.css";
 
-/*
-Landing-page preview of the client portal. The screenshots are captured from
-the real portal UI using a fictional demo client ("Northwind Outfitters"), so
-no real client data appears on the public site. Both a light and a dark
-capture ship for each view; CSS shows the one that matches the site theme.
-They are served as-is (unoptimized) so the small UI text stays crisp.
-*/
-const highlights = [
-  {
-    // pin: where the numbered marker sits on the screenshot, in percent.
-    pin: { x: 23.1, y: 36.8 },
-    title: "Overview at a glance",
-    text: "Open the portal to your latest report, what needs your approval and how the year is going.",
-  },
-  {
-    pin: { x: 52.4, y: 82.6 },
-    title: "Review and approve",
-    text: "See which reports are waiting on you and approve them in a click.",
-  },
-  {
-    pin: { x: 72.7, y: 67.5 },
-    title: "Monthly report library",
-    text: "Every month's sales tax summary in one place, filterable by month and year.",
-  },
-  {
-    pin: { x: 84.7, y: 19.4 },
-    title: "Secure document exchange",
-    text: "Send notices and files straight to your account manager.",
-  },
-] as const;
-
+/* Home page section introducing the client portal with a guided tour. */
 export function PortalPreview() {
   return (
     <section
@@ -49,34 +18,7 @@ export function PortalPreview() {
             things stand.
           </p>
         </div>
-
-        <div className={styles.portalGrid}>
-          <PortalPreviewFrame pins={highlights.map((item) => item.pin)} />
-
-          <ul className={styles.portalHighlights}>
-            {highlights.map((item, index) => (
-              <li key={item.title}>
-                <span
-                  className={styles.portalHighlightNumber}
-                  aria-hidden="true"
-                >
-                  {index + 1}
-                </span>
-                <h3>{item.title}</h3>
-                <p>{item.text}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div className={styles.portalCta}>
-          <Link
-            href="/contact"
-            className={`${styles.button} ${styles.buttonPrimary}`}
-          >
-            Get your portal set up
-          </Link>
-        </div>
+        <PortalTour />
       </div>
     </section>
   );

@@ -6,27 +6,28 @@ import styles from "@/components/marketing/marketing.module.css";
 Landing-page preview of the client portal. The screenshots are captured from
 the real portal UI using a fictional demo client ("Northwind Outfitters"), so
 no real client data appears on the public site. Both a light and a dark
-capture ship; CSS shows the one that matches the site theme.
+capture ship; CSS shows the one that matches the site theme. They are served
+as-is (unoptimized) so the small UI text stays crisp.
 */
 const highlights = [
   {
     // pin: where the numbered marker sits on the screenshot, in percent.
-    pin: { x: 23.5, y: 38.5 },
+    pin: { x: 23.1, y: 36.8 },
     title: "Overview at a glance",
     text: "Open the portal to your latest report, what needs your approval and how the year is going.",
   },
   {
-    pin: { x: 53.8, y: 80.5 },
+    pin: { x: 52.4, y: 82.6 },
     title: "Review and approve",
     text: "See which reports are waiting on you and approve them in a click.",
   },
   {
-    pin: { x: 72.5, y: 71.5 },
+    pin: { x: 72.7, y: 67.5 },
     title: "Monthly report library",
     text: "Every month's sales tax summary in one place, filterable by month and year.",
   },
   {
-    pin: { x: 84, y: 19 },
+    pin: { x: 84.7, y: 19.4 },
     title: "Secure document exchange",
     text: "Send notices and files straight to your account manager.",
   },
@@ -61,18 +62,20 @@ export function PortalPreview() {
               <Image
                 src="/images/portal/overview-light.webp"
                 alt="Client portal Overview showing a report waiting for approval, report statistics, recent reports and the latest monthly summary"
-                width={2000}
-                height={1194}
+                width={2640}
+                height={1612}
                 sizes="(max-width: 1228px) 100vw, 1180px"
+                unoptimized
                 className={`${styles.portalShot} ${styles.portalShotLight}`}
               />
               <Image
                 src="/images/portal/overview-dark.webp"
                 alt=""
                 aria-hidden="true"
-                width={2000}
-                height={1194}
+                width={2640}
+                height={1612}
                 sizes="(max-width: 1228px) 100vw, 1180px"
+                unoptimized
                 className={`${styles.portalShot} ${styles.portalShotDark}`}
               />
               {highlights.map((item, index) => (

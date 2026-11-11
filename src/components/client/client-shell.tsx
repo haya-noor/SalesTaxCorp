@@ -37,8 +37,13 @@ export function ClientShell({
     <div className="app-theme min-h-screen bg-paper text-ink dark:bg-[#0f172a] dark:text-slate-100 lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]">
       <aside className="bg-ink text-white lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col dark:bg-[#0b1220]">
         <div className="flex min-h-16 items-center justify-between gap-3 border-b border-white/10 px-4 sm:px-6 lg:min-h-[4.5rem] lg:px-5">
-          <Link href={basePath} className="flex items-center gap-3">
-            <BrandMark className="size-9" />
+          <Link
+            href={`${basePath}/overview`}
+            aria-label="Sales Tax Corp client portal, go to Overview"
+            title="Go to Overview"
+            className="group -mx-2 flex items-center gap-3 rounded-lg px-2 py-1.5 transition hover:bg-white/[0.06]"
+          >
+            <BrandMark className="size-9 transition group-hover:scale-105" />
             <span>
               <span className="block font-heading text-[17px] font-semibold leading-tight tracking-tight">
                 Sales Tax Corp

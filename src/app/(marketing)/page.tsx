@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ComparisonTable } from "@/components/marketing/comparison-table";
+import { ExposureMap } from "@/components/marketing/exposure-map";
 import { PortalPreview } from "@/components/marketing/portal-preview";
 import { ServiceShowcase } from "@/components/marketing/service-showcase";
 import styles from "@/components/marketing/marketing.module.css";
@@ -15,6 +17,12 @@ const complianceRows = [
   { code: "TX", name: "Texas", status: "Due Aug 20", kind: "due" },
   { code: "NY", name: "New York", status: "Filed", kind: "ok" },
   { code: "FL", name: "Florida", status: "Monitoring", kind: "monitor" },
+] as const;
+
+const heroTrust = [
+  "Free first consultation",
+  "Specialist-reviewed filings",
+  "Monthly report in your portal",
 ] as const;
 
 const proofPoints = [
@@ -110,6 +118,11 @@ export default function HomePage() {
                 See what we manage
               </Link>
             </div>
+            <ul className={styles.heroTrust}>
+              {heroTrust.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </div>
 
           <div className={styles.heroVisual}>
@@ -195,6 +208,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <ExposureMap />
+
       <section id="process" className={`${styles.section} ${styles.darkBand}`}>
         <div className={styles.wrap}>
           <div className={styles.sectionHeading}>
@@ -224,6 +239,8 @@ export default function HomePage() {
       </section>
 
       <ServiceShowcase />
+
+      <ComparisonTable />
 
       <section id="resources" className={`${styles.section} ${styles.sectionAlt}`}>
         <div className={styles.wrap}>

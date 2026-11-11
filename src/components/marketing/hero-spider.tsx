@@ -4,9 +4,10 @@ import { useEffect, useRef } from "react";
 import styles from "./marketing.module.css";
 
 /*
-A small brand-green spider that walks around the hero's compliance card,
+A small brand-green spider for the public home page. In the hero it walks
+around the compliance card,
 picks up one of the floating figures and carries it to an empty spot, over
-and over. It is purely decorative: the whole layer is aria-hidden and
+and over; in the services grid it updates the status pills. It is purely decorative: the whole layer is aria-hidden and
 ignores the pointer. Movement uses the Web Animations API on transforms only,
 pauses while the hero is off screen or the tab is hidden, and stays still
 when the visitor prefers reduced motion.
@@ -47,7 +48,16 @@ function wait(ms: number, signal: AbortSignal) {
   });
 }
 
-export function HeroSpider() {
+export function HeroSpider({
+  mode = "figures",
+}: {
+  /*
+  "figures": walks around the hero card carrying the floating figures.
+  "pills": walks between status pills marked with data-spider-cycle inside
+  the layer's parent and moves each one along to its next state.
+  */
+  mode?: "figures" | "pills";
+}) {
   const layerRef = useRef<HTMLDivElement>(null);
   const spiderRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
@@ -61,7 +71,8 @@ export function HeroSpider() {
 
     const figures = figureRefs.current.filter(Boolean) as HTMLDivElement[];
     const occupied = [...START];
-    let spiderAt: Point = { ...SPIDER_HOME };
+    let spiderAt: Point =
+      mode === "pills" ? { x: 0.02, y: 0.02 } : { ...SPIDER_HOME };
     let angle = 90;
 
     const size = () => {
@@ -157,73 +168,79 @@ export function HeroSpider() {
       });
     }
 
-    // The status pills in the card's rows ("Filed", "Due Aug 20"...). On
-    // every other trip (starting with the first) the spider walks over to one and moves it along:
-    // Due -> Preparing -> Filed, and a filed state rolls over to its next
-    // due date.
-    const statusChips = Array.from(
+    // Status pills the spider can update ("In progress", "Preparing"...).
+    // Each pill lists its states in data-spider-cycle as "Label:tone|...",
+    // and a visit moves it on to the next state.
+    const pills = Array.from(
       layer.parentElement?.querySelectorAll<HTMLElement>(
-        "[data-spider-status]",
+        "[data-spider-cycle]",
       ) ?? [],
     );
-
-    function nextStatus(chip: HTMLElement) {
-      const text = chip.textContent?.trim() ?? "";
-      const due = chip.dataset.spiderStatus ?? "Due";
-      if (text.startsWith("Due")) return { label: "Preparing", kind: "due" };
-      if (text === "Preparing") return { label: "Filed", kind: "ok" };
-      return { label: due, kind: "due" };
-    }
-
-    async function visitStatus(signal: AbortSignal) {
-      if (!statusChips.length) return;
-      // Prefer a row that still has work to do.
-      const open = statusChips.filter(
-        (chip) => chip.textContent?.trim() !== "Filed",
+    const toneClass: Record<string, string | undefined> = {
+      warn: styles.statusDue,
+      info: styles.statusMonitor,
+    };
+    const cycleOf = (pill: HTMLElement) =>
+      (pill.dataset.spiderCycle ?? "").split("|").map((entry) => {
+        const [label, tone = "ok"] = entry.split(":");
+        return { label, tone };
+      });
+    const stepOf = (pill: HTMLElement) =>
+      cycleOf(pill).findIndex(
+        (state) => state.label === pill.textContent?.trim(),
       );
-      const pool = open.length ? open : statusChips;
-      const chip = pool[Math.floor(Math.random() * pool.length)];
+    let lastPill: HTMLElement | null = null;
+
+    async function visitPill(signal: AbortSignal) {
+      if (!pills.length) return;
+      // Prefer a pill with work left to do, and never the same one twice in
+      // a row.
+      const candidates = pills.filter((pill) => pill !== lastPill);
+      const open = candidates.filter(
+        (pill) => stepOf(pill) < cycleOf(pill).length - 1,
+      );
+      const pool = open.length ? open : candidates.length ? candidates : pills;
+      const pill = pool[Math.floor(Math.random() * pool.length)];
+      lastPill = pill;
 
       const layerRect = layer.getBoundingClientRect();
-      const chipRect = chip.getBoundingClientRect();
+      const pillRect = pill.getBoundingClientRect();
       const { w, h } = size();
       const approach = {
-        x: (chipRect.left - layerRect.left - SPIDER_SIZE * 0.42) / w,
-        y: (chipRect.top - layerRect.top + chipRect.height / 2) / h,
+        x: (pillRect.left - layerRect.left - SPIDER_SIZE * 0.42) / w,
+        y: (pillRect.top - layerRect.top + pillRect.height / 2) / h,
       };
 
-      await wait(1200, signal);
+      await wait(1100, signal);
       await walkTo(approach, signal);
       await wait(300, signal);
-      const next = nextStatus(chip);
-      chip.classList.remove(styles.statusDue, styles.statusMonitor);
-      if (next.kind === "due") chip.classList.add(styles.statusDue);
-      chip.textContent = next.label;
-      chip.animate(
+      const cycle = cycleOf(pill);
+      const next = cycle[(stepOf(pill) + 1) % cycle.length];
+      pill.classList.remove(styles.statusDue, styles.statusMonitor);
+      const nextClass = toneClass[next.tone];
+      if (nextClass) pill.classList.add(nextClass);
+      pill.textContent = next.label;
+      pill.animate(
         [
           { transform: "scale(1)" },
-          { transform: "scale(1.18)" },
+          { transform: "scale(1.2)" },
           { transform: "scale(1)" },
         ],
         { duration: 420, easing: "ease-out" },
       );
       await wait(900, signal);
+      // Step back so the updated pill is in plain view.
       await walkTo(
-        {
-          x: approach.x - 0.2,
-          y: approach.y + (approach.y > 0.6 ? -0.1 : 0.1),
-        },
+        { x: approach.x - (SPIDER_SIZE * 0.9) / w, y: approach.y + 28 / h },
         signal,
       );
     }
 
     async function run(signal: AbortSignal) {
       let pick = 0;
-      let trip = 0;
       for (;;) {
-        trip += 1;
-        if (trip % 2 === 1) {
-          await visitStatus(signal);
+        if (mode === "pills") {
+          await visitPill(signal);
           continue;
         }
         const figureIndex = pick % figures.length;
@@ -322,7 +339,7 @@ export function HeroSpider() {
       reduceMotion.removeEventListener("change", onMotion);
       window.removeEventListener("resize", onResize);
     };
-  }, []);
+  }, [mode]);
 
   return (
     <div
@@ -331,7 +348,7 @@ export function HeroSpider() {
       aria-hidden="true"
       data-walking="false"
     >
-      {FIGURES.map((figure, index) => (
+      {(mode === "figures" ? FIGURES : []).map((figure, index) => (
         <div
           key={figure.id}
           ref={(element) => {

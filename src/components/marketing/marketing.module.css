@@ -1462,6 +1462,7 @@
 }
 
 .portalFrame {
+  position: relative;
   margin: 0;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -1501,6 +1502,56 @@
   white-space: nowrap;
 }
 
+.portalShotWrap {
+  position: relative;
+}
+
+/* Numbered markers on the screenshot, matched by the highlights below. */
+.portalPin,
+.portalHighlightNumber {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--emerald);
+  color: #fff;
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.portalPin {
+  position: absolute;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85),
+    0 8px 18px -6px rgba(11, 26, 34, 0.55);
+  animation: portalPinPulse 2.4s ease-out infinite;
+}
+
+@keyframes portalPinPulse {
+  0% {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85),
+      0 0 0 4px rgba(15, 122, 88, 0.45), 0 8px 18px -6px rgba(11, 26, 34, 0.55);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.85),
+      0 0 0 16px rgba(15, 122, 88, 0), 0 8px 18px -6px rgba(11, 26, 34, 0.55);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portalPin {
+    animation: none;
+  }
+}
+
+.portalHighlightNumber {
+  margin-bottom: 12px;
+}
+
 .portalShot {
   display: block;
   width: 100%;
@@ -1536,8 +1587,10 @@
 }
 
 .portalHighlights li {
-  padding-left: 18px;
-  border-left: 2px solid var(--emerald);
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
 }
 
 .portalHighlights h3 {
@@ -1567,6 +1620,12 @@
 @media (max-width: 620px) {
   .portalGrid {
     gap: 32px;
+  }
+
+  .portalPin {
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
   }
 
   .portalHighlights {
@@ -1737,6 +1796,7 @@
 
 /* What we manage: bento grid with mini product mockups */
 .bento {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;

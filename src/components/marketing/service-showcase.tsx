@@ -1,3 +1,4 @@
+import { HeroSpider } from "@/components/marketing/hero-spider";
 import styles from "@/components/marketing/marketing.module.css";
 
 /*
@@ -8,9 +9,21 @@ says so.
 */
 
 const nexusRows = [
-  { state: "WA", label: "Washington", value: "$96k of $100k", pct: 96, tone: "warn" },
+  {
+    state: "WA",
+    label: "Washington",
+    value: "$96k of $100k",
+    pct: 96,
+    tone: "warn",
+  },
   { state: "TX", label: "Texas", value: "$412k of $500k", pct: 82, tone: "ok" },
-  { state: "GA", label: "Georgia", value: "142 of 200 orders", pct: 71, tone: "ok" },
+  {
+    state: "GA",
+    label: "Georgia",
+    value: "142 of 200 orders",
+    pct: 71,
+    tone: "ok",
+  },
 ] as const;
 
 const registrationRows = [
@@ -25,10 +38,35 @@ const filingRows = [
   { state: "NY", period: "Q3 return", status: "Filed" },
 ] as const;
 
-function Chip({ tone, children }: { tone: "ok" | "warn" | "info"; children: React.ReactNode }) {
+// States the spider steps each pill through, as "Label:tone".
+const REGISTRATION_CYCLE = "In progress:info|Registered:ok";
+const FILING_CYCLE = "Due:warn|Preparing:warn|Filed:ok";
+const NOTICE_CYCLE = "Received:info|Responding:warn|Resolved:ok";
+const SUMMARY_CYCLE = "To approve:warn|Approved:ok";
+
+function Chip({
+  tone,
+  cycle,
+  children,
+}: {
+  tone: "ok" | "warn" | "info";
+  cycle?: string;
+  children: React.ReactNode;
+}) {
   const toneClass =
-    tone === "warn" ? styles.statusDue : tone === "info" ? styles.statusMonitor : "";
-  return <span className={`${styles.mockChip} ${toneClass}`}>{children}</span>;
+    tone === "warn"
+      ? styles.statusDue
+      : tone === "info"
+        ? styles.statusMonitor
+        : "";
+  return (
+    <span
+      className={`${styles.mockChip} ${toneClass}`}
+      data-spider-cycle={cycle}
+    >
+      {children}
+    </span>
+  );
 }
 
 export function ServiceShowcase() {
@@ -39,19 +77,21 @@ export function ServiceShowcase() {
           <p className={styles.eyebrow}>What we manage</p>
           <h2>End-to-end compliance, done for you</h2>
           <p>
-            From the first nexus review through monthly filings and state notices, one
-            team owns the work and keeps you informed.
+            From the first nexus review through monthly filings and state
+            notices, one team owns the work and keeps you informed.
           </p>
         </div>
 
         <div className={styles.bento}>
+          <HeroSpider mode="pills" />
           <article className={`${styles.bentoCard} ${styles.bentoWide}`}>
             <div className={styles.bentoText}>
               <p className={styles.servicePhase}>Understand</p>
               <h3>Nexus monitoring</h3>
               <p>
-                We track your sales and order counts against each state&apos;s threshold
-                and flag exposure before it becomes a back-tax problem.
+                We track your sales and order counts against each state&apos;s
+                threshold and flag exposure before it becomes a back-tax
+                problem.
               </p>
             </div>
             <div className={styles.mock} aria-hidden="true">
@@ -68,7 +108,11 @@ export function ServiceShowcase() {
                   </div>
                   <div className={styles.mockTrack}>
                     <span
-                      className={row.tone === "warn" ? styles.mockFillWarn : styles.mockFill}
+                      className={
+                        row.tone === "warn"
+                          ? styles.mockFillWarn
+                          : styles.mockFill
+                      }
                       style={{ width: `${row.pct}%` }}
                     />
                   </div>
@@ -81,14 +125,22 @@ export function ServiceShowcase() {
             <div className={styles.bentoText}>
               <p className={styles.servicePhase}>Get compliant</p>
               <h3>Registrations</h3>
-              <p>We prepare and submit state registrations and set up your accounts.</p>
+              <p>
+                We prepare and submit state registrations and set up your
+                accounts.
+              </p>
             </div>
             <div className={styles.mock} aria-hidden="true">
               {registrationRows.map((row) => (
                 <div key={row.state} className={styles.mockRow}>
                   <span className={styles.consoleState}>{row.state}</span>
                   <span className={styles.mockRowLabel}>{row.label}</span>
-                  <Chip tone={row.status === "Registered" ? "ok" : "info"}>{row.status}</Chip>
+                  <Chip
+                    tone={row.status === "Registered" ? "ok" : "info"}
+                    cycle={REGISTRATION_CYCLE}
+                  >
+                    {row.status}
+                  </Chip>
                 </div>
               ))}
             </div>
@@ -98,14 +150,22 @@ export function ServiceShowcase() {
             <div className={styles.bentoText}>
               <p className={styles.servicePhase}>Stay compliant</p>
               <h3>Filings and remittance</h3>
-              <p>Monthly, quarterly and annual returns prepared, reviewed and filed on time.</p>
+              <p>
+                Monthly, quarterly and annual returns prepared, reviewed and
+                filed on time.
+              </p>
             </div>
             <div className={styles.mock} aria-hidden="true">
               {filingRows.map((row) => (
                 <div key={row.state} className={styles.mockRow}>
                   <span className={styles.consoleState}>{row.state}</span>
                   <span className={styles.mockRowLabel}>{row.period}</span>
-                  <Chip tone={row.status === "Filed" ? "ok" : "warn"}>{row.status}</Chip>
+                  <Chip
+                    tone={row.status === "Filed" ? "ok" : "warn"}
+                    cycle={FILING_CYCLE}
+                  >
+                    {row.status}
+                  </Chip>
                 </div>
               ))}
             </div>
@@ -115,15 +175,22 @@ export function ServiceShowcase() {
             <div className={styles.bentoText}>
               <p className={styles.servicePhase}>Protect</p>
               <h3>Notices and audits</h3>
-              <p>State letters are answered for you, with support if an audit comes up.</p>
+              <p>
+                State letters are answered for you, with support if an audit
+                comes up.
+              </p>
             </div>
             <div className={styles.mock} aria-hidden="true">
               <div className={styles.mockNotice}>
                 <div className={styles.mockNoticeTop}>
                   <span>State notice</span>
-                  <Chip tone="ok">Resolved</Chip>
+                  <Chip tone="ok" cycle={NOTICE_CYCLE}>
+                    Resolved
+                  </Chip>
                 </div>
-                <p className={styles.mockNoticeTitle}>Missing return, July period</p>
+                <p className={styles.mockNoticeTitle}>
+                  Missing return, July period
+                </p>
                 <ol className={styles.mockTimeline}>
                   <li>Received and logged</li>
                   <li>Return filed with the state</li>
@@ -138,14 +205,16 @@ export function ServiceShowcase() {
               <p className={styles.servicePhase}>Report</p>
               <h3>Monthly summary in your portal</h3>
               <p>
-                Every month you get a clear report of what was filed and paid on your
-                behalf, ready to review and approve.
+                Every month you get a clear report of what was filed and paid on
+                your behalf, ready to review and approve.
               </p>
             </div>
             <div className={styles.mock} aria-hidden="true">
               <div className={styles.mockHeader}>
                 <span>October summary</span>
-                <Chip tone="warn">To approve</Chip>
+                <Chip tone="warn" cycle={SUMMARY_CYCLE}>
+                  To approve
+                </Chip>
               </div>
               <div className={styles.mockStats}>
                 <div>
@@ -165,7 +234,9 @@ export function ServiceShowcase() {
           </article>
         </div>
 
-        <p className={styles.bentoNote}>Illustrative examples. Figures vary by business.</p>
+        <p className={styles.bentoNote}>
+          Illustrative examples. Figures vary by business.
+        </p>
       </div>
     </section>
   );

@@ -12,42 +12,15 @@ export const metadata: Metadata = {
 };
 
 const complianceRows = [
-  {
-    code: "CA",
-    name: "California",
-    status: "Filed",
-    kind: "ok",
-    due: "Due Oct 20",
-  },
-  {
-    code: "TX",
-    name: "Texas",
-    status: "Due Aug 20",
-    kind: "due",
-    due: "Due Aug 20",
-  },
-  {
-    code: "NY",
-    name: "New York",
-    status: "Filed",
-    kind: "ok",
-    due: "Due Nov 20",
-  },
-  {
-    code: "FL",
-    name: "Florida",
-    status: "Monitoring",
-    kind: "monitor",
-    due: "",
-  },
+  { code: "CA", name: "California", status: "Filed", kind: "ok" },
+  { code: "TX", name: "Texas", status: "Due Aug 20", kind: "due" },
+  { code: "NY", name: "New York", status: "Filed", kind: "ok" },
+  { code: "FL", name: "Florida", status: "Monitoring", kind: "monitor" },
 ] as const;
 
 const proofPoints = [
   { value: "End to end", label: "Nexus, registrations, filings and notices" },
-  {
-    value: "Specialist reviewed",
-    label: "Every return checked before it's filed",
-  },
+  { value: "Specialist reviewed", label: "Every return checked before it's filed" },
   { value: "Monthly", label: "Summary of what was filed and paid" },
   { value: "One portal", label: "Reports, approvals and documents" },
 ] as const;
@@ -131,16 +104,10 @@ export default function HomePage() {
               filings and ongoing compliance—so your team can keep moving.
             </p>
             <div className={styles.heroActions}>
-              <Link
-                href="/contact"
-                className={`${styles.button} ${styles.buttonPrimary}`}
-              >
+              <Link href="/contact" className={`${styles.button} ${styles.buttonPrimary}`}>
                 Book a free consultation
               </Link>
-              <Link
-                href="#services"
-                className={`${styles.button} ${styles.buttonGhost}`}
-              >
+              <Link href="#services" className={`${styles.button} ${styles.buttonGhost}`}>
                 See what we manage
               </Link>
             </div>
@@ -148,10 +115,7 @@ export default function HomePage() {
 
           <div className={styles.heroVisual}>
             <HeroSpider />
-            <div
-              className={styles.console}
-              aria-label="Illustrative compliance overview"
-            >
+            <div className={styles.console} aria-label="Illustrative compliance overview">
               <div className={styles.consoleTop}>
                 <span className={styles.consoleTitle}>
                   <span className={styles.liveDot} /> Compliance overview
@@ -178,7 +142,6 @@ export default function HomePage() {
                     <span className={styles.consoleState}>{row.code}</span>
                     <span className={styles.consoleStateName}>{row.name}</span>
                     <span
-                      data-spider-status={row.due || undefined}
                       className={`${styles.statusChip} ${
                         row.kind === "due"
                           ? styles.statusDue
@@ -218,9 +181,8 @@ export default function HomePage() {
             <p className={styles.eyebrow}>The compliance problem</p>
             <h2>Too many moving parts for a passive dashboard</h2>
             <p>
-              Sales tax rules, deadlines and registrations require ongoing
-              attention. Software can organize the work; experienced judgment
-              keeps it on course.
+              Sales tax rules, deadlines and registrations require ongoing attention.
+              Software can organize the work; experienced judgment keeps it on course.
             </p>
           </div>
           <div className={styles.cardGridFour}>
@@ -241,8 +203,8 @@ export default function HomePage() {
             <p className={styles.eyebrow}>How it works</p>
             <h2>A clear path from uncertainty to managed compliance</h2>
             <p>
-              We establish the facts, resolve immediate gaps and then manage the
-              recurring work with transparent client updates.
+              We establish the facts, resolve immediate gaps and then manage the recurring
+              work with transparent client updates.
             </p>
           </div>
           <div className={styles.processGrid}>
@@ -256,10 +218,7 @@ export default function HomePage() {
           </div>
           <div className={styles.processCta}>
             <p>Not sure where your business stands today?</p>
-            <Link
-              href="/contact"
-              className={`${styles.button} ${styles.buttonPrimary}`}
-            >
+            <Link href="/contact" className={`${styles.button} ${styles.buttonPrimary}`}>
               Start with a review
             </Link>
           </div>
@@ -268,17 +227,14 @@ export default function HomePage() {
 
       <ServiceShowcase />
 
-      <section
-        id="resources"
-        className={`${styles.section} ${styles.sectionAlt}`}
-      >
+      <section id="resources" className={`${styles.section} ${styles.sectionAlt}`}>
         <div className={styles.wrap}>
           <div className={styles.sectionHeading}>
             <p className={styles.eyebrow}>Resources</p>
             <h2>Useful context for better compliance decisions</h2>
             <p>
-              These are the questions we help businesses work through before
-              building a practical compliance plan.
+              These are the questions we help businesses work through before building a
+              practical compliance plan.
             </p>
           </div>
           <div className={styles.resourceGrid}>
@@ -300,20 +256,14 @@ export default function HomePage() {
             <p className={styles.eyebrow}>Ready when you are</p>
             <h2>Let&apos;s map your compliance in one conversation</h2>
             <p>
-              Review where you may owe tax, what it takes to get compliant and
-              what an ongoing managed process could look like for your business.
+              Review where you may owe tax, what it takes to get compliant and what an
+              ongoing managed process could look like for your business.
             </p>
             <div className={styles.closingActions}>
-              <Link
-                href="/contact"
-                className={`${styles.button} ${styles.buttonPrimary}`}
-              >
+              <Link href="/contact" className={`${styles.button} ${styles.buttonPrimary}`}>
                 Book a free consultation
               </Link>
-              <Link
-                href="/pricing"
-                className={`${styles.button} ${styles.buttonGhost}`}
-              >
+              <Link href="/pricing" className={`${styles.button} ${styles.buttonGhost}`}>
                 View pricing estimate
               </Link>
             </div>

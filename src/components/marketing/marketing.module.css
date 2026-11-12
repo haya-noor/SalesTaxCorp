@@ -1485,7 +1485,8 @@
   font: inherit;
   text-align: left;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  transition: background 0.35s ease, border-color 0.35s ease,
+    box-shadow 0.35s ease;
 }
 
 .tourStep:hover {
@@ -1530,17 +1531,33 @@
   font-weight: 600;
 }
 
-.tourText {
+/* The description opens and closes smoothly: a one-row grid whose row
+   animates between 0fr and 1fr. */
+.tourBody {
   grid-column: 2;
-  display: none;
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease;
+}
+
+.tourStep[aria-selected="true"] .tourBody {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition-delay: 0s, 0.12s;
+}
+
+.tourText {
+  display: block;
+  min-height: 0;
+  overflow: hidden;
   color: var(--ink-soft);
   font-size: 0.95rem;
   line-height: 1.55;
 }
 
-.tourStep[aria-selected="true"] .tourText {
-  display: block;
-}
+
 
 /* Thin progress line along the bottom of the active step while the tour
    auto-advances. */
@@ -1621,8 +1638,8 @@
   position: absolute;
   inset: 0;
   transform-origin: 0 0;
-  transition: transform 0.6s cubic-bezier(0.65, 0, 0.25, 1),
-    opacity 0.45s ease;
+  transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.5s ease;
 }
 
 .tourStage[data-shown="false"] {
@@ -1654,10 +1671,33 @@
   border-radius: 12px;
   box-shadow: 0 0 0 9999px rgba(8, 20, 28, 0.38);
   pointer-events: none;
-  transition: left 0.6s cubic-bezier(0.65, 0, 0.25, 1),
-    top 0.6s cubic-bezier(0.65, 0, 0.25, 1),
-    width 0.6s cubic-bezier(0.65, 0, 0.25, 1),
-    height 0.6s cubic-bezier(0.65, 0, 0.25, 1);
+  /* Fade in once the zoom has mostly settled. Fading (rather than sliding
+     the cut-out around) keeps the move on the GPU and free of jank. */
+  animation: tourFocusIn 0.5s ease 0.35s both;
+}
+
+.tourFocus[data-leaving="true"] {
+  animation: tourFocusOut 0.35s ease both;
+}
+
+@keyframes tourFocusOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes tourFocusIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .portalFrame figcaption {
@@ -1669,8 +1709,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .tourStage,
-  .tourFocus {
+  .tourBody,
+  .tourStep {
     transition: none;
+  }
+
+  .tourFocus {
+    animation: none;
   }
 }
 

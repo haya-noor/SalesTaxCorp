@@ -71,7 +71,7 @@ function Chip({
 
 export function ServiceShowcase() {
   return (
-    <section id="services" className={styles.section}>
+    <section id="services" className={`${styles.section} ${styles.servicesBand}`}>
       <div className={styles.wrap}>
         <div className={styles.sectionHeading}>
           <p className={styles.eyebrow}>What we manage</p>

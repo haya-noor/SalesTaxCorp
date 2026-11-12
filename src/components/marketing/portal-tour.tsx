@@ -104,6 +104,19 @@ export function PortalTour() {
   const [paused, setPaused] = useState(false);
   const [visible, setVisible] = useState(false);
   const [reduced, setReduced] = useState(false);
+  // The spotlight of the step we just left fades out while the new one
+  // fades in, so the dimming never pops on or off.
+  const [shownStep, setShownStep] = useState(0);
+  const [leavingStep, setLeavingStep] = useState<number | null>(null);
+  if (shownStep !== active) {
+    setLeavingStep(shownStep);
+    setShownStep(active);
+  }
+  useEffect(() => {
+    if (leavingStep === null) return;
+    const timer = window.setTimeout(() => setLeavingStep(null), 450);
+    return () => window.clearTimeout(timer);
+  }, [leavingStep]);
   const rootRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLSpanElement>(null);
 
@@ -123,21 +136,44 @@ export function PortalTour() {
     };
   }, []);
 
-  // Auto-advance, with the progress line on the active step.
+  // Auto-advance, with the progress line on the active step. Each step
+  // gets one fill animation that pauses and resumes in place (on hover,
+  // focus or scrolling away) instead of starting over.
   const running = visible && !paused && !reduced;
+  const fillRef = useRef<Animation | null>(null);
   useEffect(() => {
     const bar = progressRef.current;
-    if (!running || !bar) return;
+    if (!bar || reduced) return;
     const fill = bar.animate(
       [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }],
       { duration: STEP_MS, easing: "linear", fill: "forwards" },
     );
+    fill.pause();
     fill.onfinish = () => setActive((index) => (index + 1) % STEPS.length);
-    return () => fill.cancel();
+    fillRef.current = fill;
+    return () => {
+      fill.cancel();
+      fillRef.current = null;
+    };
+  }, [active, reduced]);
+  useEffect(() => {
+    const fill = fillRef.current;
+    if (!fill) return;
+    if (running) fill.play();
+    else fill.pause();
   }, [running, active]);
 
   const step = STEPS[active];
   const zoom = zoomFor(step.focus);
+  // The zoom a view was last shown at, so a view fading out keeps its
+  // framing instead of snapping back to the full screenshot.
+  const zoomForView = (view: keyof typeof VIEWS) => {
+    for (let k = 0; k < STEPS.length; k += 1) {
+      const candidate = STEPS[(active - k + STEPS.length) % STEPS.length];
+      if (candidate.view === view) return zoomFor(candidate.focus);
+    }
+    return { scale: 1, x: 0, y: 0 };
+  };
 
   return (
     <div
@@ -184,8 +220,10 @@ export function PortalTour() {
                   {index + 1}
                 </span>
                 <span className={styles.tourTitle}>{item.title}</span>
-                <span className={styles.tourText}>{item.text}</span>
-                {index === active && running ? (
+                <span className={styles.tourBody}>
+                  <span className={styles.tourText}>{item.text}</span>
+                </span>
+                {index === active && !reduced ? (
                   <span className={styles.tourProgress} aria-hidden="true">
                     <span ref={progressRef} />
                   </span>
@@ -220,19 +258,16 @@ export function PortalTour() {
           {(Object.keys(VIEWS) as Array<keyof typeof VIEWS>).map((key) => {
             const view = VIEWS[key];
             const shown = key === step.view;
+            const framing = shown ? zoom : zoomForView(key);
             return (
               <div
                 key={key}
                 className={styles.tourStage}
                 data-shown={shown}
                 aria-hidden={!shown}
-                style={
-                  shown
-                    ? {
-                        transform: `translate(${zoom.x}%, ${zoom.y}%) scale(${zoom.scale})`,
-                      }
-                    : undefined
-                }
+                style={{
+                  transform: `translate(${framing.x}%, ${framing.y}%) scale(${framing.scale})`,
+                }}
               >
                 <Image
                   src={`/images/portal/${view.src}-light.webp`}
@@ -252,18 +287,25 @@ export function PortalTour() {
                   unoptimized
                   className={`${styles.portalShot} ${styles.portalShotDark}`}
                 />
-                {shown ? (
-                  <span
-                    className={styles.tourFocus}
-                    style={{
-                      left: `${step.focus.x}%`,
-                      top: `${step.focus.y}%`,
-                      width: `${step.focus.w}%`,
-                      height: `${step.focus.h}%`,
-                      borderWidth: `${2 / zoom.scale}px`,
-                    }}
-                  />
-                ) : null}
+                {[leavingStep, active].map((index) => {
+                  if (index === null || STEPS[index].view !== key) return null;
+                  const leaving = index !== active;
+                  const focus = STEPS[index].focus;
+                  return (
+                    <span
+                      key={`${index}-${leaving ? "out" : "in"}`}
+                      className={styles.tourFocus}
+                      data-leaving={leaving}
+                      style={{
+                        left: `${focus.x}%`,
+                        top: `${focus.y}%`,
+                        width: `${focus.w}%`,
+                        height: `${focus.h}%`,
+                        borderWidth: `${2 / framing.scale}px`,
+                      }}
+                    />
+                  );
+                })}
               </div>
             );
           })}

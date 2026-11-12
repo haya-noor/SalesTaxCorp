@@ -782,7 +782,77 @@
 }
 
 .closing {
-  padding-block: 30px 90px;
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(80px, 7vw, 120px);
+  background:
+    radial-gradient(45% 90% at 100% 0%, rgba(25, 180, 135, 0.22), transparent 70%),
+    radial-gradient(35% 80% at 0% 100%, rgba(25, 180, 135, 0.12), transparent 70%),
+    var(--dark-panel);
+}
+
+.closing .closingBand {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.closing .closingBand::after {
+  display: none;
+}
+
+.closing .closingBand .eyebrow {
+  color: var(--emerald-bright);
+}
+
+.closing {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (min-width: 1000px) {
+  .closing .closingBand {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 64px;
+    align-items: end;
+  }
+
+  .closing .closingBand > :not(.closingActions) {
+    grid-column: 1;
+  }
+
+  .closing .closingActions {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: center;
+    margin-top: 0;
+  }
+}
+
+
+/* Full-bleed backdrop for the services section: a faint grid that runs
+   edge to edge, fading out toward the content. */
+.servicesBand {
+  position: relative;
+  overflow: hidden;
+}
+
+.servicesBand::before {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  content: "";
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, transparent 30%, #000 85%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.servicesBand > * {
+  position: relative;
 }
 
 .closingBand {
@@ -1455,7 +1525,12 @@
 /* Client portal preview: a guided tour. Steps on the left, a browser frame
    on the right that zooms into the part of the portal each step is about. */
 .portalSection {
-  padding-top: 24px;
+  position: relative;
+  overflow: hidden;
+  border-block: 1px solid var(--line);
+  background:
+    radial-gradient(60% 70% at 0% 100%, rgba(25, 180, 135, 0.1), transparent 70%),
+    var(--surface-2);
 }
 
 .tour {
@@ -2140,7 +2215,7 @@
   color: #fff;
 }
 
-.closingBand > p {
+.closingBand > p:not(.eyebrow) {
   color: #a7bbc1 !important;
 }
 
